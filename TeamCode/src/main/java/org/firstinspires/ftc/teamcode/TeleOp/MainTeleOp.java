@@ -57,4 +57,8 @@ public class MainTeleOp extends LinearOpMode {
 
         robot.setWheelPowers(wpc);
     }
+    private void RingIntake(){
+        double g2Joy = gamepad2.left_stick_y;
+
+    }
 }

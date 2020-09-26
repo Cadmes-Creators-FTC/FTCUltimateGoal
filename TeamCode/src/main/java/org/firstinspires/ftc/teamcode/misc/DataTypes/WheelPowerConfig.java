@@ -10,6 +10,7 @@ public class WheelPowerConfig {
         lb = lbPower;
     }
 
+
     public  void clamp(){
         //clamp all between -1 and 1
         double max1 = Math.max(lf, rf);
