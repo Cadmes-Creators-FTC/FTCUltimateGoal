@@ -26,6 +26,8 @@ public class MainRobotConfig {
     private DcMotor wheelRB;
     private DcMotor wheelLB;
 
+    public DcMotor intakeWheel;
+
     private Vector2 currentPosition = new Vector2(0, 0);
 
     //IMU
@@ -50,6 +52,7 @@ public class MainRobotConfig {
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
         wheelRB = hardwareMap.get(DcMotor.class, "RBWheel");
         wheelLB = hardwareMap.get(DcMotor.class, "LBWheel");
+        intakeWheel = hardwareMap.get(DcMotor.class,"Intake");
 
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);
@@ -58,6 +61,7 @@ public class MainRobotConfig {
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         new Thread(KeepAtTargetAngle()).start();
     }
@@ -114,13 +118,16 @@ public class MainRobotConfig {
         wheelRF.setPower(wheelPowerConfig.rf);
         wheelRB.setPower(wheelPowerConfig.rb);
         wheelLB.setPower(wheelPowerConfig.lb);
+        intakeWheel.setPower(wheelPowerConfig.in);
     }
     public WheelPowerConfig getWheelPowers(){
         return new WheelPowerConfig(
                 wheelLF.getPower(),
                 wheelRF.getPower(),
                 wheelRB.getPower(),
-                wheelLB.getPower()
+                wheelLB.getPower(),
+                intakeWheel.getPower()
+                //intakeWheel,getPower()
         );
     }
     //endregion
@@ -135,7 +142,7 @@ public class MainRobotConfig {
             if (keepAtTargetAngle){
                 double correction = getAngleWheelCorrection();
                 WheelPowerConfig currentWPC = getWheelPowers();
-                WheelPowerConfig correctionWPC = new WheelPowerConfig(correction, -correction, - correction, correction);
+                WheelPowerConfig correctionWPC = new WheelPowerConfig(correction, -correction, - correction, correction, correction);
 
                 WheelPowerConfig newWPC = currentWPC.Add(correctionWPC);
 
@@ -169,7 +176,8 @@ public class MainRobotConfig {
                     deltaPos.y + deltaPos.x,
                     deltaPos.y - deltaPos.x,
                     deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x
+                    deltaPos.y - deltaPos.x,
+                    deltaPos.y + deltaPos.x
             );
             wpc.clamp();
 

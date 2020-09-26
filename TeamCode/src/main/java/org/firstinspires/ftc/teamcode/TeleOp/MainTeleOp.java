@@ -36,6 +36,8 @@ public class MainTeleOp extends LinearOpMode {
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
         double joyR = gamepad1.right_stick_x;
+        double g2Joy = gamepad2.left_stick_y;
+
 
         //reverse y joystick
         joyY *= -1;
@@ -45,7 +47,9 @@ public class MainTeleOp extends LinearOpMode {
                 joyY + joyX + joyR,
                 joyY - joyX - joyR,
                 joyY + joyX - joyR,
-                joyY - joyX + joyR
+                joyY - joyX + joyR,
+                g2Joy
+
         );
         wpc.clamp();
 
@@ -56,5 +60,8 @@ public class MainTeleOp extends LinearOpMode {
         wpc.lb = 0.7*Math.pow(wpc.lb, 2) + 0.3*wpc.lb;
 
         robot.setWheelPowers(wpc);
+    }
+    private void RingIntake(){
+
     }
 }
