@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
+import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
 import org.firstinspires.ftc.teamcode.misc.MathFunctions;
 
@@ -161,10 +162,15 @@ public class MainRobotConfig {
 
     public void DriveToPosition (Vector2 targetPos) {
         Vector2 deltaPos = targetPos.Subtract(currentPosition);
+        WheelPosition prevWheelPositions = new WheelPosition(0, 0, 0, 0);
+        double stopDistance = 5;
 
-        deltaPos.clamp(1);
+        wheelLF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelRF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelRB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelLB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        while(true /*while haven't reached pos*/) {
+        while(Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance) {
             WheelPowerConfig wpc = new WheelPowerConfig(
                     deltaPos.y + deltaPos.x,
                     deltaPos.y - deltaPos.x,
@@ -172,7 +178,26 @@ public class MainRobotConfig {
                     deltaPos.y - deltaPos.x
             );
             wpc.clamp();
+            setWheelPowers(wpc);
 
+            WheelPosition currentWheelPosition = new WheelPosition(
+                    wheelLF.getCurrentPosition(),
+                    wheelRF.getCurrentPosition(),
+                    wheelRB.getCurrentPosition(),
+                    wheelLB.getCurrentPosition()
+            );
+            WheelPosition wheelPositionDelta = prevWheelPositions.Subtract(currentWheelPosition);
+            prevWheelPositions = currentWheelPosition;
+
+            Vector2 pos = WheelTicksToPos(wheelPositionDelta);
+            currentPosition.Add(pos);
+
+            deltaPos = targetPos.Subtract(currentPosition);
         }
+
+        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
+    }
+    private Vector2 WheelTicksToPos(WheelPosition wheelTicks){
+        return new Vector2(0, 0);
     }
 }

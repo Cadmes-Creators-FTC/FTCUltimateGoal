@@ -2,13 +2,9 @@ package org.firstinspires.ftc.teamcode.misc;
 
 public class MathFunctions {
     //convert cm to encoder ticks
-    public static int CMToTicks(double CM, boolean side){
-        if(side) {
-            CM *= Math.sqrt(2);
-        }
-
+    public static int CMToTicks(double CM){
         double tickCM = 1120 / 26.928;
-        tickCM *= (100f/141f);
+        tickCM *= (100.0/141.0);
         long ticks = Math.round(tickCM * CM);
 
         return (int) ticks;
