@@ -189,18 +189,25 @@ public class MainRobotConfig {
                     wheelRB.getCurrentPosition(),
                     wheelLB.getCurrentPosition()
             );
-            WheelPosition wheelPositionDelta = prevWheelPositions.Subtract(currentWheelPosition);
+            WheelPosition wheelPositionDelta = currentWheelPosition.Subtract(prevWheelPositions);
             prevWheelPositions = currentWheelPosition;
 
-            Vector2 pos = WheelTicksToPos(wheelPositionDelta);
-            currentPosition.Add(pos);
+            Vector2 posChange = WheelTicksToPos(wheelPositionDelta);
+            currentPosition.Add(posChange);
 
             deltaPos = targetPos.Subtract(currentPosition);
         }
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
-    private Vector2 WheelTicksToPos(WheelPosition wheelTicks){
-        return new Vector2(0, 0);
+    private Vector2 WheelTicksToPos(WheelPosition wheelPos){
+        wheelPos.ToCM(10*Math.PI, 1120);
+
+        Vector2 vectorLF = new Vector2(1, 1).Multipy(wheelPos.lf);
+        Vector2 vectorRF = new Vector2(-1, 1).Multipy(wheelPos.rf);
+        Vector2 vectorRB = new Vector2(1, 1).Multipy(wheelPos.rb);
+        Vector2 vectorLB = new Vector2(-1, 1).Multipy(wheelPos.lb);
+
+        return vectorLF.Add(vectorRF).Add(vectorRB).Add(vectorLB);
     }
 }

@@ -22,4 +22,7 @@ public class Vector2 {
     public Vector2 Subtract(Vector2 pos){
         return new Vector2(x-pos.x, y-pos.y);
     }
+    public Vector2 Multipy(double scaler){
+        return new Vector2(x*scaler, y*scaler);
+    }
 }
