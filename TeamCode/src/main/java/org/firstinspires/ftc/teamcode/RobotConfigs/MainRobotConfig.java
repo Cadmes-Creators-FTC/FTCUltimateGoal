@@ -203,10 +203,10 @@ public class MainRobotConfig {
     private Vector2 WheelTicksToPos(WheelPosition wheelPos){
         wheelPos.ToCM(10*Math.PI, 1120);
 
-        Vector2 vectorLF = new Vector2(1, 1).Multipy(wheelPos.lf);
-        Vector2 vectorRF = new Vector2(-1, 1).Multipy(wheelPos.rf);
-        Vector2 vectorRB = new Vector2(1, 1).Multipy(wheelPos.rb);
-        Vector2 vectorLB = new Vector2(-1, 1).Multipy(wheelPos.lb);
+        Vector2 vectorLF = new Vector2(1/Math.sqrt(2), 1).Multipy(wheelPos.lf);
+        Vector2 vectorRF = new Vector2(-1/Math.sqrt(2), 1).Multipy(wheelPos.rf);
+        Vector2 vectorRB = new Vector2(1/Math.sqrt(2), 1).Multipy(wheelPos.rb);
+        Vector2 vectorLB = new Vector2(-1/Math.sqrt(2), 1).Multipy(wheelPos.lb);
 
         return vectorLF.Add(vectorRF).Add(vectorRB).Add(vectorLB);
     }
