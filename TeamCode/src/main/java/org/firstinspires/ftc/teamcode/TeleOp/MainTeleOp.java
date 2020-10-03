@@ -56,9 +56,12 @@ public class MainTeleOp extends LinearOpMode {
         wpc.lb = 0.7*Math.pow(wpc.lb, 2) + 0.3*wpc.lb;
 
         robot.setWheelPowers(wpc);
+        RingIntake();
     }
+    //voor de intake van de ringen
     private void RingIntake(){
-        double g2Joy = gamepad2.left_stick_y;
-
+        boolean buttonA = gamepad2.a;
+        if (buttonA == true);
+            robot.intakeWheel.setPower(0.5);
     }
 }
