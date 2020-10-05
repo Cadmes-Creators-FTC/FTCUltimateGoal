@@ -171,17 +171,22 @@ public class MainRobotConfig {
     }
     //endregion
 
-    public void DriveToPosition (Vector2 targetPos) {
+    public void DriveToPosition (Vector2 targetPos) throws InterruptedException {
+        Vector2 startPos = currentPosition;
         Vector2 deltaPos = targetPos.Subtract(currentPosition);
-        WheelPosition prevWheelPositions = new WheelPosition(0, 0, 0, 0);
-        double stopDistance = 5;
+        double stopDistance = 10;
 
         wheelLF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wheelRF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wheelRB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wheelLB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        while(Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance) {
+        wheelLF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        while(Math.abs(deltaPos.x) > stopDistance && Math.abs(deltaPos.y) > stopDistance) {
             WheelPowerConfig wpc = new WheelPowerConfig(
                     deltaPos.y + deltaPos.x,
                     deltaPos.y - deltaPos.x,
@@ -191,17 +196,17 @@ public class MainRobotConfig {
             wpc.clamp();
             setWheelPowers(wpc);
 
-            WheelPosition currentWheelPosition = new WheelPosition(
+            Thread.sleep(100);
+
+            WheelPosition wheelTicks = new WheelPosition(
                     wheelLF.getCurrentPosition(),
                     wheelRF.getCurrentPosition(),
                     wheelRB.getCurrentPosition(),
                     wheelLB.getCurrentPosition()
             );
-            WheelPosition wheelPositionDelta = currentWheelPosition.Subtract(prevWheelPositions);
-            prevWheelPositions = currentWheelPosition;
 
-            Vector2 posChange = WheelTicksToPos(wheelPositionDelta);
-            currentPosition.Add(posChange);
+            Vector2 posChange = WheelTicksToPos(wheelTicks);
+            currentPosition = startPos.Add(posChange);
 
             deltaPos = targetPos.Subtract(currentPosition);
         }
@@ -211,11 +216,14 @@ public class MainRobotConfig {
     private Vector2 WheelTicksToPos(WheelPosition wheelPos){
         wheelPos.ToCM(10*Math.PI, 1120);
 
-        Vector2 vectorLF = new Vector2(1/Math.sqrt(2), 1).Multipy(wheelPos.lf);
-        Vector2 vectorRF = new Vector2(-1/Math.sqrt(2), 1).Multipy(wheelPos.rf);
-        Vector2 vectorRB = new Vector2(1/Math.sqrt(2), 1).Multipy(wheelPos.rb);
-        Vector2 vectorLB = new Vector2(-1/Math.sqrt(2), 1).Multipy(wheelPos.lb);
+        Vector2 vectorLF = new Vector2(1/Math.sqrt(2), 1).Multiply(wheelPos.lf);
+        Vector2 vectorRF = new Vector2(-1/Math.sqrt(2), 1).Multiply(wheelPos.rf);
+        Vector2 vectorRB = new Vector2(1/Math.sqrt(2), 1).Multiply(wheelPos.rb);
+        Vector2 vectorLB = new Vector2(-1/Math.sqrt(2), 1).Multiply(wheelPos.lb);
 
-        return vectorLF.Add(vectorRF).Add(vectorRB).Add(vectorLB);
+        Vector2 total = vectorLF.Add(vectorRF).Add(vectorRB).Add(vectorLB);
+        total = total.Divide(4);
+
+        return total;
     }
 }

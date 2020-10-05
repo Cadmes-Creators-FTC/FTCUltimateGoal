@@ -27,7 +27,6 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-
             DriveWithController();
         }
     }

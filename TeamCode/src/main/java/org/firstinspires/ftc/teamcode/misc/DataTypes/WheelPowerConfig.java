@@ -20,12 +20,12 @@ public class WheelPowerConfig {
         if(max > 1) {
             lf /= max;
             rf /= max;
-              lb /= max;
+            rb /= max;
+            lb /= max;
         }
     }
 
     public WheelPowerConfig Add(WheelPowerConfig WPC){
         return new WheelPowerConfig(lf+WPC.lf, rf+WPC.rf, rb+WPC.rb, lb+WPC.lb);
     }
-
 }
