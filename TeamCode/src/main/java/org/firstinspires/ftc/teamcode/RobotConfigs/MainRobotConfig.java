@@ -63,7 +63,15 @@ public class MainRobotConfig {
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        new Thread(KeepAtTargetAngle()).start();
+        Thread keepAtTargetAngleThread = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    KeepAtTargetAngle();
+                } catch (InterruptedException ignored) { }
+            }
+        };
+        keepAtTargetAngleThread.start();
     }
 
 
@@ -133,7 +141,7 @@ public class MainRobotConfig {
     public void setKeepAtTargetAngle(boolean x){
         keepAtTargetAngle = x;
     }
-    private Runnable KeepAtTargetAngle() throws InterruptedException {
+    private void KeepAtTargetAngle() throws InterruptedException {
         //noinspection InfiniteLoopStatement
         while (true){
             if (keepAtTargetAngle){

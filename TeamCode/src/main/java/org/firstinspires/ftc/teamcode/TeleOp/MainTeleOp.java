@@ -27,6 +27,7 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
+
             DriveWithController();
         }
     }
@@ -39,6 +40,7 @@ public class MainTeleOp extends LinearOpMode {
 
         //reverse y joystick
         joyY *= -1;
+        telemetry.addData("joyY", joyY);
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(
@@ -49,12 +51,12 @@ public class MainTeleOp extends LinearOpMode {
         );
         wpc.clamp();
 
-        //smooth out the acceleration
-        wpc.lf = 0.7*Math.pow(wpc.lf, 2) + 0.3*wpc.lf;
-        wpc.rf = 0.7*Math.pow(wpc.rf, 2) + 0.3*wpc.rf;
-        wpc.rb = 0.7*Math.pow(wpc.rb, 2) + 0.3*wpc.rb;
-        wpc.lb = 0.7*Math.pow(wpc.lb, 2) + 0.3*wpc.lb;
 
+        //smooth out the acceleration
+        wpc.lf = 0.6*Math.pow(wpc.lf, 3) + 0.4*wpc.lf;
+        wpc.rf = 0.6*Math.pow(wpc.rf, 3) + 0.4*wpc.rf;
+        wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
+        wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
         robot.setWheelPowers(wpc);
     }
     private void RingIntake(){
