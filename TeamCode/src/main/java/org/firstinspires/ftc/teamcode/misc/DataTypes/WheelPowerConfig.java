@@ -25,7 +25,12 @@ public class WheelPowerConfig {
         }
     }
 
-    public WheelPowerConfig Add(WheelPowerConfig WPC){
-        return new WheelPowerConfig(lf+WPC.lf, rf+WPC.rf, rb+WPC.rb, lb+WPC.lb);
+    public static WheelPowerConfig Add(WheelPowerConfig wpc1, WheelPowerConfig wpc2){
+        return new WheelPowerConfig(
+                wpc1.lf+wpc2.lf,
+                wpc1.rf+wpc2.rf,
+                wpc1.rb+wpc2.rb,
+                wpc1.lb+wpc2.lb
+        );
     }
 }

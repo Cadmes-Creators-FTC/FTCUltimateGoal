@@ -16,16 +16,17 @@ public class Vector2 {
         y *= n;
     }
 
-    public Vector2 Add(Vector2 pos){
-        return new Vector2(x+pos.x, y+pos.y);
+
+    public static Vector2 Add(Vector2 v1, Vector2 v2){
+        return new Vector2(v1.x+v2.x, v1.y+v2.y);
     }
-    public Vector2 Subtract(Vector2 pos){
-        return new Vector2(x-pos.x, y-pos.y);
+    public static Vector2 Subtract(Vector2 v1, Vector2 v2){
+        return new Vector2(v1.x-v2.x, v1.y-v2.y);
     }
-    public Vector2 Multiply(double scaler){
-        return new Vector2(x*scaler, y*scaler);
+    public static Vector2 Multiply(Vector2 vector, double scaler){
+        return new Vector2(vector.x*scaler, vector.y*scaler);
     }
-    public Vector2 Divide(double scaler){
-        return new Vector2(x/scaler, y/scaler);
+    public static Vector2 Divide(Vector2 vector, double scaler){
+        return new Vector2(vector.x/scaler, vector.y/scaler);
     }
 }
