@@ -6,9 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.RobotConfigs.MainRobotConfig;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
 
-@Autonomous(name="BlueBuildPlateLine", group="blue")
+@Autonomous(name="TestAutonomous", group="blue")
 public class TestAutonomous extends LinearOpMode {
-
     private MainRobotConfig robot;
 
     @Override
@@ -18,6 +17,7 @@ public class TestAutonomous extends LinearOpMode {
 
         //initialize robot hardware
         robot = new MainRobotConfig(hardwareMap, telemetry);
+        robot.setCurrentPosition(new Vector2(0, 0));
         //wait for imu to calibrate
         robot.WaitForGyroCalibration();
 
@@ -37,7 +37,7 @@ public class TestAutonomous extends LinearOpMode {
     }
 
     //autonomous sequence
-    private void AutonomousSequence(){
-
+    private void AutonomousSequence() throws InterruptedException {
+        robot.DriveToPosition(new Vector2(0, 100));
     }
 }

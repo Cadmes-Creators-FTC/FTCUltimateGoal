@@ -13,17 +13,24 @@ public class WheelPowerConfig {
 
     public  void clamp(){
         //clamp all between -1 and 1
-        double max1 = Math.max(lf, rf);
-        double max2 = Math.max(rb, lb);
+        double max1 = Math.max(Math.abs(lf), Math.abs(rf));
+        double max2 = Math.max(Math.abs(rb), Math.abs(lb));
         double max = Math.max(max1, max2);
-        lf /= max;
-        rf /= max;
-        rb /= max;
-        lb /= max;
+
+        if(max > 1) {
+            lf /= max;
+            rf /= max;
+            rb /= max;
+            lb /= max;
+        }
     }
 
-    public WheelPowerConfig Add(WheelPowerConfig WPC){
-        return new WheelPowerConfig(lf+WPC.lf, rf+WPC.rf, rb+WPC.rb, lb+WPC.lb);
+    public static WheelPowerConfig Add(WheelPowerConfig wpc1, WheelPowerConfig wpc2){
+        return new WheelPowerConfig(
+                wpc1.lf+wpc2.lf,
+                wpc1.rf+wpc2.rf,
+                wpc1.rb+wpc2.rb,
+                wpc1.lb+wpc2.lb
+        );
     }
-
 }

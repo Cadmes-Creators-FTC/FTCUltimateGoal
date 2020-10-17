@@ -25,7 +25,13 @@ public class WheelPosition {
         lb = MathFunctions.CMsToTicks(lb, wheelCircumference, ticksPerRot);
     }
 
-    public WheelPosition Subtract(WheelPosition pos){
-        return new WheelPosition(lf+pos.lf, rf+pos.rf, rb+pos.rb, lb+pos.lb);
+
+    public static WheelPosition Subtract(WheelPosition pos1, WheelPosition pos2){
+        return new WheelPosition(
+                pos1.lf-pos2.lf,
+                pos1.rf-pos2.rf,
+                pos1.rb-pos2.rb,
+                pos1.lb-pos2.lb
+        );
     }
 }
