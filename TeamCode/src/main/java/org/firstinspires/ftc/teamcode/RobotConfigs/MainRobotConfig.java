@@ -27,7 +27,8 @@ public class MainRobotConfig {
     private DcMotor wheelRB;
     private DcMotor wheelLB;
 
-    public DcMotor intakeWheel;
+    public DcMotor intakeWheelL;
+    public DcMotor intakeWheelR;
 
     private Vector2 currentPosition = new Vector2(0, 0);
 
@@ -53,7 +54,8 @@ public class MainRobotConfig {
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
         wheelRB = hardwareMap.get(DcMotor.class, "RBWheel");
         wheelLB = hardwareMap.get(DcMotor.class, "LBWheel");
-        intakeWheel = hardwareMap.get(DcMotor.class,"Intake");
+        intakeWheelL = hardwareMap.get(DcMotor.class,"IntakeL");
+        intakeWheelR = hardwareMap.get(DcMotor.class, "IntakeR");
 
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);

@@ -62,7 +62,9 @@ public class MainTeleOp extends LinearOpMode {
     //voor de intake van de ringen
     private void RingIntake(){
         boolean buttonA = gamepad2.a;
-        if (buttonA == true);
-            robot.intakeWheel.setPower(0.5);
+        if (buttonA == true) {
+            robot.intakeWheelL.setPower(1);
+            robot.intakeWheelR.setPower(-1);
+        }
     }
 }
