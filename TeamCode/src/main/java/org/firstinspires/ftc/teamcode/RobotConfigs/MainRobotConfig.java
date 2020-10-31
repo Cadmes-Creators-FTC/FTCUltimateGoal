@@ -194,6 +194,13 @@ public class MainRobotConfig {
                     deltaPos.y + deltaPos.x,
                     deltaPos.y - deltaPos.x
             );
+
+            telemetry.addData("lf power", wpc.lf);
+            telemetry.addData("rf power", wpc.rf);
+            telemetry.addData("rb power", wpc.rb);
+            telemetry.addData("lb power", wpc.lb);
+            telemetry.update();
+
             wpc.clamp();
             setWheelPowers(wpc);
 
