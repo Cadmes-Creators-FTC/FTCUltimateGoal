@@ -17,10 +17,10 @@ public class TestAutonomous extends LinearOpMode {
         telemetry.update();
 
         //initialize robot hardware
-        /*robot = new MainRobotConfig(hardwareMap, telemetry);
+        robot = new MainRobotConfig(hardwareMap, telemetry);
         robot.setCurrentPosition(new Vector2(0, 0));
         //wait for imu to calibrate
-        robot.WaitForGyroCalibration();*/
+        robot.WaitForGyroCalibration();
 
         telemetry.addData("State", "Initialized, waiting for start");
         telemetry.update();
@@ -33,22 +33,11 @@ public class TestAutonomous extends LinearOpMode {
         //start autonomous
         //AutonomousSequence();
         while (!isStopRequested()){
-        testAutomous();
+            AutonomousSequence();
 
-        telemetry.addData("State", "Done");
-        telemetry.update();
-    }
-    }
-
-    private void testAutomous() {
-        DcMotor testWheelL;
-        DcMotor testWheelR;
-
-        testWheelL = hardwareMap.get(DcMotor.class, "TwheelL");
-        testWheelR = hardwareMap.get(DcMotor.class, "TwheelR");
-
-        testWheelR.setPower(-1);
-        testWheelL.setPower(1);
+            telemetry.addData("State", "Done");
+            telemetry.update();
+        }
     }
 
     //autonomous sequence

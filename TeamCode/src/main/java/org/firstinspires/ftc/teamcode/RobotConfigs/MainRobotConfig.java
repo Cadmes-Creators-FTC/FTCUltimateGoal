@@ -54,8 +54,8 @@ public class MainRobotConfig {
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
         wheelRB = hardwareMap.get(DcMotor.class, "RBWheel");
         wheelLB = hardwareMap.get(DcMotor.class, "LBWheel");
-        intakeWheelL = hardwareMap.get(DcMotor.class,"IntakeL");
-        intakeWheelR = hardwareMap.get(DcMotor.class, "IntakeR");
+//        intakeWheelL = hardwareMap.get(DcMotor.class,"IntakeL");
+//        intakeWheelR = hardwareMap.get(DcMotor.class, "IntakeR");
 
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);
@@ -197,14 +197,17 @@ public class MainRobotConfig {
                     deltaPos.y - deltaPos.x
             );
 
+            wpc.clamp();
+            setWheelPowers(wpc);
+
             telemetry.addData("lf power", wpc.lf);
             telemetry.addData("rf power", wpc.rf);
             telemetry.addData("rb power", wpc.rb);
             telemetry.addData("lb power", wpc.lb);
-            telemetry.update();
 
-            wpc.clamp();
-            setWheelPowers(wpc);
+            telemetry.addData("pos x", currentPosition.x);
+            telemetry.addData("pos y", currentPosition.y);
+            telemetry.update();
 
             Thread.sleep(100);
 
@@ -234,7 +237,9 @@ public class MainRobotConfig {
         Vector2 vectorLB = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.lb);
 
         Vector2 total = Vector2.Add(Vector2.Add(vectorLF, vectorRF), Vector2.Add(vectorLB, vectorRB));
-        total = Vector2.Divide(total, 4);
+
+        telemetry.addData("total wheelposchange", total);
+//        total = Vector2.Divide(total, 4);
 
         return total;
     }
