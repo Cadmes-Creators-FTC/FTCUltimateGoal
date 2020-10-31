@@ -39,7 +39,7 @@ public class MainTeleOp extends LinearOpMode {
 
         //reverse y joystick
         joyY *= -1;
-        telemetry.addData("joyY", joyY);
+        telemetry.addData("JoyY", String.valueOf(joyY));
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(
