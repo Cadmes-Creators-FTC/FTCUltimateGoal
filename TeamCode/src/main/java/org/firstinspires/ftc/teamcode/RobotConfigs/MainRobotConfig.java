@@ -21,6 +21,8 @@ public class MainRobotConfig {
     //hardwareMap and telemetry
     private Telemetry telemetry;
 
+    public Boolean isRobotRunning = true;
+
     //motors
     private DcMotor wheelLF;
     private DcMotor wheelRF;
@@ -31,6 +33,7 @@ public class MainRobotConfig {
     public DcMotor intakeWheelR;
 
     private Vector2 currentPosition = new Vector2(0, 0);
+    private WheelPosition currentPositionTicks = new WheelPosition(0, 0, 0, 0);
 
     //IMU
     private BNO055IMU imu;
@@ -60,20 +63,32 @@ public class MainRobotConfig {
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);
 
+        wheelLF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Thread keepAtTargetAngleThread = new Thread(){
+        new Thread(){
             @Override
             public void run(){
                 try {
                     KeepAtTargetAngle();
                 } catch (InterruptedException ignored) { }
             }
-        };
-        keepAtTargetAngleThread.start();
+        }.start();
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    KeepPositionUpdated();
+                } catch (InterruptedException ignored) { }
+            }
+        }.start();
     }
 
 
@@ -145,7 +160,7 @@ public class MainRobotConfig {
     }
     private void KeepAtTargetAngle() throws InterruptedException {
         //noinspection InfiniteLoopStatement
-        while (true){
+        while (isRobotRunning){
             if (keepAtTargetAngle){
                 double correction = getAngleWheelCorrection();
                 WheelPowerConfig currentWPC = getWheelPowers();
@@ -173,7 +188,46 @@ public class MainRobotConfig {
     }
     //endregion
 
-    //region Autonomous driving to position
+    //region Position
+    public void KeepPositionUpdated() throws InterruptedException{
+        while (isRobotRunning){
+            WheelPosition wheelPos = new WheelPosition(
+                    wheelLF.getCurrentPosition() - currentPositionTicks.lf,
+                    wheelRF.getCurrentPosition() - currentPositionTicks.rf,
+                    wheelRB.getCurrentPosition() - currentPositionTicks.rb,
+                    wheelLB.getCurrentPosition() - currentPositionTicks.lb
+            );
+            currentPositionTicks = new WheelPosition(
+                    wheelLF.getCurrentPosition(),
+                    wheelRF.getCurrentPosition(),
+                    wheelRB.getCurrentPosition(),
+                    wheelLB.getCurrentPosition()
+            );
+
+            telemetry.addData("pos x", currentPosition.x);
+            telemetry.addData("pos y", currentPosition.y);
+            telemetry.addData("posticks lf", currentPositionTicks.lf);
+            telemetry.addData("posticks rf", currentPositionTicks.rf);
+            telemetry.addData("posticks rb", currentPositionTicks.rb);
+            telemetry.addData("posticks lb", currentPositionTicks.lb);
+            telemetry.update();
+
+            wheelPos.ToCM(10*Math.PI, 1120);
+
+            Vector2 vectorLF = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.lf);
+            Vector2 vectorRF = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.rf);
+            Vector2 vectorRB = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.rb);
+            Vector2 vectorLB = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.lb);
+
+            Vector2 deltaPos = Vector2.Add(Vector2.Add(vectorLF, vectorRF), Vector2.Add(vectorLB, vectorRB));
+
+            deltaPos = Vector2.Divide(deltaPos, 4);
+
+            currentPosition = Vector2.Add(currentPosition, deltaPos);
+
+            Thread.sleep(30);
+        }
+    }
     public void DriveToPosition (Vector2 targetPos) throws InterruptedException {
         double stopDistance = 10;
         WheelPosition prevWheelTicks = new WheelPosition(0, 0, 0, 0);
@@ -220,28 +274,13 @@ public class MainRobotConfig {
             WheelPosition wheelTicksDelta = WheelPosition.Subtract(wheelTicks, prevWheelTicks);
             prevWheelTicks = wheelTicks;
 
-            Vector2 posChange = WheelTicksToPos(wheelTicksDelta);
-            currentPosition = Vector2.Add(currentPosition, posChange);
+//            Vector2 posChange = WheelTicksToPos(wheelTicksDelta);
+//            currentPosition = Vector2.Add(currentPosition, posChange);
 
             deltaPos = Vector2.Subtract(targetPos, currentPosition);
         }
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
-    }
-    private Vector2 WheelTicksToPos(WheelPosition wheelPos){
-        wheelPos.ToCM(10*Math.PI, 1120);
-
-        Vector2 vectorLF = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.lf);
-        Vector2 vectorRF = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.rf);
-        Vector2 vectorRB = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.rb);
-        Vector2 vectorLB = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.lb);
-
-        Vector2 total = Vector2.Add(Vector2.Add(vectorLF, vectorRF), Vector2.Add(vectorLB, vectorRB));
-
-        telemetry.addData("total wheelposchange", total);
-//        total = Vector2.Divide(total, 4);
-
-        return total;
     }
     //endregion
 }

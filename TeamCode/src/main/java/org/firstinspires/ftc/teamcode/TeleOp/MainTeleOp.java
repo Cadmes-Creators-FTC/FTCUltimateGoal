@@ -29,6 +29,8 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive()){
             DriveWithController();
         }
+
+        robot.isRobotRunning = false;
     }
 
     private void DriveWithController(){
@@ -39,7 +41,6 @@ public class MainTeleOp extends LinearOpMode {
 
         //reverse y joystick
         joyY *= -1;
-        telemetry.addData("JoyY", String.valueOf(joyY));
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(
