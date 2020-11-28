@@ -191,7 +191,8 @@ public class MainRobotConfig {
     //region Position
     public void KeepPositionUpdated() throws InterruptedException{
         while (isRobotRunning){
-            WheelPosition wheelPos = new WheelPosition(
+            /* get position delta and update wheel ticks */
+            WheelPosition wheelPosDelta = new WheelPosition(
                     wheelLF.getCurrentPosition() - currentPositionTicks.lf,
                     wheelRF.getCurrentPosition() - currentPositionTicks.rf,
                     wheelRB.getCurrentPosition() - currentPositionTicks.rb,
@@ -212,19 +213,25 @@ public class MainRobotConfig {
             telemetry.addData("posticks lb", currentPositionTicks.lb);
             telemetry.update();
 
-            wheelPos.ToCM(10*Math.PI, 1120);
+            /* transform ticks to cm */
+            wheelPosDelta.ToCM(10*Math.PI, 1120);
 
-            Vector2 vectorLF = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.lf);
-            Vector2 vectorRF = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.rf);
-            Vector2 vectorRB = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.rb);
-            Vector2 vectorLB = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.lb);
+            /* transform individual wheel movement to whole robot movement */
+            double cornerDegrees = 90/(Math.sqrt(2)+1);
+
+            Vector2 vectorLF = Vector2.Multiply(new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.lf);
+            Vector2 vectorRF = Vector2.Multiply(new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.rf);
+            Vector2 vectorRB = Vector2.Multiply(new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.rb);
+            Vector2 vectorLB = Vector2.Multiply(new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.lb);
 
             Vector2 deltaPos = Vector2.Add(Vector2.Add(vectorLF, vectorRF), Vector2.Add(vectorLB, vectorRB));
 
             deltaPos = Vector2.Divide(deltaPos, 4);
 
+            /* update position */
             currentPosition = Vector2.Add(currentPosition, deltaPos);
 
+            /* timout between updates */
             Thread.sleep(30);
         }
     }
