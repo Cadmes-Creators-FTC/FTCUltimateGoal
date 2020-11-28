@@ -228,6 +228,11 @@ public class MainRobotConfig {
 
             deltaPos = Vector2.Divide(deltaPos, 4);
 
+            /* account for rotation */
+            Vector2 t_deltaPos = deltaPos;
+            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
+            deltaPos.x = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
+
             /* update position */
             currentPosition = Vector2.Add(currentPosition, deltaPos);
 
