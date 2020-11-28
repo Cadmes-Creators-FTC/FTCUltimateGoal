@@ -218,6 +218,8 @@ public class MainRobotConfig {
 
             /* transform individual wheel movement to whole robot movement */
             double cornerDegrees = 90/(Math.sqrt(2)+1);
+            Vector2 wheelVectorRight = new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees));
+            Vector2 wheelVectorLeft = new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees));
 
             Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
             Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
