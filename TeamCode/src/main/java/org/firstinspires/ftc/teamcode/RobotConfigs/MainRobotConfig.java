@@ -68,7 +68,7 @@ public class MainRobotConfig {
         wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
