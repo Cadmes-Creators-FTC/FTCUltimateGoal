@@ -241,7 +241,7 @@ public class MainRobotConfig {
             /* update position */
             currentPosition = Vector2.Add(currentPosition, deltaPos);
 
-            /* timout between updates */
+            /* timeout between updates */
             Thread.sleep(30);
         }
     }
