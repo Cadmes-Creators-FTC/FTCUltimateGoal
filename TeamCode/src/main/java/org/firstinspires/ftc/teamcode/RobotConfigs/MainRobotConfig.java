@@ -219,13 +219,16 @@ public class MainRobotConfig {
             /* transform individual wheel movement to whole robot movement */
             double cornerDegrees = 90/(Math.sqrt(2)+1);
 
-            Vector2 vectorLF = Vector2.Multiply(new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.lf);
-            Vector2 vectorRF = Vector2.Multiply(new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.rf);
-            Vector2 vectorRB = Vector2.Multiply(new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.rb);
-            Vector2 vectorLB = Vector2.Multiply(new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees)), wheelPosDelta.lb);
+            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
+            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
+            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
+            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
 
-            Vector2 deltaPos = Vector2.Add(Vector2.Add(vectorLF, vectorRF), Vector2.Add(vectorLB, vectorRB));
+            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
+            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
+            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
 
+            // divide by 4 to get average vector
             deltaPos = Vector2.Divide(deltaPos, 4);
 
             /* account for rotation */
