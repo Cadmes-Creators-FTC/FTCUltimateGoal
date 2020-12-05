@@ -68,7 +68,7 @@ public class MainRobotConfig {
         wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -191,7 +191,8 @@ public class MainRobotConfig {
     //region Position
     public void KeepPositionUpdated() throws InterruptedException{
         while (isRobotRunning){
-            WheelPosition wheelPos = new WheelPosition(
+            /* get position delta and update wheel ticks */
+            WheelPosition wheelPosDelta = new WheelPosition(
                     wheelLF.getCurrentPosition() - currentPositionTicks.lf,
                     wheelRF.getCurrentPosition() - currentPositionTicks.rf,
                     wheelRB.getCurrentPosition() - currentPositionTicks.rb,
@@ -212,19 +213,35 @@ public class MainRobotConfig {
             telemetry.addData("posticks lb", currentPositionTicks.lb);
             telemetry.update();
 
-            wheelPos.ToCM(10*Math.PI, 1120);
+            /* transform ticks to cm */
+            wheelPosDelta.ToCM(10*Math.PI, 1120);
 
-            Vector2 vectorLF = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.lf);
-            Vector2 vectorRF = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.rf);
-            Vector2 vectorRB = Vector2.Multiply(new Vector2(1/Math.sqrt(2), 1), wheelPos.rb);
-            Vector2 vectorLB = Vector2.Multiply(new Vector2(-1/Math.sqrt(2), 1), wheelPos.lb);
+            /* transform individual wheel movement to whole robot movement */
+            double cornerDegrees = 90/(Math.sqrt(2)+1);
+            Vector2 wheelVectorRight = new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees));
+            Vector2 wheelVectorLeft = new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees));
 
-            Vector2 deltaPos = Vector2.Add(Vector2.Add(vectorLF, vectorRF), Vector2.Add(vectorLB, vectorRB));
+            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
+            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
+            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
+            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
 
+            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
+            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
+            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
+
+            // divide by 4 to get average vector
             deltaPos = Vector2.Divide(deltaPos, 4);
 
+            /* account for rotation */
+            Vector2 t_deltaPos = deltaPos;
+            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
+            deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
+
+            /* update position */
             currentPosition = Vector2.Add(currentPosition, deltaPos);
 
+            /* timeout between updates */
             Thread.sleep(30);
         }
     }
