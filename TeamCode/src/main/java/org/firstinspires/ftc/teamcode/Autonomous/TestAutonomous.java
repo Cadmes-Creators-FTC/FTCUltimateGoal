@@ -17,9 +17,9 @@ public class TestAutonomous extends LinearOpMode {
 
         //initialize robot hardware
         robot = new MainRobot(hardwareMap, telemetry);
-        robot.setCurrentPosition(new Vector2(0, 0));
+        robot.driving.setCurrentPosition(new Vector2(0, 0));
         //wait for imu to calibrate
-        robot.WaitForGyroCalibration();
+        robot.gyroscope.WaitForGyroCalibration();
 
         telemetry.addData("State", "Initialized, waiting for start");
         telemetry.update();
@@ -41,7 +41,7 @@ public class TestAutonomous extends LinearOpMode {
 
     //autonomous sequence
     private void AutonomousSequence() throws InterruptedException {
-        robot.DriveToPosition(new Vector2(0, 100));
+
     }
 
 }
