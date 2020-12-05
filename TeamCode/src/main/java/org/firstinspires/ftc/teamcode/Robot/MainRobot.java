@@ -31,7 +31,7 @@ public class MainRobot {
         telemetry = inputTelemetry;
 
         driving = new Driving(hardwareMap, telemetry, this);
-        shooter = new Shooter(hardwareMap, telemetry, this);
+//        shooter = new Shooter(hardwareMap, telemetry, this);
         gyroscope = new Gyroscope(hardwareMap, telemetry, this);
     }
 }

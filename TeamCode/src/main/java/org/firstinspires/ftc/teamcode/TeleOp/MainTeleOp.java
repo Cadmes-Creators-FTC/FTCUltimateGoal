@@ -28,7 +28,7 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             DriveWithController();
-            RingShooter();
+//            RingShooter();
         }
 
         robot.isRunning = false;
