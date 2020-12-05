@@ -24,9 +24,7 @@ public class MainRobot {
     public Boolean isRunning = true;
 
     public Driving driving;
-
-    public DcMotor shooterWheelL;
-    public DcMotor shooterWheelR;
+    public Shooter shooter;
 
     //IMU
     private final BNO055IMU imu;
@@ -46,9 +44,7 @@ public class MainRobot {
         imu.initialize(parameters);
 
         driving = new Driving(hardwareMap, telemetry, this);
-
-//        shooterWheelL = hardwareMap.get(DcMotor.class, "ShooterL");
-//        shooterWheelR = hardwareMap.get(DcMotor.class, "ShooterR");
+        shooter = new Shooter(hardwareMap, telemetry, this);
 
 
         new Thread(){
@@ -60,7 +56,6 @@ public class MainRobot {
             }
         }.start();
     }
-
 
     //region IMU callibration
     public void WaitForGyroCalibration() throws InterruptedException{
