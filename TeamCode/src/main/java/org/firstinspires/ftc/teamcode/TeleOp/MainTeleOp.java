@@ -19,7 +19,7 @@ public class MainTeleOp extends LinearOpMode {
         //initialize robot hardware
         robot = new MainRobot(hardwareMap, telemetry);
         //wait for imu to calibrate
-        robot.WaitForGyroCalibration();
+        robot.gyroscope.WaitForGyroCalibration();
 
         telemetry.addData("State", "Initialized, waiting for start");
         telemetry.update();
@@ -28,7 +28,7 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             DriveWithController();
-//            RingShooter();
+            RingShooter();
         }
 
         robot.isRunning = false;
@@ -53,21 +53,18 @@ public class MainTeleOp extends LinearOpMode {
         wpc.clamp();
 
         //smooth out the acceleration
+        //f(x) = 0.6x^2 + 0.4x
         wpc.lf = 0.6*Math.pow(wpc.lf, 3) + 0.4*wpc.lf;
         wpc.rf = 0.6*Math.pow(wpc.rf, 3) + 0.4*wpc.rf;
         wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
         wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
-        robot.setWheelPowers(wpc);
+        robot.driving.setWheelPowers(wpc);
     }
 
-    //voor de intake van de ringen
     private void RingShooter(){
-        if (gamepad2.a) {
-            robot.shooterWheelL.setPower(1);
-            robot.shooterWheelR.setPower(-1);
-        }else {
-            robot.shooterWheelL.setPower(0);
-            robot.shooterWheelR.setPower(0);
-        }
+        if (gamepad2.a)
+            robot.shooter.TurnOn();
+        else
+            robot.shooter.TurnOf();
     }
 }
