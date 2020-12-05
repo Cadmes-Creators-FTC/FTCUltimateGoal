@@ -207,10 +207,7 @@ public class MainRobotConfig {
 
             telemetry.addData("pos x", currentPosition.x);
             telemetry.addData("pos y", currentPosition.y);
-            telemetry.addData("posticks lf", currentPositionTicks.lf);
-            telemetry.addData("posticks rf", currentPositionTicks.rf);
-            telemetry.addData("posticks rb", currentPositionTicks.rb);
-            telemetry.addData("posticks lb", currentPositionTicks.lb);
+            telemetry.addData("rot", currentAngle);
             telemetry.update();
 
             /* transform ticks to cm */
