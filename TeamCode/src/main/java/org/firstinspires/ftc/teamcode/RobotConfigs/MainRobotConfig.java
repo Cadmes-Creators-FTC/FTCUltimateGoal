@@ -24,19 +24,19 @@ public class MainRobotConfig {
     public Boolean isRobotRunning = true;
 
     //motors
-    private DcMotor wheelLF;
-    private DcMotor wheelRF;
-    private DcMotor wheelRB;
-    private DcMotor wheelLB;
+    private final DcMotor wheelLF;
+    private final DcMotor wheelRF;
+    private final DcMotor wheelRB;
+    private final DcMotor wheelLB;
 
-    public DcMotor intakeWheelL;
-    public DcMotor intakeWheelR;
+    public DcMotor shooterWheelL;
+    public DcMotor shooterWheelR;
 
     private Vector2 currentPosition = new Vector2(0, 0);
     private WheelPosition currentPositionTicks = new WheelPosition(0, 0, 0, 0);
 
     //IMU
-    private BNO055IMU imu;
+    private final BNO055IMU imu;
     private Orientation lastAngles = new Orientation();
     private double currentAngle;
     private boolean keepAtTargetAngle = false;
@@ -57,8 +57,8 @@ public class MainRobotConfig {
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
         wheelRB = hardwareMap.get(DcMotor.class, "RBWheel");
         wheelLB = hardwareMap.get(DcMotor.class, "LBWheel");
-//        intakeWheelL = hardwareMap.get(DcMotor.class,"IntakeL");
-//        intakeWheelR = hardwareMap.get(DcMotor.class, "IntakeR");
+//        shooterWheelL = hardwareMap.get(DcMotor.class, "ShooterL");
+//        shooterWheelR = hardwareMap.get(DcMotor.class, "ShooterR");
 
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);

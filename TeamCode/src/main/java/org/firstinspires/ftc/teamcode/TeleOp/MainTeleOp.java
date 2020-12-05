@@ -28,6 +28,7 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             DriveWithController();
+            RingShooter();
         }
 
         robot.isRobotRunning = false;
@@ -58,14 +59,16 @@ public class MainTeleOp extends LinearOpMode {
         wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
         wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
         robot.setWheelPowers(wpc);
-        RingIntake();
     }
+
     //voor de intake van de ringen
-    private void RingIntake(){
-        boolean buttonA = gamepad2.a;
-        if (buttonA == true) {
-            robot.intakeWheelL.setPower(1);
-            robot.intakeWheelR.setPower(-1);
+    private void RingShooter(){
+        if (gamepad2.a) {
+            robot.shooterWheelL.setPower(1);
+            robot.shooterWheelR.setPower(-1);
+        }else {
+            robot.shooterWheelL.setPower(0);
+            robot.shooterWheelR.setPower(0);
         }
     }
 }
