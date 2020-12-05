@@ -25,76 +25,13 @@ public class MainRobot {
 
     public Driving driving;
     public Shooter shooter;
-
-    //IMU
-    private final BNO055IMU imu;
-    private Orientation lastAngles = new Orientation();
-    private double currentAngle;
-    private double targetAngle;
+    public Gyroscope gyroscope;
 
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry) throws InterruptedException {
         telemetry = inputTelemetry;
 
-        //assign imu
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.loggingEnabled = false;
-        imu.initialize(parameters);
-
         driving = new Driving(hardwareMap, telemetry, this);
         shooter = new Shooter(hardwareMap, telemetry, this);
-
-        new Thread(){
-            @Override
-            public void run(){
-                try {
-                    KeepCurrentAngleUpdated();
-                } catch (InterruptedException ignored) { }
-            }
-        }.start();
+        gyroscope = new Gyroscope(hardwareMap, telemetry, this);
     }
-
-    //region IMU callibration
-    public void WaitForGyroCalibration() throws InterruptedException{
-        while (!imu.isGyroCalibrated()) {
-            Thread.sleep(50);
-        }
-    }
-    //endregion
-
-    //region Angles
-    private void UpdateCurrentAngle(){
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-        deltaAngle *= -1;
-
-        currentAngle += deltaAngle;
-
-        currentAngle = MathFunctions.clambAngleDegrees(currentAngle);
-
-        lastAngles = angles;
-    }
-    private void KeepCurrentAngleUpdated() throws InterruptedException {
-        while (isRunning){
-            UpdateCurrentAngle();
-            Thread.sleep(100);
-        }
-    }
-    public void ResetCurrentAngle(){
-        currentAngle = 0;
-        targetAngle = 0;
-        lastAngles = new Orientation();
-    }
-
-    public double getCurrentAngle(){
-        return currentAngle;
-    }
-    public double getTargetAngle() { return targetAngle; }
-    public void setTargetAngle(double newTargetAngle) {
-        targetAngle = MathFunctions.clambAngleDegrees(newTargetAngle);
-    }
-    //endregion
 }

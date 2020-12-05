@@ -108,8 +108,8 @@ public class Driving {
 
         double correction = 0;
 
-        double targetAngle = robot.getTargetAngle();
-        double currentAngle = robot.getCurrentAngle();
+        double targetAngle = robot.gyroscope.getTargetAngle();
+        double currentAngle = robot.gyroscope.getCurrentAngle();
         if (Math.abs(targetAngle - currentAngle) > minDegreesOff)
             correction = targetAngle - currentAngle;
         correction = correction * gain;
@@ -148,7 +148,7 @@ public class Driving {
             telemetry.addData("ticks 2", currentPositionTicks.rf);
             telemetry.addData("ticks 3", currentPositionTicks.rb);
             telemetry.addData("ticks 4", currentPositionTicks.lb);
-            telemetry.addData("rot", robot.getCurrentAngle());
+            telemetry.addData("rot", robot.gyroscope.getCurrentAngle());
             telemetry.update();
 
             /* transform ticks to cm */
@@ -172,7 +172,7 @@ public class Driving {
             deltaPos = Vector2.Divide(deltaPos, 4);
 
             /* account for rotation */
-            double currentAngle = robot.getCurrentAngle();
+            double currentAngle = robot.gyroscope.getCurrentAngle();
             Vector2 t_deltaPos = deltaPos;
             deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
             deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
