@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.RobotConfigs.MainRobotConfig;
+import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
 
 @TeleOp(name = "Main_Robot", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
-    private MainRobotConfig robot;
+    private MainRobot robot;
 
     @Override
     public void runOpMode () throws InterruptedException{
@@ -17,7 +17,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.update();
 
         //initialize robot hardware
-        robot = new MainRobotConfig(hardwareMap, telemetry);
+        robot = new MainRobot(hardwareMap, telemetry);
         //wait for imu to calibrate
         robot.WaitForGyroCalibration();
 
@@ -29,11 +29,9 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive()){
             DriveWithController();
 //            RingShooter();
-            telemetry.addData("encoder shit", robot.wheelRF.getCurrentPosition());
-            telemetry.update();
         }
 
-        robot.isRobotRunning = false;
+        robot.isRunning = false;
     }
 
     private void DriveWithController(){
@@ -53,7 +51,6 @@ public class MainTeleOp extends LinearOpMode {
                 joyY - joyX + joyR
         );
         wpc.clamp();
-
 
         //smooth out the acceleration
         wpc.lf = 0.6*Math.pow(wpc.lf, 3) + 0.4*wpc.lf;

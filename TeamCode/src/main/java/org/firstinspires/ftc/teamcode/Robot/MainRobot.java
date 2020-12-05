@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RobotConfigs;
+package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,15 +17,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 @Disabled
-public class MainRobotConfig {
+public class MainRobot {
     //hardwareMap and telemetry
     private Telemetry telemetry;
 
-    public Boolean isRobotRunning = true;
+    public Boolean isRunning = true;
 
     //motors
     private final DcMotor wheelLF;
-    public final DcMotor wheelRF;
+    private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
     private final int wheelTicksPerRotation = 1680;
@@ -43,7 +43,7 @@ public class MainRobotConfig {
     private boolean keepAtTargetAngle = false;
     private double targetAngle;
 
-    public MainRobotConfig(HardwareMap hardwareMap, Telemetry inputTelemetry) throws InterruptedException {
+    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry) throws InterruptedException {
         telemetry = inputTelemetry;
 
         //assign imu
@@ -123,7 +123,7 @@ public class MainRobotConfig {
         lastAngles = angles;
     }
     private void KeepCurrentAngleUpdated() throws InterruptedException {
-        while (isRobotRunning){
+        while (isRunning){
             UpdateCurrentAngle();
             Thread.sleep(100);
         }
@@ -137,6 +137,7 @@ public class MainRobotConfig {
     public double getCurrentAngle(){
         return currentAngle;
     }
+    public double getTargetAngle() { return targetAngle; }
     public void setTargetAngle(double newTargetAngle) {
         targetAngle = MathFunctions.clambAngleDegrees(newTargetAngle);
     }
@@ -166,7 +167,7 @@ public class MainRobotConfig {
     }
     private void KeepAtTargetAngle() throws InterruptedException {
         //noinspection InfiniteLoopStatement
-        while (isRobotRunning){
+        while (isRunning){
             if (keepAtTargetAngle){
                 double correction = getAngleWheelCorrection();
                 WheelPowerConfig currentWPC = getWheelPowers();
@@ -202,7 +203,7 @@ public class MainRobotConfig {
         currentPosition = pos;
     }
     public void KeepPositionUpdated() throws InterruptedException{
-        while (isRobotRunning){
+        while (isRunning){
             /* get position delta and update wheel ticks */
             WheelPosition wheelPosDelta = new WheelPosition(
                     wheelLF.getCurrentPosition() - currentPositionTicks.lf,

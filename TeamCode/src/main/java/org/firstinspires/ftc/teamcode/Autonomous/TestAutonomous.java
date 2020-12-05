@@ -2,14 +2,13 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.RobotConfigs.MainRobotConfig;
+import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
 
 @Autonomous(name="TestAutonomous", group="blue")
 public class TestAutonomous extends LinearOpMode {
-    private MainRobotConfig robot;
+    private MainRobot robot;
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -17,7 +16,7 @@ public class TestAutonomous extends LinearOpMode {
         telemetry.update();
 
         //initialize robot hardware
-        robot = new MainRobotConfig(hardwareMap, telemetry);
+        robot = new MainRobot(hardwareMap, telemetry);
         robot.setCurrentPosition(new Vector2(0, 0));
         //wait for imu to calibrate
         robot.WaitForGyroCalibration();
