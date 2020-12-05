@@ -46,7 +46,6 @@ public class MainRobot {
         driving = new Driving(hardwareMap, telemetry, this);
         shooter = new Shooter(hardwareMap, telemetry, this);
 
-
         new Thread(){
             @Override
             public void run(){
