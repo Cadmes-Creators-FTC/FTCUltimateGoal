@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -22,7 +21,7 @@ public class Shooter {
         shooterWheelL = hardwareMap.get(DcMotor.class, "ShooterL");
         shooterWheelR = hardwareMap.get(DcMotor.class, "ShooterR");
 
-        shooterWheelL.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterWheelL.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void TurnOn(){
