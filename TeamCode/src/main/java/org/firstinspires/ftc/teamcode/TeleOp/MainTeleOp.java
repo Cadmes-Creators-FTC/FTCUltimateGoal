@@ -28,7 +28,9 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             DriveWithController();
-            RingShooter();
+//            RingShooter();
+            telemetry.addData("encoder shit", robot.wheelRF.getCurrentPosition());
+            telemetry.update();
         }
 
         robot.isRobotRunning = false;

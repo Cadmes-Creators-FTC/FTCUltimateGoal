@@ -25,9 +25,10 @@ public class MainRobotConfig {
 
     //motors
     private final DcMotor wheelLF;
-    private final DcMotor wheelRF;
+    public final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
+    private final int wheelTicksPerRotation = 1680;
 
     public DcMotor shooterWheelL;
     public DcMotor shooterWheelR;
@@ -85,6 +86,14 @@ public class MainRobotConfig {
             @Override
             public void run(){
                 try {
+                    KeepCurrentAngleUpdated();
+                } catch (InterruptedException ignored) { }
+            }
+        }.start();
+        new Thread(){
+            @Override
+            public void run(){
+                try {
                     KeepPositionUpdated();
                 } catch (InterruptedException ignored) { }
             }
@@ -101,7 +110,7 @@ public class MainRobotConfig {
     //endregion
 
     //region Angles
-    public void UpdateCurrentAngle(){
+    private void UpdateCurrentAngle(){
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
@@ -112,6 +121,12 @@ public class MainRobotConfig {
         currentAngle = MathFunctions.clambAngleDegrees(currentAngle);
 
         lastAngles = angles;
+    }
+    private void KeepCurrentAngleUpdated() throws InterruptedException {
+        while (isRobotRunning){
+            UpdateCurrentAngle();
+            Thread.sleep(100);
+        }
     }
     public void ResetCurrentAngle(){
         currentAngle = 0;
@@ -124,15 +139,6 @@ public class MainRobotConfig {
     }
     public void setTargetAngle(double newTargetAngle) {
         targetAngle = MathFunctions.clambAngleDegrees(newTargetAngle);
-    }
-    //endregion
-
-    //region Position
-    public Vector2 getCurrentPosition(){
-        return currentPosition;
-    }
-    public void setCurrentPosition(Vector2 pos){
-        currentPosition = pos;
     }
     //endregion
 
@@ -189,6 +195,12 @@ public class MainRobotConfig {
     //endregion
 
     //region Position
+    public Vector2 getCurrentPosition(){
+        return currentPosition;
+    }
+    public void setCurrentPosition(Vector2 pos){
+        currentPosition = pos;
+    }
     public void KeepPositionUpdated() throws InterruptedException{
         while (isRobotRunning){
             /* get position delta and update wheel ticks */
@@ -207,11 +219,15 @@ public class MainRobotConfig {
 
             telemetry.addData("pos x", currentPosition.x);
             telemetry.addData("pos y", currentPosition.y);
+            telemetry.addData("ticks 1", currentPositionTicks.lf);
+            telemetry.addData("ticks 2", currentPositionTicks.rf);
+            telemetry.addData("ticks 3", currentPositionTicks.rb);
+            telemetry.addData("ticks 4", currentPositionTicks.lb);
             telemetry.addData("rot", currentAngle);
             telemetry.update();
 
             /* transform ticks to cm */
-            wheelPosDelta.ToCM(10*Math.PI, 1120);
+            wheelPosDelta.ToCM(10*Math.PI, wheelTicksPerRotation);
 
             /* transform individual wheel movement to whole robot movement */
             double cornerDegrees = 90/(Math.sqrt(2)+1);
