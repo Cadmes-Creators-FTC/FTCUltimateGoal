@@ -186,17 +186,6 @@ public class Driving {
     }
     public void DriveToPosition (Vector2 targetPos) throws InterruptedException {
         double stopDistance = 10;
-        WheelPosition prevWheelTicks = new WheelPosition(0, 0, 0, 0);
-
-        wheelLF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheelRF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheelRB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheelLB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        wheelLF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         Vector2 deltaPos = Vector2.Subtract(targetPos, currentPosition);
         while((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)) {
@@ -210,28 +199,7 @@ public class Driving {
             wpc.clamp();
             setWheelPowers(wpc);
 
-            telemetry.addData("lf power", wpc.lf);
-            telemetry.addData("rf power", wpc.rf);
-            telemetry.addData("rb power", wpc.rb);
-            telemetry.addData("lb power", wpc.lb);
-
-            telemetry.addData("pos x", currentPosition.x);
-            telemetry.addData("pos y", currentPosition.y);
-            telemetry.update();
-
             Thread.sleep(100);
-
-            WheelPosition wheelTicks = new WheelPosition(
-                    wheelLF.getCurrentPosition(),
-                    wheelRF.getCurrentPosition(),
-                    wheelRB.getCurrentPosition(),
-                    wheelLB.getCurrentPosition()
-            );
-            WheelPosition wheelTicksDelta = WheelPosition.Subtract(wheelTicks, prevWheelTicks);
-            prevWheelTicks = wheelTicks;
-
-//            Vector2 posChange = WheelTicksToPos(wheelTicksDelta);
-//            currentPosition = Vector2.Add(currentPosition, posChange);
 
             deltaPos = Vector2.Subtract(targetPos, currentPosition);
         }
