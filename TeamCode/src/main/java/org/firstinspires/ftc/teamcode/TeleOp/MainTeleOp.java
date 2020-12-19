@@ -63,7 +63,7 @@ public class MainTeleOp extends LinearOpMode {
 
     private void RingShooter(){
         if (gamepad2.a)
-            robot.shooter.TurnOn();
+            robot.shooter.TurnOn(1);
         else
             robot.shooter.TurnOf();
     }
