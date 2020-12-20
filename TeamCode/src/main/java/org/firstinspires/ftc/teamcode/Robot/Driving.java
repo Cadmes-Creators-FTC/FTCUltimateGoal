@@ -11,14 +11,14 @@ import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
 
 @Disabled
 public class Driving {
-    private Telemetry telemetry; // for logging and debugging
-    private MainRobot robot; //reference to robot
+    private final Telemetry telemetry; // for logging and debugging
+    private final MainRobot robot; //reference to robot
 
     private final DcMotor wheelLF;
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
-    private final int ticksPerRotation = 1680;
+    private final int ticksPerRotation = 1120;
 
     private boolean keepAtTargetAngle = false;
 
@@ -151,37 +151,37 @@ public class Driving {
             telemetry.addData("rot", robot.gyroscope.getCurrentAngle());
             telemetry.update();
 
-            /* transform ticks to cm */
-            wheelPosDelta.ToCM(10*Math.PI, ticksPerRotation);
+//            /* transform ticks to cm */
+//            wheelPosDelta.ToCM(10*Math.PI, ticksPerRotation);
+//
+//            /* transform individual wheel movement to whole robot movement */
+//            double cornerDegrees = 90/(Math.sqrt(2)+1);
+//            Vector2 wheelVectorRight = new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees));
+//            Vector2 wheelVectorLeft = new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees));
+//
+//            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
+//            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
+//            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
+//            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
+//
+//            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
+//            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
+//            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
+//
+//            // divide by 4 to get average vector
+//            deltaPos = Vector2.Divide(deltaPos, 4);
 
-            /* transform individual wheel movement to whole robot movement */
-            double cornerDegrees = 90/(Math.sqrt(2)+1);
-            Vector2 wheelVectorRight = new Vector2(Math.sin(cornerDegrees), Math.cos(cornerDegrees));
-            Vector2 wheelVectorLeft = new Vector2(-Math.sin(cornerDegrees), Math.cos(cornerDegrees));
-
-            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
-            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
-            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
-            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
-
-            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
-            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
-            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
-
-            // divide by 4 to get average vector
-            deltaPos = Vector2.Divide(deltaPos, 4);
-
-            /* account for rotation */
-            double currentAngle = robot.gyroscope.getCurrentAngle();
-            Vector2 t_deltaPos = deltaPos;
-            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
-            deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
-
-            /* update position */
-            currentPosition = Vector2.Add(currentPosition, deltaPos);
-
-            /* timeout between updates */
-            Thread.sleep(30);
+//            /* account for rotation */
+//            double currentAngle = robot.gyroscope.getCurrentAngle();
+//            Vector2 t_deltaPos = deltaPos;
+//            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
+//            deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
+//
+//            /* update position */
+//            currentPosition = Vector2.Add(currentPosition, deltaPos);
+//
+//            /* timeout between updates */
+//            Thread.sleep(30);
         }
     }
     public void DriveToPosition (Vector2 targetPos) throws InterruptedException {

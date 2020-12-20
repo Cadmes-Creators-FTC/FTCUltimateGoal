@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 @Disabled
 public class MainRobot {
     //hardwareMap and telemetry
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
     public Boolean isRunning = true;
 
