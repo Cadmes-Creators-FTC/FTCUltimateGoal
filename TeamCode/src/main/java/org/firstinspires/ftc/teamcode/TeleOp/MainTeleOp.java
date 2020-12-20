@@ -29,6 +29,8 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive()){
             DriveWithController();
 //            RingShooter();
+            if (gamepad1.dpad_up)
+                button();
         }
 
         robot.isRunning = false;
@@ -66,5 +68,30 @@ public class MainTeleOp extends LinearOpMode {
             robot.shooter.TurnOn(1);
         else
             robot.shooter.TurnOf();
+    }
+
+    private void button(){
+        boolean dPad = gamepad1.dpad_up;
+        double Test0 = 0;
+        double Test1 = 0;
+        double Test2 = 0;
+        double Test3 = 0;
+        double Counter = 0.1;
+
+        WheelPowerConfig wpc = new WheelPowerConfig(
+                Test0 + Counter,
+                Test1 + Counter,
+                Test2 + Counter,
+                Test3 + Counter
+        );
+        wpc.clamp();
+        
+        if (dPad)
+            wpc.lf = Counter + Math.pow(wpc.lf, 1);
+            wpc.lb = Counter + Math.pow(wpc.lb, 1);
+            wpc.rf = Counter + Math.pow(wpc.rf, 1);
+            wpc.rb = Counter + Math.pow(wpc.rb, 1);
+
+
     }
 }

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.misc.DataTypes;
 
 import org.firstinspires.ftc.teamcode.misc.MathFunctions;
 
-public class WheelPosition {
+public class  WheelPosition {
     public double lf,rf,rb,lb;
 
     public WheelPosition(double lfPos, double rfPos, double rbPos, double lbPos){

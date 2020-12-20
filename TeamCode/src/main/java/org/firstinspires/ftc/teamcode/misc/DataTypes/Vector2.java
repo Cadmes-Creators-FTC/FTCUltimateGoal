@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.misc.DataTypes;
 
-public class Vector2 {
+public class  Vector2 {
     public double x, y;
 
     public Vector2(double xIn, double yIN){
