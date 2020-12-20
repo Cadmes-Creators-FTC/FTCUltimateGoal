@@ -20,8 +20,8 @@ public class Gyroscope {
 
     private Orientation lastAngles = new Orientation();
 
-    private double currentAngle;
-    private double targetAngle;
+    private double currentAngle = 0;
+    private double targetAngle = 0;
 
     public Gyroscope(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
         telemetry = inputTelemetry;
