@@ -17,16 +17,16 @@ public class  Vector2 {
     }
 
 
-    public static Vector2 Add(Vector2 v1, Vector2 v2){
+    public static Vector2 add(Vector2 v1, Vector2 v2){
         return new Vector2(v1.x+v2.x, v1.y+v2.y);
     }
-    public static Vector2 Subtract(Vector2 v1, Vector2 v2){
+    public static Vector2 subtract(Vector2 v1, Vector2 v2){
         return new Vector2(v1.x-v2.x, v1.y-v2.y);
     }
-    public static Vector2 Multiply(Vector2 vector, double scaler){
+    public static Vector2 multiply(Vector2 vector, double scaler){
         return new Vector2(vector.x*scaler, vector.y*scaler);
     }
-    public static Vector2 Divide(Vector2 vector, double scaler){
+    public static Vector2 divide(Vector2 vector, double scaler){
         return new Vector2(vector.x/scaler, vector.y/scaler);
     }
 }

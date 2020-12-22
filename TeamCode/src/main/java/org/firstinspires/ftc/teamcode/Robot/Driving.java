@@ -199,7 +199,7 @@ public class Driving {
 //            deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
 
             /* update position */
-            currentPosition = Vector2.Add(currentPosition, deltaPos);
+            currentPosition = Vector2.add(currentPosition, deltaPos);
 
             /* timeout between updates */
             Thread.sleep(30);
@@ -208,7 +208,7 @@ public class Driving {
     public void driveToPosition(Vector2 targetPos) throws InterruptedException {
         double stopDistance = 10;
 
-        Vector2 deltaPos = Vector2.Subtract(targetPos, currentPosition);
+        Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         while((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)) {
             WheelPowerConfig wpc = new WheelPowerConfig(
                     deltaPos.y + deltaPos.x,
@@ -222,7 +222,7 @@ public class Driving {
 
             Thread.sleep(100);
 
-            deltaPos = Vector2.Subtract(targetPos, currentPosition);
+            deltaPos = Vector2.subtract(targetPos, currentPosition);
         }
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
