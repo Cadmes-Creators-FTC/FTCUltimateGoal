@@ -25,6 +25,17 @@ public class Matrix {
         matrix = t_matrix;
     }
 
+    public static Matrix scale(Matrix a, double scaler){
+        Matrix b = new Matrix(a.rows, a.columns, null);
+
+        for(int i = 0; i < a.rows; i++) {
+            for (int j = 0; j < a.columns; j++) {
+                b.matrix[i][j] = a.matrix[i][j] * scaler;
+            }
+        }
+
+        return b;
+    }
     public static Matrix multiply(Matrix a, Matrix b){
         Matrix c = new Matrix(a.rows, b.columns, null);
 
