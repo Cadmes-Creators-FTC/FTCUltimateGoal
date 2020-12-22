@@ -19,7 +19,7 @@ public class Driving {
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
-    private final int ticksPerRotation = 1120;
+    private final int ticksPerRotation = 960;
 
     private boolean keepAtTargetAngle = false;
 
@@ -154,20 +154,20 @@ public class Driving {
             telemetry.update();
 
             /* get wheel pos matrix */
-            wheelPosDelta.toCM(36, ticksPerRotation);
+            wheelPosDelta.toCM(11*Math.PI, ticksPerRotation);
             Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
-                    { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.rb, wheelPosDelta.lb }
+                    { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.lb, wheelPosDelta.rb }
             });
 
             /* get transformation matrix */
-            double angle = Math.toRadians(robot.gyroscope.getCurrentAngle()) + Math.PI/4;
+            double angle = Math.toRadians(-robot.gyroscope.getCurrentAngle()) + Math.PI/4;
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
             Matrix transformMatrix = new Matrix(4, 2, new double[][]{
-                    { sinVal,  cosVal },
-                    { cosVal, -sinVal },
-                    { sinVal,  cosVal },
-                    { cosVal, -sinVal },
+                    { 1.21*sinVal,  cosVal },
+                    { 1.21*cosVal, -sinVal },
+                    { 1.21*cosVal, -sinVal },
+                    { 1.21*sinVal,  cosVal },
             });
             transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
@@ -175,35 +175,11 @@ public class Driving {
             Matrix posMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
             Vector2 deltaPos = new Vector2(posMatrix.matrix[0][1], posMatrix.matrix[0][0]);
 
-//            /* transform individual wheel movement to whole robot movement */
-//            double cornerDegrees = 90/(Math.sqrt(2)+1);
-//            Vector2 wheelVectorRight = new Vector2(-Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
-//            Vector2 wheelVectorLeft = new Vector2(Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
-//
-//
-//            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
-//            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
-//            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
-//            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
-//
-//            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
-//            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
-//            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
-//
-//            // divide by 4 to get average vector
-//            deltaPos = Vector2.Divide(deltaPos, 4);
-//
-//            /* account for rotation */
-//            double currentAngle = robot.gyroscope.getCurrentAngle();
-//            Vector2 t_deltaPos = deltaPos;
-//            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
-//            deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
-
             /* update position */
             currentPosition = Vector2.add(currentPosition, deltaPos);
 
             /* timeout between updates */
-            Thread.sleep(30);
+            Thread.sleep(50);
         }
     }
     public void driveToPosition(Vector2 targetPos) throws InterruptedException {

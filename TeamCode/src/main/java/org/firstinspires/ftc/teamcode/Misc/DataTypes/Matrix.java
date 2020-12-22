@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Misc.DataTypes;
 
+import java.util.Arrays;
+
 public class Matrix {
     public int rows, columns;
     public double[][] matrix;
@@ -10,12 +12,9 @@ public class Matrix {
 
         // make all 0 matrix if input is null
         if (t_matrix == null){
-            t_matrix = new double[][]{{}};
-            for (int i = 0; i < t_rows; i++) {
-                for (int j = 0; j < t_columns; j++) {
-                    t_matrix[i][j] = 0;
-                }
-            }
+            t_matrix = new double[rows][columns];
+            for (double[] row: t_matrix)
+                Arrays.fill(row, 0.0);
         }
 
         matrix = t_matrix;
@@ -26,15 +25,13 @@ public class Matrix {
     }
 
     public static Matrix scale(Matrix a, double scaler){
-        Matrix b = new Matrix(a.rows, a.columns, null);
-
         for(int i = 0; i < a.rows; i++) {
             for (int j = 0; j < a.columns; j++) {
-                b.matrix[i][j] = a.matrix[i][j] * scaler;
+                a.matrix[i][j] *= scaler;
             }
         }
 
-        return b;
+        return a;
     }
     public static Matrix multiply(Matrix a, Matrix b){
         Matrix c = new Matrix(a.rows, b.columns, null);

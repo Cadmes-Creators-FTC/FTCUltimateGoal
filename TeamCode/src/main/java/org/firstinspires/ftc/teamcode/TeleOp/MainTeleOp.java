@@ -28,7 +28,7 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-//            driveWithJoystick();
+            driveWithJoystick();
 //            ringShooter();
 //            if (gamepad1.dpad_up)
 //                button();
