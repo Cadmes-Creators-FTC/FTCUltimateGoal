@@ -13,16 +13,16 @@ public class  WheelPosition {
     }
 
     public void ToCM(double wheelCircumference, double ticksPerRot){
-        lf = MathFunctions.TicksToCMs(lf, wheelCircumference, ticksPerRot);
-        rf = MathFunctions.TicksToCMs(rf, wheelCircumference, ticksPerRot);
-        rb = MathFunctions.TicksToCMs(rb, wheelCircumference, ticksPerRot);
-        lb = MathFunctions.TicksToCMs(lb, wheelCircumference, ticksPerRot);
+        lf = MathFunctions.ticksToCMs(lf, wheelCircumference, ticksPerRot);
+        rf = MathFunctions.ticksToCMs(rf, wheelCircumference, ticksPerRot);
+        rb = MathFunctions.ticksToCMs(rb, wheelCircumference, ticksPerRot);
+        lb = MathFunctions.ticksToCMs(lb, wheelCircumference, ticksPerRot);
     }
     public void ToTicks(double wheelCircumference, double ticksPerRot){
-        lf = MathFunctions.CMsToTicks(lf, wheelCircumference, ticksPerRot);
-        rf = MathFunctions.CMsToTicks(rf, wheelCircumference, ticksPerRot);
-        rb = MathFunctions.CMsToTicks(rb, wheelCircumference, ticksPerRot);
-        lb = MathFunctions.CMsToTicks(lb, wheelCircumference, ticksPerRot);
+        lf = MathFunctions.centimetersToTicks(lf, wheelCircumference, ticksPerRot);
+        rf = MathFunctions.centimetersToTicks(rf, wheelCircumference, ticksPerRot);
+        rb = MathFunctions.centimetersToTicks(rb, wheelCircumference, ticksPerRot);
+        lb = MathFunctions.centimetersToTicks(lb, wheelCircumference, ticksPerRot);
     }
 
 
