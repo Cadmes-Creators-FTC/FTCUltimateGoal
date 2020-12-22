@@ -20,6 +20,7 @@ public class MainTeleOp extends LinearOpMode {
         robot = new MainRobot(hardwareMap, telemetry);
         //wait for imu to calibrate
         robot.gyroscope.waitForGyroCalibration();
+        robot.startThreats();
 
         telemetry.addData("State", "Initialized, waiting for start");
         telemetry.update();
@@ -27,10 +28,10 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            driveWithJoystick();
+//            driveWithJoystick();
 //            ringShooter();
-            if (gamepad1.dpad_up)
-                button();
+//            if (gamepad1.dpad_up)
+//                button();
         }
 
         robot.isRunning = false;
@@ -65,7 +66,7 @@ public class MainTeleOp extends LinearOpMode {
 
     private void ringShooter(){
         if (gamepad2.a)
-            robot.shooter.turnOn(1);
+            robot.shooter.turnOn(0.85);
         else
             robot.shooter.turnOf();
     }

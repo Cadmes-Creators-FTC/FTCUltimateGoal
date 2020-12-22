@@ -20,6 +20,11 @@ public class Shooter {
 
         shooterWheelL = hardwareMap.get(DcMotor.class, "ShooterL");
         shooterWheelR = hardwareMap.get(DcMotor.class, "ShooterR");
+
+        shooterWheelL.setDirection(DcMotor.Direction.REVERSE);
+    }
+    public void startThreats(){
+
     }
 
     public void turnOn(double power){

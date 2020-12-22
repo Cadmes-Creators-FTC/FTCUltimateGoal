@@ -47,8 +47,9 @@ public class Driving {
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
 
-        //start threads
+    public void startThreats(){
         new Thread(){
             @Override
             public void run(){

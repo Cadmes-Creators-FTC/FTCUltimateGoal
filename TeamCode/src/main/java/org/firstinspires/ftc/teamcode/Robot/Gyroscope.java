@@ -34,7 +34,9 @@ public class Gyroscope {
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.loggingEnabled = false;
         imu.initialize(parameters);
+    }
 
+    public void startThreats(){
         //keep currentAngle updated
         new Thread(){
             @Override
