@@ -25,7 +25,7 @@ public class WheelPowerConfig {
         }
     }
 
-    public static WheelPowerConfig Add(WheelPowerConfig wpc1, WheelPowerConfig wpc2){
+    public static WheelPowerConfig add(WheelPowerConfig wpc1, WheelPowerConfig wpc2){
         return new WheelPowerConfig(
                 wpc1.lf+wpc2.lf,
                 wpc1.rf+wpc2.rf,

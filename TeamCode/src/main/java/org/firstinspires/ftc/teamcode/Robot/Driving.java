@@ -96,7 +96,7 @@ public class Driving {
                 WheelPowerConfig currentWPC = getWheelPowers();
                 WheelPowerConfig correctionWPC = new WheelPowerConfig(correction, -correction, -correction, correction);
 
-                WheelPowerConfig newWPC = WheelPowerConfig.Add(currentWPC, correctionWPC);
+                WheelPowerConfig newWPC = WheelPowerConfig.add(currentWPC, correctionWPC);
 
                 setWheelPowers(newWPC);
             }else
