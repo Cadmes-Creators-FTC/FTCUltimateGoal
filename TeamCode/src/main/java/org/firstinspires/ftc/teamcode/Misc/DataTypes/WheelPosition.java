@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.misc.DataTypes;
+package org.firstinspires.ftc.teamcode.Misc.DataTypes;
 
-import org.firstinspires.ftc.teamcode.misc.MathFunctions;
+import org.firstinspires.ftc.teamcode.Misc.MathFunctions;
 
 public class  WheelPosition {
     public double lf,rf,rb,lb;

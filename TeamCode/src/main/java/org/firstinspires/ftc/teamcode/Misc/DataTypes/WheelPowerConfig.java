@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.misc.DataTypes;
+package org.firstinspires.ftc.teamcode.Misc.DataTypes;
 
 public class WheelPowerConfig {
     public double lf,rf,rb,lb;

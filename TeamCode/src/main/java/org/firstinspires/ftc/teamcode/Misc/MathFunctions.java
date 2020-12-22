@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.misc;
+package org.firstinspires.ftc.teamcode.Misc;
 
 public class MathFunctions {
 

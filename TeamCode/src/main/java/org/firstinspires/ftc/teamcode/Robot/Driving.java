@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.Matrix;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPosition;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Matrix;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @Disabled
 public class Driving {

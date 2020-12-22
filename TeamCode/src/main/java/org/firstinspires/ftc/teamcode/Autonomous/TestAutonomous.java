@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 
 @Autonomous(name="TestAutonomous", group="blue")
 public class TestAutonomous extends LinearOpMode {

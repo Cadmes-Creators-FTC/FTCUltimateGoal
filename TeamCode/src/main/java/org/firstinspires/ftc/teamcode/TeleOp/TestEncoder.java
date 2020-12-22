@@ -4,9 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Robot.MainRobot;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
-
 @TeleOp(name = "testEncoder", group = "TeleOp")
 public class TestEncoder extends LinearOpMode {
 
