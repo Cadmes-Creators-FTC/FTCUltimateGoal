@@ -53,7 +53,7 @@ public class Driving {
             @Override
             public void run(){
                 try {
-                    KeepAtTargetAngle();
+                    keepAtTargetAngle();
                 } catch (InterruptedException ignored) { }
             }
         }.start();
@@ -61,7 +61,7 @@ public class Driving {
             @Override
             public void run(){
                 try {
-                    KeepPositionUpdated();
+                    keepPositionUpdated();
                 } catch (InterruptedException ignored) { }
             }
         }.start();
@@ -89,7 +89,7 @@ public class Driving {
     public void setKeepAtTargetAngle(boolean x){
         keepAtTargetAngle = x;
     }
-    private void KeepAtTargetAngle() throws InterruptedException {
+    private void keepAtTargetAngle() throws InterruptedException {
         while (robot.isRunning){
             if (keepAtTargetAngle){
                 double correction = getAngleWheelCorrection();
@@ -127,7 +127,7 @@ public class Driving {
         currentPosition = pos;
     }
 
-    public void KeepPositionUpdated() throws InterruptedException{
+    public void keepPositionUpdated() throws InterruptedException{
         while (robot.isRunning){
             /* get and update wheel tick positions */
             WheelPosition wheelPosDelta = new WheelPosition(
@@ -205,7 +205,7 @@ public class Driving {
             Thread.sleep(30);
         }
     }
-    public void DriveToPosition (Vector2 targetPos) throws InterruptedException {
+    public void driveToPosition(Vector2 targetPos) throws InterruptedException {
         double stopDistance = 10;
 
         Vector2 deltaPos = Vector2.Subtract(targetPos, currentPosition);
