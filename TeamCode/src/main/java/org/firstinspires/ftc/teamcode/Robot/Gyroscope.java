@@ -40,19 +40,19 @@ public class Gyroscope {
             @Override
             public void run(){
                 try {
-                    KeepCurrentAngleUpdated();
+                    keepCurrentAngleUpdated();
                 } catch (InterruptedException ignored) { }
             }
         }.start();
     }
 
-    public void WaitForGyroCalibration() throws InterruptedException{
+    public void waitForGyroCalibration() throws InterruptedException{
         while (!imu.isGyroCalibrated()) {
             Thread.sleep(50);
         }
     }
 
-    private void KeepCurrentAngleUpdated() throws InterruptedException {
+    private void keepCurrentAngleUpdated() throws InterruptedException {
         while (robot.isRunning){
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
@@ -71,7 +71,7 @@ public class Gyroscope {
     public double getCurrentAngle(){
         return currentAngle;
     }
-    public void ResetCurrentAngle(){
+    public void resetCurrentAngle(){
         currentAngle = 0;
         targetAngle = 0;
         lastAngles = new Orientation();
