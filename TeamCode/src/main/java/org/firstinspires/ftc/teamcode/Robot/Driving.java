@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.misc.DataTypes.Matrix;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
@@ -23,7 +24,7 @@ public class Driving {
     private boolean keepAtTargetAngle = false;
 
     private Vector2 currentPosition = new Vector2(0, 0);
-    private WheelPosition currentPositionTicks = new WheelPosition(0, 0, 0, 0);
+    private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
     public Driving(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
         telemetry = inputTelemetry;
@@ -128,53 +129,70 @@ public class Driving {
 
     public void KeepPositionUpdated() throws InterruptedException{
         while (robot.isRunning){
-            /* get position delta and update wheel ticks */
+            /* get and update wheel tick positions */
             WheelPosition wheelPosDelta = new WheelPosition(
-                    wheelLF.getCurrentPosition()*-1 - currentPositionTicks.lf,
-                    wheelRF.getCurrentPosition()*-1 - currentPositionTicks.rf,
-                    wheelRB.getCurrentPosition()*-1 - currentPositionTicks.rb,
-                    wheelLB.getCurrentPosition()*-1 - currentPositionTicks.lb
+                    wheelLF.getCurrentPosition()*-1 - currentWheelPosTicks.lf,
+                    wheelRF.getCurrentPosition()*-1 - currentWheelPosTicks.rf,
+                    wheelRB.getCurrentPosition()*-1 - currentWheelPosTicks.rb,
+                    wheelLB.getCurrentPosition()*-1 - currentWheelPosTicks.lb
             );
-            currentPositionTicks = new WheelPosition(
+            currentWheelPosTicks = new WheelPosition(
                     wheelLF.getCurrentPosition()*-1,
                     wheelRF.getCurrentPosition()*-1,
                     wheelRB.getCurrentPosition()*-1,
                     wheelLB.getCurrentPosition()*-1
             );
 
-            WheelPosition testVar = currentPositionTicks;
-
             telemetry.addData("pos x", currentPosition.x);
             telemetry.addData("pos y", currentPosition.y);
-            telemetry.addData("ticks 1", testVar.lf);
-            telemetry.addData("ticks 2", testVar.rf);
-            telemetry.addData("ticks 3", testVar.rb);
-            telemetry.addData("ticks 4", testVar.lb);
+            telemetry.addData("ticks 1", currentWheelPosTicks.lf);
+            telemetry.addData("ticks 2", currentWheelPosTicks.rf);
+            telemetry.addData("ticks 3", currentWheelPosTicks.rb);
+            telemetry.addData("ticks 4", currentWheelPosTicks.lb);
             telemetry.addData("rot", robot.gyroscope.getCurrentAngle());
             telemetry.update();
 
-            /* transform ticks to cm */
+            /* get wheel pos matrix */
             wheelPosDelta.ToCM(36, ticksPerRotation);
+            Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
+                    { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.rb, wheelPosDelta.lb }
+            });
 
-            /* transform individual wheel movement to whole robot movement */
-            double cornerDegrees = 90/(Math.sqrt(2)+1);
-            Vector2 wheelVectorRight = new Vector2(-Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
-            Vector2 wheelVectorLeft = new Vector2(Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
+            /* get transformation matrix */
+            double angle = Math.toRadians(robot.gyroscope.getCurrentAngle()) + Math.PI/4;
+            double sinVal = Math.sqrt(2)*Math.sin(angle);
+            double cosVal = Math.sqrt(2)*Math.cos(angle);
+            Matrix transformMatrix = new Matrix(4, 2, new double[][]{
+                    { sinVal,  cosVal },
+                    { cosVal, -sinVal },
+                    { sinVal,  cosVal },
+                    { cosVal, -sinVal },
+            });
+            transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
+            /* get movement */
+            Matrix posMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
+            Vector2 deltaPos = new Vector2(posMatrix.matrix[0][1], posMatrix.matrix[0][0]);
 
-            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
-            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
-            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
-            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
-
-            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
-            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
-            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
-
-            // divide by 4 to get average vector
-            deltaPos = Vector2.Divide(deltaPos, 4);
-
-            /* account for rotation */
+//            /* transform individual wheel movement to whole robot movement */
+//            double cornerDegrees = 90/(Math.sqrt(2)+1);
+//            Vector2 wheelVectorRight = new Vector2(-Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
+//            Vector2 wheelVectorLeft = new Vector2(Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
+//
+//
+//            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
+//            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
+//            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
+//            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
+//
+//            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
+//            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
+//            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
+//
+//            // divide by 4 to get average vector
+//            deltaPos = Vector2.Divide(deltaPos, 4);
+//
+//            /* account for rotation */
 //            double currentAngle = robot.gyroscope.getCurrentAngle();
 //            Vector2 t_deltaPos = deltaPos;
 //            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
