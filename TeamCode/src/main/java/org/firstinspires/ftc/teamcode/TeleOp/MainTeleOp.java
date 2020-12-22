@@ -27,8 +27,8 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()){
-            DriveWithJoystick();
-//            RingShooter();
+            driveWithJoystick();
+//            ringShooter();
             if (gamepad1.dpad_up)
                 button();
         }
@@ -36,7 +36,7 @@ public class MainTeleOp extends LinearOpMode {
         robot.isRunning = false;
     }
 
-    private void DriveWithJoystick(){
+    private void driveWithJoystick(){
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
@@ -63,7 +63,7 @@ public class MainTeleOp extends LinearOpMode {
         robot.driving.setWheelPowers(wpc);
     }
 
-    private void RingShooter(){
+    private void ringShooter(){
         if (gamepad2.a)
             robot.shooter.turnOn(1);
         else
