@@ -32,7 +32,7 @@ public class TestAutonomous extends LinearOpMode {
         //start autonomous
         //AutonomousSequence();
         while (!isStopRequested()){
-            AutonomousSequence();
+            autonomousSequence();
 
             telemetry.addData("State", "Done");
             telemetry.update();
@@ -40,7 +40,7 @@ public class TestAutonomous extends LinearOpMode {
     }
 
     //autonomous sequence
-    private void AutonomousSequence() throws InterruptedException {
+    private void autonomousSequence() throws InterruptedException {
 
     }
 
