@@ -12,13 +12,13 @@ public class  WheelPosition {
         lb = lbPos;
     }
 
-    public void ToCM(double wheelCircumference, double ticksPerRot){
+    public void toCM(double wheelCircumference, double ticksPerRot){
         lf = MathFunctions.ticksToCMs(lf, wheelCircumference, ticksPerRot);
         rf = MathFunctions.ticksToCMs(rf, wheelCircumference, ticksPerRot);
         rb = MathFunctions.ticksToCMs(rb, wheelCircumference, ticksPerRot);
         lb = MathFunctions.ticksToCMs(lb, wheelCircumference, ticksPerRot);
     }
-    public void ToTicks(double wheelCircumference, double ticksPerRot){
+    public void toTicks(double wheelCircumference, double ticksPerRot){
         lf = MathFunctions.centimetersToTicks(lf, wheelCircumference, ticksPerRot);
         rf = MathFunctions.centimetersToTicks(rf, wheelCircumference, ticksPerRot);
         rb = MathFunctions.centimetersToTicks(rb, wheelCircumference, ticksPerRot);
@@ -26,7 +26,7 @@ public class  WheelPosition {
     }
 
 
-    public static WheelPosition Subtract(WheelPosition pos1, WheelPosition pos2){
+    public static WheelPosition subtract(WheelPosition pos1, WheelPosition pos2){
         return new WheelPosition(
                 pos1.lf-pos2.lf,
                 pos1.rf-pos2.rf,

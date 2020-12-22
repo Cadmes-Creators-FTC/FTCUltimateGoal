@@ -153,7 +153,7 @@ public class Driving {
             telemetry.update();
 
             /* get wheel pos matrix */
-            wheelPosDelta.ToCM(36, ticksPerRotation);
+            wheelPosDelta.toCM(36, ticksPerRotation);
             Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
                     { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.rb, wheelPosDelta.lb }
             });
