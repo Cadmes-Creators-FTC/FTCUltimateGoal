@@ -210,11 +210,5 @@ public class Driving {
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
 
-    public void dPad(){
-
-
-
-
-    }
     //endregion
 }
