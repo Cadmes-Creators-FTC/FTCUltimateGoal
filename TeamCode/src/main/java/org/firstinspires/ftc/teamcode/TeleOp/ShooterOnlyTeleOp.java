@@ -32,14 +32,14 @@ public class ShooterOnlyTeleOp extends LinearOpMode {
 
     private void RingShooter(){
         if (gamepad2.a)
-            robot.shooter.TurnOn(1);
+            robot.shooter.turnOn(1);
         else if(gamepad2.b)
-            robot.shooter.TurnOn(0.9);
+            robot.shooter.turnOn(0.9);
         else if(gamepad2.x)
-            robot.shooter.TurnOn(0.8);
+            robot.shooter.turnOn(0.8);
         else if(gamepad2.y)
-            robot.shooter.TurnOn(0.6);
+            robot.shooter.turnOn(0.6);
         else
-            robot.shooter.TurnOf();
+            robot.shooter.turnOf();
     }
 }

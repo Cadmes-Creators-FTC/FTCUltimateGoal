@@ -22,11 +22,11 @@ public class Shooter {
         shooterWheelR = hardwareMap.get(DcMotor.class, "ShooterR");
     }
 
-    public void TurnOn(double power){
+    public void turnOn(double power){
         shooterWheelL.setPower(power);
         shooterWheelR.setPower(power);
     }
-    public void TurnOf(){
+    public void turnOf(){
         shooterWheelL.setPower(0);
         shooterWheelR.setPower(0);
     }
