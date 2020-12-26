@@ -29,7 +29,7 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeIsActive()){
             DriveWithController();
 //            RingShooter();
-            if (gamepad1.dpad_up)
+
                 button();
         }
 
@@ -37,6 +37,8 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void DriveWithController(){
+        if (gamepad1.dpad_up||gamepad1.dpad_down)
+            return;
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
@@ -71,27 +73,49 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void button(){
-        boolean dPad = gamepad1.dpad_up;
         double Test0 = 0;
         double Test1 = 0;
         double Test2 = 0;
         double Test3 = 0;
         double Counter = 0.1;
+       WheelPowerConfig wpc = new WheelPowerConfig(
+                0,
+                0,
+                0,
+                0
+       );
+       //0 wpc.clamp();
 
-        WheelPowerConfig wpc = new WheelPowerConfig(
-                Test0 + Counter,
-                Test1 + Counter,
-                Test2 + Counter,
-                Test3 + Counter
-        );
-        wpc.clamp();
-        
-        if (dPad)
-            wpc.lf = Counter + Math.pow(wpc.lf, 1);
-            wpc.lb = Counter + Math.pow(wpc.lb, 1);
-            wpc.rf = Counter + Math.pow(wpc.rf, 1);
-            wpc.rb = Counter + Math.pow(wpc.rb, 1);
+        if (gamepad1.dpad_up) {
+            wpc.lf = 0.5;
+            wpc.lb = 0.5;
+            wpc.rf = 0.5;
+            wpc.rb = 0.5;
+            robot.driving.setWheelPowers(wpc);
+        }
 
+        if (gamepad1.dpad_down) {
+            wpc.lf = -0.5;
+            wpc.lb = -0.5;
+            wpc.rf = -0.5;
+            wpc.rb = -0.5;
+            robot.driving.setWheelPowers(wpc);
+        }
 
+        if (gamepad1.dpad_left) {
+            wpc.lf = -0.5;
+            wpc.lb = 0.5;
+            wpc.rf = 0.5;
+            wpc.rb = -0.5;
+            robot.driving.setWheelPowers(wpc);
+        }
+
+        if (gamepad1.dpad_right){
+            wpc.lf = 0.5;
+            wpc.lb = -0.5;
+            wpc.rf = -0.5;
+            wpc.rb = 0.5;
+            robot.driving.setWheelPowers(wpc);
+        }
     }
 }
