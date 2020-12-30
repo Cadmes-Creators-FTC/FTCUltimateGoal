@@ -27,15 +27,15 @@ public class MainRobot {
             componentsList.add(logging);
         }
         if(!disabledComponents.contains("gyroscope")) {
-            gyroscope = new Gyroscope(hardwareMap, telemetry, this);
+            gyroscope = new Gyroscope(hardwareMap, this);
             componentsList.add(gyroscope);
         }
         if(!disabledComponents.contains("driving")) {
-            driving = new Driving(hardwareMap, telemetry, this);
+            driving = new Driving(hardwareMap, this);
             componentsList.add(driving);
         }
         if(!disabledComponents.contains("shooter")) {
-            shooter = new Shooter(hardwareMap, telemetry, this);
+            shooter = new Shooter(hardwareMap, this);
             componentsList.add(shooter);
         }
     }
