@@ -20,8 +20,8 @@ public class Gyroscope extends RobotComponent{
     private double currentAngle = 0;
     private double targetAngle = 0;
 
-    public Gyroscope(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
-        super(inputTelemetry, inputRobot);
+    public Gyroscope(HardwareMap hardwareMap, MainRobot inputRobot) {
+        super(inputRobot);
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 

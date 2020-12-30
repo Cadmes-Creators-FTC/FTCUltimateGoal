@@ -17,7 +17,7 @@ public class Logging extends RobotComponent {
     private int updateDelay = 100;
 
     public Logging(Telemetry inputTelemetry, MainRobot inputRobot) {
-        super(inputTelemetry, inputRobot);
+        super(inputRobot);
 
         telemetry = inputTelemetry;
     }

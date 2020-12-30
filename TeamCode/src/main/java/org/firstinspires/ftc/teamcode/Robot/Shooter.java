@@ -11,8 +11,8 @@ public class Shooter extends RobotComponent {
     private final DcMotor shooterWheelL;
     private final DcMotor shooterWheelR;
 
-    public Shooter(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
-        super(inputTelemetry, inputRobot);
+    public Shooter(HardwareMap hardwareMap, MainRobot inputRobot) {
+        super(inputRobot);
 
         shooterWheelL = hardwareMap.get(DcMotor.class, "ShooterL");
         shooterWheelR = hardwareMap.get(DcMotor.class, "ShooterR");

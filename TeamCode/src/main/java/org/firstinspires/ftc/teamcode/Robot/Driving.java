@@ -21,8 +21,8 @@ public class Driving extends RobotComponent {
     private Vector2 currentPosition = new Vector2(0, 0);
     private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
-    public Driving(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
-        super(inputTelemetry, inputRobot);
+    public Driving(HardwareMap hardwareMap, MainRobot inputRobot) {
+        super(inputRobot);
 
         wheelLF = hardwareMap.get(DcMotor.class, "LFWheel");
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
