@@ -30,9 +30,9 @@ public class MainRobot {
             components.add( new Shooter(hardwareMap, telemetry, this) );
     }
 
-    public void startThreats(){
+    public void startThreads(){
         for(int i = 0; i < components.size(); i++){
-            components.get(i).startThreats();
+            components.get(i).startThreads();
         }
     }
 }

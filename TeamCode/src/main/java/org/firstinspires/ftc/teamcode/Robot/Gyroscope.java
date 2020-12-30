@@ -33,7 +33,7 @@ public class Gyroscope extends RobotComponent{
     }
 
     @Override
-    public void startThreats(){
+    public void startThreads(){
         new Thread(){
             @Override
             public void run(){

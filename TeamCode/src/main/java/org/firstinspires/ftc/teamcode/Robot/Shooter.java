@@ -21,7 +21,7 @@ public class Shooter extends RobotComponent {
     }
 
     @Override
-    public void startThreats(){
+    public void startThreads(){
 
     }
 

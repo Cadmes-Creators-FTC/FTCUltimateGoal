@@ -13,7 +13,7 @@ public class RobotComponent {
         robot = inputRobot;
     }
 
-    public void startThreats(){
+    public void startThreads(){
 
     }
 }
