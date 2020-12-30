@@ -16,10 +16,6 @@ public class MainRobot {
 
     public Boolean isRunning = true;
 
-    public Driving driving;
-    public Shooter shooter;
-    public Gyroscope gyroscope;
-
     public ArrayList<RobotComponent> components;
 
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) throws InterruptedException {
