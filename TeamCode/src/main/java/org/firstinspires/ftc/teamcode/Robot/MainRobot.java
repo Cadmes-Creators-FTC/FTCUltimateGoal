@@ -18,7 +18,7 @@ public class MainRobot {
 
     public ArrayList<RobotComponent> components;
 
-    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) throws InterruptedException {
+    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) {
         telemetry = inputTelemetry;
 
         List<String> disabledComponents = Arrays.asList(inputDisabledComponents);
