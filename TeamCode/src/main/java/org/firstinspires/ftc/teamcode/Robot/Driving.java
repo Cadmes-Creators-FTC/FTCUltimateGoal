@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @Disabled
-public class Driving extends RobotComponent{
+public class Driving extends RobotComponent {
     private final DcMotor wheelLF;
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
