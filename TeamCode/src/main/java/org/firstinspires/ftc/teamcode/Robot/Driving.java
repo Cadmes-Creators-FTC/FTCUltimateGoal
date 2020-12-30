@@ -18,8 +18,6 @@ public class Driving extends RobotComponent{
     private final DcMotor wheelLB;
     private final int ticksPerRotation = 960;
 
-    private boolean keepAtTargetAngle = false;
-
     private Vector2 currentPosition = new Vector2(0, 0);
     private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
