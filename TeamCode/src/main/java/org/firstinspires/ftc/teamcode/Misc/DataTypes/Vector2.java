@@ -16,7 +16,7 @@ public class  Vector2 {
         y *= n;
     }
 
-    public Matrix toMatrix(Vector2 v){
+    public Matrix toMatrix(){
         return new Matrix(1, 2, new double[][]{
                 { x, y }
         });
