@@ -11,20 +11,21 @@ import java.util.List;
 
 @Disabled
 public class MainRobot {
-    //hardwareMap and telemetry
-    private final Telemetry telemetry;
-
     public Boolean isRunning = true;
 
     public Driving driving;
     public Gyroscope gyroscope;
     public Shooter shooter;
+    public Logging logging;
     public ArrayList<RobotComponent> componentsList;
 
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) {
-        telemetry = inputTelemetry;
-
         List<String> disabledComponents = Arrays.asList(inputDisabledComponents);
+
+        if(!disabledComponents.contains("logging")) {
+            logging = new Logging(inputTelemetry, this);
+            componentsList.add(logging);
+        }
         if(!disabledComponents.contains("gyroscope")) {
             gyroscope = new Gyroscope(hardwareMap, telemetry, this);
             componentsList.add(gyroscope);
