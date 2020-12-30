@@ -23,7 +23,14 @@ public class Logging extends RobotComponent {
 
     @Override
     public void startThreads(){
-
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    updateLogs();
+                } catch (InterruptedException ignored) { }
+            }
+        }.start();
     }
 
     public void setLog(String key, String value){
