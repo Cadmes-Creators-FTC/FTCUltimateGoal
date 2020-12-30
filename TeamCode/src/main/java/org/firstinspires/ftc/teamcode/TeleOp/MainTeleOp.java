@@ -18,7 +18,6 @@ public class MainTeleOp extends LinearOpMode {
 
         //initialize robot hardware
         robot = new MainRobot(hardwareMap, telemetry);
-        //wait for imu to calibrate
         robot.gyroscope.waitForGyroCalibration();
         robot.startThreads();
 

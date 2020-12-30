@@ -18,7 +18,6 @@ public class TestAutonomous extends LinearOpMode {
         //initialize robot hardware
         robot = new MainRobot(hardwareMap, telemetry);
         robot.driving.setCurrentPosition(new Vector2(0, 0));
-        //wait for imu to calibrate
         robot.gyroscope.waitForGyroCalibration();
 
         telemetry.addData("State", "Initialized, waiting for start");
