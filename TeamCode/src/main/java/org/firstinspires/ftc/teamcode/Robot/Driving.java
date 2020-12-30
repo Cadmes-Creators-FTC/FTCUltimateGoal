@@ -11,10 +11,7 @@ import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @Disabled
-public class Driving {
-    private final Telemetry telemetry; // for logging and debugging
-    private final MainRobot robot; //reference to robot
-
+public class Driving extends RobotComponent{
     private final DcMotor wheelLF;
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
@@ -27,8 +24,7 @@ public class Driving {
     private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
     public Driving(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
-        telemetry = inputTelemetry;
-        robot = inputRobot;
+        super(inputTelemetry, inputRobot);
 
         wheelLF = hardwareMap.get(DcMotor.class, "LFWheel");
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
@@ -49,6 +45,7 @@ public class Driving {
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    @Override
     public void startThreats(){
         new Thread(){
             @Override
