@@ -144,12 +144,22 @@ public class Driving {
         double stopDistance = 10;
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
-        while((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)) {
+        while ((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)){
+
+            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
+            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+                    { Math.cos(angleRad), -Math.sin(angleRad) },
+                    { Math.sin(angleRad), Math.cos(angleRad) },
+            });
+
+            Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
+            Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
+
             WheelPowerConfig wpc = new WheelPowerConfig(
-                    deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x,
-                    deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x
             );
 
             wpc.clamp();
@@ -158,7 +168,7 @@ public class Driving {
             Thread.sleep(100);
 
             deltaPos = Vector2.subtract(targetPos, currentPosition);
-        }
+        };
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
