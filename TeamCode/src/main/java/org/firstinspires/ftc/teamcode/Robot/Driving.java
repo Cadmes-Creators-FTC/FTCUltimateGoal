@@ -102,15 +102,6 @@ public class Driving {
                     wheelLB.getCurrentPosition()*-1
             );
 
-            telemetry.addData("pos x", currentPosition.x);
-            telemetry.addData("pos y", currentPosition.y);
-            telemetry.addData("ticks 1", currentWheelPosTicks.lf);
-            telemetry.addData("ticks 2", currentWheelPosTicks.rf);
-            telemetry.addData("ticks 3", currentWheelPosTicks.rb);
-            telemetry.addData("ticks 4", currentWheelPosTicks.lb);
-            telemetry.addData("rot", robot.gyroscope.getCurrentAngle());
-            telemetry.update();
-
             /* get wheel pos matrix */
             wheelPosDelta.toCM(11*Math.PI, ticksPerRotation);
             Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
