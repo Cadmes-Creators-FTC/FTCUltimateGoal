@@ -16,7 +16,8 @@ public class ShooterOnlyTeleOp extends LinearOpMode {
         telemetry.update();
 
         //initialize robot hardware
-        robot = new MainRobot(hardwareMap, telemetry);
+        String[] disabledComponents = {"gyroscope", "driving"};
+        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
         telemetry.addData("State", "Initialized, waiting for start");
         telemetry.update();
