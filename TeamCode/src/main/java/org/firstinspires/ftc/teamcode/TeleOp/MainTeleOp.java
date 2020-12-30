@@ -34,9 +34,9 @@ public class MainTeleOp extends LinearOpMode {
 //                button();
         }
 
-        robot.logging.setLog("state", "Stopped");
-
         robot.isRunning = false;
+
+        robot.logging.setLog("state", "Stopped");
     }
 
     private void driveWithJoystick(){
