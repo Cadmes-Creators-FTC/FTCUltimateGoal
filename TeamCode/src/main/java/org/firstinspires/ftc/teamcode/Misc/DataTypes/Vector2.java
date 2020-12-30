@@ -16,6 +16,12 @@ public class  Vector2 {
         y *= n;
     }
 
+    public Matrix toMatrix(Vector2 v){
+        return new Matrix(1, 2, new double[][]{
+                { x, y }
+        });
+    }
+
 
     public static Vector2 add(Vector2 v1, Vector2 v2){
         return new Vector2(v1.x+v2.x, v1.y+v2.y);
@@ -28,11 +34,5 @@ public class  Vector2 {
     }
     public static Vector2 divide(Vector2 vector, double scaler){
         return new Vector2(vector.x/scaler, vector.y/scaler);
-    }
-
-    public static Matrix toMatrix(Vector2 v){
-        return new Matrix(1, 2, new double[][]{
-                { v.y, v.x }
-        });
     }
 }
