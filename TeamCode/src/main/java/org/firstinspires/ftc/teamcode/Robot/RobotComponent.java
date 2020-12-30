@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class RobotComponent {
     public final MainRobot robot; //reference to robot
 
-    public RobotComponent(Telemetry inputTelemetry, MainRobot inputRobot) {
+    public RobotComponent(MainRobot inputRobot) {
         robot = inputRobot;
     }
 
