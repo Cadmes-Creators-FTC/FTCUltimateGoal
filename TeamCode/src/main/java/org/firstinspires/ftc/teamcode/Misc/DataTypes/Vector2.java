@@ -29,4 +29,10 @@ public class  Vector2 {
     public static Vector2 divide(Vector2 vector, double scaler){
         return new Vector2(vector.x/scaler, vector.y/scaler);
     }
+
+    public static Matrix toMatrix(Vector2 v){
+        return new Matrix(1, 2, new double[][]{
+                { v.y, v.x }
+        });
+    }
 }
