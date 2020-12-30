@@ -12,7 +12,6 @@ public class MainTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        //initialize robot hardware
         String[] disabledComponents = {};
         robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
