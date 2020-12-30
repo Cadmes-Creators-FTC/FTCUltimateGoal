@@ -21,12 +21,12 @@ public class MainRobot {
 
         gyroscope = new Gyroscope(hardwareMap, telemetry, this);
         driving = new Driving(hardwareMap, telemetry, this);
-//        shooter = new Shooter(hardwareMap, telemetry, this);
+        shooter = new Shooter(hardwareMap, telemetry, this);
     }
 
     public void startThreats(){
         gyroscope.startThreats();
         driving.startThreats();
-//        shooter.startThreats();
+        shooter.startThreats();
     }
 }
