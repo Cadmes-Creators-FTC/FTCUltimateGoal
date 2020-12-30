@@ -16,23 +16,32 @@ public class MainRobot {
 
     public Boolean isRunning = true;
 
-    public ArrayList<RobotComponent> components;
+    public Driving driving;
+    public Gyroscope gyroscope;
+    public Shooter shooter;
+    public ArrayList<RobotComponent> componentsList;
 
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) {
         telemetry = inputTelemetry;
 
         List<String> disabledComponents = Arrays.asList(inputDisabledComponents);
-        if(!disabledComponents.contains("gyroscope"))
-            components.add( new Gyroscope(hardwareMap, telemetry, this) );
-        if(!disabledComponents.contains("driving"))
-            components.add( new Driving(hardwareMap, telemetry, this) );
-        if(!disabledComponents.contains("shooter"))
-            components.add( new Shooter(hardwareMap, telemetry, this) );
+        if(!disabledComponents.contains("gyroscope")) {
+            gyroscope = new Gyroscope(hardwareMap, telemetry, this);
+            componentsList.add(gyroscope);
+        }
+        if(!disabledComponents.contains("driving")) {
+            driving = new Driving(hardwareMap, telemetry, this);
+            componentsList.add(driving);
+        }
+        if(!disabledComponents.contains("shooter")) {
+            shooter = new Shooter(hardwareMap, telemetry, this);
+            componentsList.add(shooter);
+        }
     }
 
     public void startThreads(){
-        for(int i = 0; i < components.size(); i++){
-            components.get(i).startThreads();
+        for(int i = 0; i < componentsList.size(); i++){
+            componentsList.get(i).startThreads();
         }
     }
 }
