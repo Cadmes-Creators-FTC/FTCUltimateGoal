@@ -27,10 +27,7 @@ public class TestAutonomous extends LinearOpMode {
 
         robot.logging.setLog("state", "Running");
 
-        //start autonomous
-        //AutonomousSequence();
-        while (!isStopRequested()){
-            autonomousSequence();
+        autonomousSequence();
 
         robot.logging.setLog("state", "Stopped");
     }
