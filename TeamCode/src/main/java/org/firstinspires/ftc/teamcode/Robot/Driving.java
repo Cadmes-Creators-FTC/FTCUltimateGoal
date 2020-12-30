@@ -113,19 +113,19 @@ public class Driving {
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
             Matrix transformMatrix = new Matrix(4, 2, new double[][]{
-                    { 1.21*sinVal,  cosVal },
-                    { 1.21*cosVal, -sinVal },
-                    { 1.21*cosVal, -sinVal },
-                    { 1.21*sinVal,  cosVal },
+                    {  cosVal, 1.21*sinVal },
+                    { -sinVal, 1.21*cosVal },
+                    { -sinVal, 1.21*cosVal },
+                    {  cosVal, 1.21*sinVal },
             });
             transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
             /* get movement */
-            Matrix posMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
-            Vector2 deltaPos = new Vector2(posMatrix.matrix[0][1], posMatrix.matrix[0][0]);
+            Matrix deltaPosMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
+            Vector2 deltaPosVector = deltaPosMatrix.toVector2();
 
             /* update position */
-            currentPosition = Vector2.add(currentPosition, deltaPos);
+            currentPosition = Vector2.add(currentPosition, deltaPosVector);
 
             /* timeout between updates */
             Thread.sleep(50);
