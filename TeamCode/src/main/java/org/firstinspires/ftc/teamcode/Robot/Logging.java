@@ -14,6 +14,7 @@ public class Logging extends RobotComponent {
     private final Telemetry telemetry;
 
     private Map<String, String> logs;
+    private int updateDelay = 100;
 
     public Logging(Telemetry inputTelemetry, MainRobot inputRobot) {
         super(inputTelemetry, inputRobot);
@@ -40,14 +41,14 @@ public class Logging extends RobotComponent {
         logs.remove(key);
     }
 
-    public void updateLogs(int delay) throws InterruptedException {
+    public void updateLogs() throws InterruptedException {
         while (robot.isRunning){
             for(Map.Entry<String, String> entry : logs.entrySet()){
                 telemetry.addData(entry.getKey(), entry.getValue());
             }
             telemetry.update();
 
-            Thread.sleep(delay);
+            Thread.sleep(updateDelay);
         }
     }
 }
