@@ -54,14 +54,6 @@ public class Driving {
             @Override
             public void run(){
                 try {
-                    keepAtTargetAngle();
-                } catch (InterruptedException ignored) { }
-            }
-        }.start();
-        new Thread(){
-            @Override
-            public void run(){
-                try {
                     keepPositionUpdated();
                 } catch (InterruptedException ignored) { }
             }
@@ -85,40 +77,6 @@ public class Driving {
         );
     }
     //endregion
-
-    //region keep target angle
-    public void setKeepAtTargetAngle(boolean x){
-        keepAtTargetAngle = x;
-    }
-    private void keepAtTargetAngle() throws InterruptedException {
-        while (robot.isRunning){
-            if (keepAtTargetAngle){
-                double correction = getAngleWheelCorrection();
-                WheelPowerConfig currentWPC = getWheelPowers();
-                WheelPowerConfig correctionWPC = new WheelPowerConfig(correction, -correction, -correction, correction);
-
-                WheelPowerConfig newWPC = WheelPowerConfig.add(currentWPC, correctionWPC);
-
-                setWheelPowers(newWPC);
-            }else
-                Thread.sleep(500);
-        }
-    }
-    private double getAngleWheelCorrection(){
-        double gain = .05;
-        double minDegreesOff = 3;
-
-        double correction = 0;
-
-        double targetAngle = robot.gyroscope.getTargetAngle();
-        double currentAngle = robot.gyroscope.getCurrentAngle();
-        if (Math.abs(targetAngle - currentAngle) > minDegreesOff)
-            correction = targetAngle - currentAngle;
-        correction = correction * gain;
-
-        return correction;
-    }
-     //endregion
 
     //region Position
     public Vector2 getCurrentPosition(){
