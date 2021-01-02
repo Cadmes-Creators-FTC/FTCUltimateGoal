@@ -19,9 +19,9 @@ public class MainRobot {
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry) throws InterruptedException {
         telemetry = inputTelemetry;
 
-        gyroscope = new Gyroscope(hardwareMap, telemetry, this);
-        driving = new Driving(hardwareMap, telemetry, this);
-//        shooter = new Shooter(hardwareMap, telemetry, this);
+//        gyroscope = new Gyroscope(hardwareMap, telemetry, this);
+//        driving = new Driving(hardwareMap, telemetry, this);
+        shooter = new Shooter(hardwareMap, telemetry, this);
     }
 
     public void startThreats(){
