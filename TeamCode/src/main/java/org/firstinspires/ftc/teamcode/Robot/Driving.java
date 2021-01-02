@@ -19,7 +19,7 @@ public class Driving {
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
-    private final int ticksPerRotation = 1120;
+    private final int ticksPerRotation = 960;
 
     private boolean keepAtTargetAngle = false;
 
@@ -160,17 +160,14 @@ public class Driving {
             });
 
             /* get transformation matrix */
-            double yScaler = 1.33;
-            double xScaler = 1.11;
-
             double angle = Math.toRadians(-robot.gyroscope.getCurrentAngle()) + Math.PI/4;
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
             Matrix transformMatrix = new Matrix(4, 2, new double[][]{
-                    { yScaler*sinVal, xScaler*cosVal },
-                    { yScaler*cosVal, xScaler*-sinVal },
-                    { yScaler*cosVal, xScaler*-sinVal },
-                    { yScaler*sinVal, xScaler*cosVal },
+                    { 1.21*sinVal,  cosVal },
+                    { 1.21*cosVal, -sinVal },
+                    { 1.21*cosVal, -sinVal },
+                    { 1.21*sinVal,  cosVal },
             });
             transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
