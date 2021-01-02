@@ -12,19 +12,20 @@ public class MainTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] disabledComponents = {};
-        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
-        robot.logging.setLog("state", "Initializing");
+        telemetry.addData("State", "Initializing");
+        telemetry.update();
 
+        //initialize robot hardware
+        robot = new MainRobot(hardwareMap, telemetry);
+        //wait for imu to calibrate
         robot.gyroscope.waitForGyroCalibration();
-        robot.startThreads();
+        robot.startThreats();
 
-        robot.logging.setLog("state", "Initialized, waiting for start");
+        telemetry.addData("State", "Initialized, waiting for start");
+        telemetry.update();
 
         waitForStart();
-
-        robot.logging.setLog("state", "Running");
 
         while (opModeIsActive()){
             driveWithJoystick();
@@ -34,8 +35,6 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         robot.isRunning = false;
-
-        robot.logging.setLog("state", "Stopped");
     }
 
     private void driveWithJoystick(){
