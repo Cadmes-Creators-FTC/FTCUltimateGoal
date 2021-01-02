@@ -12,36 +12,28 @@ public class TestAutonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        telemetry.addData("State", "Initializing");
-        telemetry.update();
+        String[] disabledComponents = {};
+        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
-        //initialize robot hardware
-        robot = new MainRobot(hardwareMap, telemetry);
-        robot.driving.setCurrentPosition(new Vector2(0, 0));
-        //wait for imu to calibrate
+        robot.logging.setLog("state", "Initializing");
+
         robot.gyroscope.waitForGyroCalibration();
+        robot.driving.setCurrentPosition(new Vector2(0, 0));
+        robot.startThreads();
 
-        telemetry.addData("State", "Initialized, waiting for start");
-        telemetry.update();
+        robot.logging.setLog("state", "Initialized, waiting for start");
 
         waitForStart();
 
-        telemetry.addData("State", "Running");
-        telemetry.update();
+        robot.logging.setLog("state", "Running");
 
-        //start autonomous
-        //AutonomousSequence();
-        while (!isStopRequested()){
-            autonomousSequence();
+        autonomousSequence();
 
-            telemetry.addData("State", "Done");
-            telemetry.update();
-        }
+        robot.logging.setLog("state", "Stopped");
     }
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-
+        robot.driving.driveToPosition(new Vector2(0, 100));
     }
-
 }

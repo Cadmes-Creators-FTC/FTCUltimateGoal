@@ -11,24 +11,18 @@ import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @Disabled
-public class Driving {
-    private final Telemetry telemetry; // for logging and debugging
-    private final MainRobot robot; //reference to robot
-
+public class Driving extends RobotComponent {
     private final DcMotor wheelLF;
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
     private final int ticksPerRotation = 960;
 
-    private boolean keepAtTargetAngle = false;
-
     private Vector2 currentPosition = new Vector2(0, 0);
     private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
-    public Driving(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
-        telemetry = inputTelemetry;
-        robot = inputRobot;
+    public Driving(HardwareMap hardwareMap, MainRobot inputRobot) {
+        super(inputRobot);
 
         wheelLF = hardwareMap.get(DcMotor.class, "LFWheel");
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
@@ -49,15 +43,8 @@ public class Driving {
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void startThreats(){
-        new Thread(){
-            @Override
-            public void run(){
-                try {
-                    keepAtTargetAngle();
-                } catch (InterruptedException ignored) { }
-            }
-        }.start();
+    @Override
+    public void startThreads(){
         new Thread(){
             @Override
             public void run(){
@@ -86,40 +73,6 @@ public class Driving {
     }
     //endregion
 
-    //region keep target angle
-    public void setKeepAtTargetAngle(boolean x){
-        keepAtTargetAngle = x;
-    }
-    private void keepAtTargetAngle() throws InterruptedException {
-        while (robot.isRunning){
-            if (keepAtTargetAngle){
-                double correction = getAngleWheelCorrection();
-                WheelPowerConfig currentWPC = getWheelPowers();
-                WheelPowerConfig correctionWPC = new WheelPowerConfig(correction, -correction, -correction, correction);
-
-                WheelPowerConfig newWPC = WheelPowerConfig.add(currentWPC, correctionWPC);
-
-                setWheelPowers(newWPC);
-            }else
-                Thread.sleep(500);
-        }
-    }
-    private double getAngleWheelCorrection(){
-        double gain = .05;
-        double minDegreesOff = 3;
-
-        double correction = 0;
-
-        double targetAngle = robot.gyroscope.getTargetAngle();
-        double currentAngle = robot.gyroscope.getCurrentAngle();
-        if (Math.abs(targetAngle - currentAngle) > minDegreesOff)
-            correction = targetAngle - currentAngle;
-        correction = correction * gain;
-
-        return correction;
-    }
-     //endregion
-
     //region Position
     public Vector2 getCurrentPosition(){
         return currentPosition;
@@ -144,15 +97,6 @@ public class Driving {
                     wheelLB.getCurrentPosition()*-1
             );
 
-            telemetry.addData("pos x", currentPosition.x);
-            telemetry.addData("pos y", currentPosition.y);
-            telemetry.addData("ticks 1", currentWheelPosTicks.lf);
-            telemetry.addData("ticks 2", currentWheelPosTicks.rf);
-            telemetry.addData("ticks 3", currentWheelPosTicks.rb);
-            telemetry.addData("ticks 4", currentWheelPosTicks.lb);
-            telemetry.addData("rot", robot.gyroscope.getCurrentAngle());
-            telemetry.update();
-
             /* get wheel pos matrix */
             wheelPosDelta.toCM(11*Math.PI, ticksPerRotation);
             Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
@@ -164,19 +108,19 @@ public class Driving {
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
             Matrix transformMatrix = new Matrix(4, 2, new double[][]{
-                    { 1.21*sinVal,  cosVal },
-                    { 1.21*cosVal, -sinVal },
-                    { 1.21*cosVal, -sinVal },
-                    { 1.21*sinVal,  cosVal },
+                    {  cosVal, 1.21*sinVal },
+                    { -sinVal, 1.21*cosVal },
+                    { -sinVal, 1.21*cosVal },
+                    {  cosVal, 1.21*sinVal },
             });
             transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
             /* get movement */
-            Matrix posMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
-            Vector2 deltaPos = new Vector2(posMatrix.matrix[0][1], posMatrix.matrix[0][0]);
+            Matrix deltaPosMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
+            Vector2 deltaPosVector = deltaPosMatrix.toVector2();
 
             /* update position */
-            currentPosition = Vector2.add(currentPosition, deltaPos);
+            currentPosition = Vector2.add(currentPosition, deltaPosVector);
 
             /* timeout between updates */
             Thread.sleep(50);
@@ -186,12 +130,22 @@ public class Driving {
         double stopDistance = 10;
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
-        while((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)) {
+        while ((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)){
+
+            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
+            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+                    { Math.cos(angleRad), -Math.sin(angleRad) },
+                    { Math.sin(angleRad), Math.cos(angleRad) },
+            });
+
+            Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
+            Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
+
             WheelPowerConfig wpc = new WheelPowerConfig(
-                    deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x,
-                    deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x
             );
 
             wpc.clamp();
@@ -200,7 +154,7 @@ public class Driving {
             Thread.sleep(100);
 
             deltaPos = Vector2.subtract(targetPos, currentPosition);
-        }
+        };
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
