@@ -27,25 +27,15 @@ public class MainTeleOp extends LinearOpMode {
         robot.logging.setLog("state", "Running");
 
         while (opModeIsActive()){
-            DriveWithController();
-//            RingShooter();
-
-                button();
             driveWithJoystick();
             ringShooter();
-//            if (gamepad1.dpad_up)
-//                button();
+            driveWithDpad();
         }
 
         robot.isRunning = false;
 
-        robot.logging.removeLog("power");
         robot.logging.setLog("state", "Stopped");
     }
-
-    private void DriveWithController(){
-        if (gamepad1.dpad_up||gamepad1.dpad_down)
-            return;
         
     private void driveWithJoystick(){
         //get joystick input
@@ -83,19 +73,13 @@ public class MainTeleOp extends LinearOpMode {
             robot.shooter.turnOf();
     }
 
-    private void button(){
-        double Test0 = 0;
-        double Test1 = 0;
-        double Test2 = 0;
-        double Test3 = 0;
-        double Counter = 0.1;
+    private void driveWithDpad(){
        WheelPowerConfig wpc = new WheelPowerConfig(
                 0,
                 0,
                 0,
                 0
        );
-       //0 wpc.clamp();
 
         if (gamepad1.dpad_up) {
             wpc.lf = 0.5;
