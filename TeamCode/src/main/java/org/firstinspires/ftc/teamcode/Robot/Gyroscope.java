@@ -12,7 +12,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Misc.MathFunctions;
 
 @Disabled
-public class Gyroscope extends RobotComponent{
+public class Gyroscope {
+    private Telemetry telemetry; // for logging and debugging
+    private MainRobot robot; //reference to robot
+
     private final BNO055IMU imu;
 
     private Orientation lastAngles = new Orientation();
@@ -20,8 +23,9 @@ public class Gyroscope extends RobotComponent{
     private double currentAngle = 0;
     private double targetAngle = 0;
 
-    public Gyroscope(HardwareMap hardwareMap, MainRobot inputRobot) {
-        super(inputRobot);
+    public Gyroscope(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
+        telemetry = inputTelemetry;
+        robot = inputRobot;
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
@@ -32,8 +36,8 @@ public class Gyroscope extends RobotComponent{
         imu.initialize(parameters);
     }
 
-    @Override
-    public void startThreads(){
+    public void startThreats(){
+        //keep currentAngle updated
         new Thread(){
             @Override
             public void run(){

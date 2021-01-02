@@ -24,11 +24,6 @@ public class Matrix {
         matrix = t_matrix;
     }
 
-    public Vector2 toVector2(){
-        return new Vector2(matrix[0][0], matrix[0][1]);
-    }
-
-
     public static Matrix scale(Matrix a, double scaler){
         for(int i = 0; i < a.rows; i++) {
             for (int j = 0; j < a.columns; j++) {
