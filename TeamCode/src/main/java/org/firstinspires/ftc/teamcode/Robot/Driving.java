@@ -16,7 +16,7 @@ public class Driving extends RobotComponent {
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
-    private final int ticksPerRotation = 960;
+    private final int ticksPerRotation = 1120;
 
     private Vector2 currentPosition = new Vector2(0, 0);
     private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
@@ -104,30 +104,46 @@ public class Driving extends RobotComponent {
             });
 
             /* get transformation matrix */
-            double angle = Math.toRadians(-robot.gyroscope.getCurrentAngle()) + Math.PI/4;
+            double yScaler = 1.33;
+            double xScaler = 1.11;
+
+//            double angle = Math.toRadians(-robot.gyroscope.getCurrentAngle()) + Math.PI/4;
+            double angle = Math.PI/4;
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
             Matrix transformMatrix = new Matrix(4, 2, new double[][]{
-                    {  cosVal, 1.21*sinVal },
-                    { -sinVal, 1.21*cosVal },
-                    { -sinVal, 1.21*cosVal },
-                    {  cosVal, 1.21*sinVal },
+                    { xScaler*cosVal,  yScaler*sinVal },
+                    { xScaler*-sinVal, yScaler*cosVal },
+                    { xScaler*-sinVal, yScaler*cosVal },
+                    { xScaler*cosVal,  yScaler*sinVal },
             });
             transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
             /* get movement */
             Matrix deltaPosMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
+
+            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
+            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+                    { Math.cos(angleRad), -Math.sin(angleRad) },
+                    { Math.sin(angleRad), Math.cos(angleRad) },
+            });
+
+            deltaPosMatrix = Matrix.multiply(deltaPosMatrix, rotMatrix);
+
             Vector2 deltaPosVector = deltaPosMatrix.toVector2();
 
             /* update position */
             currentPosition = Vector2.add(currentPosition, deltaPosVector);
 
+            robot.logging.setLog("x", currentPosition.x);
+            robot.logging.setLog("y", currentPosition.y);
+
             /* timeout between updates */
             Thread.sleep(50);
         }
     }
-    public void driveToPosition(Vector2 targetPos) throws InterruptedException {
-        double stopDistance = 10;
+    public void driveToPosition(Vector2 targetPos, double power) throws InterruptedException {
+        double stopDistance = 10 * power; //scale with power to minimize error
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         while ((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)){
@@ -149,6 +165,7 @@ public class Driving extends RobotComponent {
             );
 
             wpc.clamp();
+            wpc = WheelPowerConfig.multiply(wpc, power);
             setWheelPowers(wpc);
 
             Thread.sleep(100);

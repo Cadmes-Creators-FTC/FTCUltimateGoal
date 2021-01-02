@@ -17,7 +17,7 @@ public class MainRobot {
     public Gyroscope gyroscope;
     public Shooter shooter;
     public Logging logging;
-    public ArrayList<RobotComponent> componentsList;
+    public ArrayList<RobotComponent> componentsList = new ArrayList<RobotComponent>();
 
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) {
         List<String> disabledComponents = Arrays.asList(inputDisabledComponents);

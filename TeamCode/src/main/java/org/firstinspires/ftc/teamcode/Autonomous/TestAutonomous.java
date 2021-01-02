@@ -29,11 +29,16 @@ public class TestAutonomous extends LinearOpMode {
 
         autonomousSequence();
 
+        robot.isRunning = false;
+
         robot.logging.setLog("state", "Stopped");
     }
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        robot.driving.driveToPosition(new Vector2(0, 100));
+        robot.driving.driveToPosition(new Vector2(100, 100), 0.5);
+        robot.driving.driveToPosition(new Vector2(0, 100), 0.5);
+        robot.driving.driveToPosition(new Vector2(100, 0), 0.5);
+        robot.driving.driveToPosition(new Vector2(0, 0), 0.5);
     }
 }

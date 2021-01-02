@@ -28,13 +28,14 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             driveWithJoystick();
-//            ringShooter();
+            ringShooter();
 //            if (gamepad1.dpad_up)
 //                button();
         }
 
         robot.isRunning = false;
 
+        robot.logging.removeLog("power");
         robot.logging.setLog("state", "Stopped");
     }
 
@@ -63,6 +64,8 @@ public class MainTeleOp extends LinearOpMode {
         wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
         wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
         robot.driving.setWheelPowers(wpc);
+
+        robot.logging.setLog("power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
     }
 
     private void ringShooter(){

@@ -6,14 +6,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.util.Map;
+import java.util.HashMap;
 
 @Disabled
 public class Logging extends RobotComponent {
     //hardwareMap and telemetry
     private final Telemetry telemetry;
 
-    private Map<String, String> logs;
+    private HashMap<String, Object> logs = new HashMap<String, Object>();
     private int updateDelay = 100;
 
     public Logging(Telemetry inputTelemetry, MainRobot inputRobot) {
@@ -34,7 +34,7 @@ public class Logging extends RobotComponent {
         }.start();
     }
 
-    public void setLog(String key, String value){
+    public void setLog(String key, Object value){
         logs.put(key, value);
     }
     public void removeLog(String key){
@@ -43,7 +43,7 @@ public class Logging extends RobotComponent {
 
     public void updateLogs() throws InterruptedException {
         while (robot.isRunning){
-            for(Map.Entry<String, String> entry : logs.entrySet()){
+            for(HashMap.Entry<String, Object> entry : logs.entrySet()){
                 telemetry.addData(entry.getKey(), entry.getValue());
             }
             telemetry.update();

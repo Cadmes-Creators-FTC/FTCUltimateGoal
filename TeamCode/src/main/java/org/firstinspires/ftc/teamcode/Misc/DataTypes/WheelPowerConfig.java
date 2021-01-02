@@ -33,4 +33,12 @@ public class WheelPowerConfig {
                 wpc1.lb+wpc2.lb
         );
     }
+    public static WheelPowerConfig multiply(WheelPowerConfig wpc, double scaler){
+        return new WheelPowerConfig(
+                wpc.lf*scaler,
+                wpc.rf*scaler,
+                wpc.rb*scaler,
+                wpc.lb*scaler
+        );
+    }
 }
