@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.misc;
+package org.firstinspires.ftc.teamcode.Misc;
 
 public class MathFunctions {
 
     //region translate ticks and cm
-    public static double TicksToCMs(double ticks, double wheelCircumference, double ticksPerRot){
+    public static double ticksToCMs(double ticks, double wheelCircumference, double ticksPerRot){
         double cmPerTick = wheelCircumference/ticksPerRot;
         return cmPerTick*ticks;
     }
-    public static double CMsToTicks(double cm, double wheelCircumference, double ticksPerRot){
+    public static double centimetersToTicks(double cm, double wheelCircumference, double ticksPerRot){
         double ticksPerCM = ticksPerRot/wheelCircumference;
         return ticksPerCM*cm;
     }

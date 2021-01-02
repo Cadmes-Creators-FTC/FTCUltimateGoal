@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 
 @Autonomous(name="TestAutonomous", group="blue")
 public class TestAutonomous extends LinearOpMode {
@@ -12,36 +12,28 @@ public class TestAutonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        telemetry.addData("State", "Initializing");
-        telemetry.update();
+        String[] disabledComponents = {};
+        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
-        //initialize robot hardware
-        robot = new MainRobot(hardwareMap, telemetry);
+        robot.logging.setLog("state", "Initializing");
+
+        robot.gyroscope.waitForGyroCalibration();
         robot.driving.setCurrentPosition(new Vector2(0, 0));
-        //wait for imu to calibrate
-        robot.gyroscope.WaitForGyroCalibration();
+        robot.startThreads();
 
-        telemetry.addData("State", "Initialized, waiting for start");
-        telemetry.update();
+        robot.logging.setLog("state", "Initialized, waiting for start");
 
         waitForStart();
 
-        telemetry.addData("State", "Running");
-        telemetry.update();
+        robot.logging.setLog("state", "Running");
 
-        //start autonomous
-        //AutonomousSequence();
-        while (!isStopRequested()){
-            AutonomousSequence();
+        autonomousSequence();
 
-            telemetry.addData("State", "Done");
-            telemetry.update();
-        }
+        robot.logging.setLog("state", "Stopped");
     }
 
     //autonomous sequence
-    private void AutonomousSequence() throws InterruptedException {
-
+    private void autonomousSequence() throws InterruptedException {
+        robot.driving.driveToPosition(new Vector2(0, 100));
     }
-
 }

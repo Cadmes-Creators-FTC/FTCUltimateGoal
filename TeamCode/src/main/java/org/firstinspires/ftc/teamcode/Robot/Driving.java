@@ -5,29 +5,24 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.Vector2;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPosition;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Matrix;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @Disabled
-public class Driving {
-    private final Telemetry telemetry; // for logging and debugging
-    private final MainRobot robot; //reference to robot
-
+public class Driving extends RobotComponent {
     private final DcMotor wheelLF;
     private final DcMotor wheelRF;
     private final DcMotor wheelRB;
     private final DcMotor wheelLB;
-    private final int ticksPerRotation = 1120;
-
-    private boolean keepAtTargetAngle = false;
+    private final int ticksPerRotation = 960;
 
     private Vector2 currentPosition = new Vector2(0, 0);
-    private WheelPosition currentPositionTicks = new WheelPosition(0, 0, 0, 0);
+    private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
-    public Driving(HardwareMap hardwareMap, Telemetry inputTelemetry, MainRobot inputRobot) {
-        telemetry = inputTelemetry;
-        robot = inputRobot;
+    public Driving(HardwareMap hardwareMap, MainRobot inputRobot) {
+        super(inputRobot);
 
         wheelLF = hardwareMap.get(DcMotor.class, "LFWheel");
         wheelRF = hardwareMap.get(DcMotor.class, "RFWheel");
@@ -46,21 +41,15 @@ public class Driving {
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
 
-        //start threads
+    @Override
+    public void startThreads(){
         new Thread(){
             @Override
             public void run(){
                 try {
-                    KeepAtTargetAngle();
-                } catch (InterruptedException ignored) { }
-            }
-        }.start();
-        new Thread(){
-            @Override
-            public void run(){
-                try {
-                    KeepPositionUpdated();
+                    keepPositionUpdated();
                 } catch (InterruptedException ignored) { }
             }
         }.start();
@@ -84,40 +73,6 @@ public class Driving {
     }
     //endregion
 
-    //region keep target angle
-    public void setKeepAtTargetAngle(boolean x){
-        keepAtTargetAngle = x;
-    }
-    private void KeepAtTargetAngle() throws InterruptedException {
-        while (robot.isRunning){
-            if (keepAtTargetAngle){
-                double correction = getAngleWheelCorrection();
-                WheelPowerConfig currentWPC = getWheelPowers();
-                WheelPowerConfig correctionWPC = new WheelPowerConfig(correction, -correction, -correction, correction);
-
-                WheelPowerConfig newWPC = WheelPowerConfig.Add(currentWPC, correctionWPC);
-
-                setWheelPowers(newWPC);
-            }else
-                Thread.sleep(500);
-        }
-    }
-    private double getAngleWheelCorrection(){
-        double gain = .05;
-        double minDegreesOff = 3;
-
-        double correction = 0;
-
-        double targetAngle = robot.gyroscope.getTargetAngle();
-        double currentAngle = robot.gyroscope.getCurrentAngle();
-        if (Math.abs(targetAngle - currentAngle) > minDegreesOff)
-            correction = targetAngle - currentAngle;
-        correction = correction * gain;
-
-        return correction;
-    }
-     //endregion
-
     //region Position
     public Vector2 getCurrentPosition(){
         return currentPosition;
@@ -126,77 +81,71 @@ public class Driving {
         currentPosition = pos;
     }
 
-    public void KeepPositionUpdated() throws InterruptedException{
+    public void keepPositionUpdated() throws InterruptedException{
         while (robot.isRunning){
-            /* get position delta and update wheel ticks */
+            /* get and update wheel tick positions */
             WheelPosition wheelPosDelta = new WheelPosition(
-                    wheelLF.getCurrentPosition()*-1 - currentPositionTicks.lf,
-                    wheelRF.getCurrentPosition()*-1 - currentPositionTicks.rf,
-                    wheelRB.getCurrentPosition()*-1 - currentPositionTicks.rb,
-                    wheelLB.getCurrentPosition()*-1 - currentPositionTicks.lb
+                    wheelLF.getCurrentPosition()*-1 - currentWheelPosTicks.lf,
+                    wheelRF.getCurrentPosition()*-1 - currentWheelPosTicks.rf,
+                    wheelRB.getCurrentPosition()*-1 - currentWheelPosTicks.rb,
+                    wheelLB.getCurrentPosition()*-1 - currentWheelPosTicks.lb
             );
-            currentPositionTicks = new WheelPosition(
+            currentWheelPosTicks = new WheelPosition(
                     wheelLF.getCurrentPosition()*-1,
                     wheelRF.getCurrentPosition()*-1,
                     wheelRB.getCurrentPosition()*-1,
                     wheelLB.getCurrentPosition()*-1
             );
 
-            WheelPosition testVar = currentPositionTicks;
+            /* get wheel pos matrix */
+            wheelPosDelta.toCM(11*Math.PI, ticksPerRotation);
+            Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
+                    { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.lb, wheelPosDelta.rb }
+            });
 
-            telemetry.addData("pos x", currentPosition.x);
-            telemetry.addData("pos y", currentPosition.y);
-            telemetry.addData("ticks 1", testVar.lf);
-            telemetry.addData("ticks 2", testVar.rf);
-            telemetry.addData("ticks 3", testVar.rb);
-            telemetry.addData("ticks 4", testVar.lb);
-            telemetry.addData("rot", robot.gyroscope.getCurrentAngle());
-            telemetry.update();
+            /* get transformation matrix */
+            double angle = Math.toRadians(-robot.gyroscope.getCurrentAngle()) + Math.PI/4;
+            double sinVal = Math.sqrt(2)*Math.sin(angle);
+            double cosVal = Math.sqrt(2)*Math.cos(angle);
+            Matrix transformMatrix = new Matrix(4, 2, new double[][]{
+                    {  cosVal, 1.21*sinVal },
+                    { -sinVal, 1.21*cosVal },
+                    { -sinVal, 1.21*cosVal },
+                    {  cosVal, 1.21*sinVal },
+            });
+            transformMatrix = Matrix.scale(transformMatrix, 0.25);
 
-            /* transform ticks to cm */
-            wheelPosDelta.ToCM(36, ticksPerRotation);
-
-            /* transform individual wheel movement to whole robot movement */
-            double cornerDegrees = 90/(Math.sqrt(2)+1);
-            Vector2 wheelVectorRight = new Vector2(-Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
-            Vector2 wheelVectorLeft = new Vector2(Math.sin(cornerDegrees), 1.53*Math.cos(cornerDegrees));
-
-
-            Vector2 vectorLF = Vector2.Multiply(wheelVectorRight, wheelPosDelta.lf);
-            Vector2 vectorRF = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.rf);
-            Vector2 vectorRB = Vector2.Multiply(wheelVectorRight, wheelPosDelta.rb);
-            Vector2 vectorLB = Vector2.Multiply(wheelVectorLeft, wheelPosDelta.lb);
-
-            Vector2 vectorFront = Vector2.Add(vectorLF, vectorRF);
-            Vector2 vectorBack = Vector2.Add(vectorLB, vectorRB);
-            Vector2 deltaPos = Vector2.Add(vectorFront, vectorBack);
-
-            // divide by 4 to get average vector
-            deltaPos = Vector2.Divide(deltaPos, 4);
-
-            /* account for rotation */
-//            double currentAngle = robot.gyroscope.getCurrentAngle();
-//            Vector2 t_deltaPos = deltaPos;
-//            deltaPos.x = Math.sin(currentAngle+90)*t_deltaPos.x + Math.sin(currentAngle)*t_deltaPos.y;
-//            deltaPos.y = Math.cos(currentAngle+90)*t_deltaPos.x + Math.cos(currentAngle)*t_deltaPos.y;
+            /* get movement */
+            Matrix deltaPosMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
+            Vector2 deltaPosVector = deltaPosMatrix.toVector2();
 
             /* update position */
-            currentPosition = Vector2.Add(currentPosition, deltaPos);
+            currentPosition = Vector2.add(currentPosition, deltaPosVector);
 
             /* timeout between updates */
-            Thread.sleep(30);
+            Thread.sleep(50);
         }
     }
-    public void DriveToPosition (Vector2 targetPos) throws InterruptedException {
+    public void driveToPosition(Vector2 targetPos) throws InterruptedException {
         double stopDistance = 10;
 
-        Vector2 deltaPos = Vector2.Subtract(targetPos, currentPosition);
-        while((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)) {
+        Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
+        while ((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)){
+
+            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
+            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+                    { Math.cos(angleRad), -Math.sin(angleRad) },
+                    { Math.sin(angleRad), Math.cos(angleRad) },
+            });
+
+            Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
+            Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
+
             WheelPowerConfig wpc = new WheelPowerConfig(
-                    deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x,
-                    deltaPos.y + deltaPos.x,
-                    deltaPos.y - deltaPos.x
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x
             );
 
             wpc.clamp();
@@ -204,17 +153,11 @@ public class Driving {
 
             Thread.sleep(100);
 
-            deltaPos = Vector2.Subtract(targetPos, currentPosition);
-        }
+            deltaPos = Vector2.subtract(targetPos, currentPosition);
+        };
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
 
-    public void dPad(){
-
-
-
-
-    }
     //endregion
 }

@@ -11,35 +11,38 @@ public class ShooterOnlyTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
+        String[] disabledComponents = {"gyroscope", "driving"};
+        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
-        telemetry.addData("State", "Initializing");
-        telemetry.update();
+        robot.logging.setLog("state", "Initializing");
 
-        //initialize robot hardware
-        robot = new MainRobot(hardwareMap, telemetry);
+        robot.startThreads();
 
-        telemetry.addData("State", "Initialized, waiting for start");
-        telemetry.update();
+        robot.logging.setLog("state", "Initialized, waiting for start");
 
         waitForStart();
+
+        robot.logging.setLog("state", "Running");
 
         while (opModeIsActive()){
             RingShooter();
         }
 
         robot.isRunning = false;
+
+        robot.logging.setLog("state", "Stopped");
     }
 
     private void RingShooter(){
         if (gamepad2.a)
-            robot.shooter.TurnOn(1);
+            robot.shooter.turnOn(1);
         else if(gamepad2.b)
-            robot.shooter.TurnOn(0.9);
+            robot.shooter.turnOn(0.9);
         else if(gamepad2.x)
-            robot.shooter.TurnOn(0.8);
+            robot.shooter.turnOn(0.8);
         else if(gamepad2.y)
-            robot.shooter.TurnOn(0.6);
+            robot.shooter.turnOn(0.6);
         else
-            robot.shooter.TurnOf();
+            robot.shooter.turnOf();
     }
 }

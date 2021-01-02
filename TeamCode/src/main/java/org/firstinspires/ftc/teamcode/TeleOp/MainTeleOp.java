@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
-import org.firstinspires.ftc.teamcode.misc.DataTypes.WheelPowerConfig;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @TeleOp(name = "Main_Robot", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
@@ -12,33 +12,41 @@ public class MainTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
+        String[] disabledComponents = {};
+        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
 
-        telemetry.addData("State", "Initializing");
-        telemetry.update();
+        robot.logging.setLog("state", "Initializing");
 
-        //initialize robot hardware
-        robot = new MainRobot(hardwareMap, telemetry);
-        //wait for imu to calibrate
-        robot.gyroscope.WaitForGyroCalibration();
+        robot.gyroscope.waitForGyroCalibration();
+        robot.startThreads();
 
-        telemetry.addData("State", "Initialized, waiting for start");
-        telemetry.update();
+        robot.logging.setLog("state", "Initialized, waiting for start");
 
         waitForStart();
+
+        robot.logging.setLog("state", "Running");
 
         while (opModeIsActive()){
             DriveWithController();
 //            RingShooter();
 
                 button();
+            driveWithJoystick();
+//            ringShooter();
+//            if (gamepad1.dpad_up)
+//                button();
         }
 
         robot.isRunning = false;
+
+        robot.logging.setLog("state", "Stopped");
     }
 
     private void DriveWithController(){
         if (gamepad1.dpad_up||gamepad1.dpad_down)
             return;
+        
+    private void driveWithJoystick(){
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
@@ -65,11 +73,11 @@ public class MainTeleOp extends LinearOpMode {
         robot.driving.setWheelPowers(wpc);
     }
 
-    private void RingShooter(){
+    private void ringShooter(){
         if (gamepad2.a)
-            robot.shooter.TurnOn(1);
+            robot.shooter.turnOn(0.85);
         else
-            robot.shooter.TurnOf();
+            robot.shooter.turnOf();
     }
 
     private void button(){
