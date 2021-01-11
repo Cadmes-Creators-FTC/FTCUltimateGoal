@@ -74,12 +74,7 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void driveWithDpad(){
-       WheelPowerConfig wpc = new WheelPowerConfig(
-                0,
-                0,
-                0,
-                0
-       );
+       WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
 
         if (gamepad1.dpad_up) {
             wpc.lf = 0.5;
