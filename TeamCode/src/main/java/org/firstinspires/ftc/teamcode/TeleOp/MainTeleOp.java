@@ -81,7 +81,6 @@ public class MainTeleOp extends LinearOpMode {
             wpc.lb = 0.5;
             wpc.rf = 0.5;
             wpc.rb = 0.5;
-            robot.driving.setWheelPowers(wpc);
         }
 
         if (gamepad1.dpad_down) {
@@ -89,7 +88,6 @@ public class MainTeleOp extends LinearOpMode {
             wpc.lb = -0.5;
             wpc.rf = -0.5;
             wpc.rb = -0.5;
-            robot.driving.setWheelPowers(wpc);
         }
 
         if (gamepad1.dpad_left) {
@@ -97,7 +95,6 @@ public class MainTeleOp extends LinearOpMode {
             wpc.lb = 0.5;
             wpc.rf = 0.5;
             wpc.rb = -0.5;
-            robot.driving.setWheelPowers(wpc);
         }
 
         if (gamepad1.dpad_right){
@@ -105,7 +102,8 @@ public class MainTeleOp extends LinearOpMode {
             wpc.lb = -0.5;
             wpc.rf = -0.5;
             wpc.rb = 0.5;
-            robot.driving.setWheelPowers(wpc);
         }
+
+        robot.driving.setWheelPowers(wpc);
     }
 }
