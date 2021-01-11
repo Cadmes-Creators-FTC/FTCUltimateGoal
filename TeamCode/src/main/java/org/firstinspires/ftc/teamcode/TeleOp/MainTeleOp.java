@@ -108,4 +108,10 @@ public class MainTeleOp extends LinearOpMode {
 
         robot.driving.setWheelPowers(wpc);
     }
+
+    private void wobbleArm(){
+        // hier kan je besturing neerzetten
+        // je kan functies in wobblearm gebruiken zoals dit
+        robot.wobbleArm.armDown();
+    }
 }
