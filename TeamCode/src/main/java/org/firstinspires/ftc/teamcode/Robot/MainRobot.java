@@ -17,6 +17,7 @@ public class MainRobot {
     public Gyroscope gyroscope;
     public Shooter shooter;
     public Logging logging;
+    public WobbleArm wobbleArm;
     public ArrayList<RobotComponent> componentsList = new ArrayList<RobotComponent>();
 
     public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) {
@@ -37,6 +38,10 @@ public class MainRobot {
         if(!disabledComponents.contains("shooter")) {
             shooter = new Shooter(hardwareMap, this);
             componentsList.add(shooter);
+        }
+        if(!disabledComponents.contains("wobbleArm")) {
+            wobbleArm = new WobbleArm(hardwareMap, this);
+            componentsList.add(wobbleArm);
         }
     }
 
