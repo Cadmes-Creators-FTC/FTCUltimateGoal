@@ -28,8 +28,10 @@ public class MainTeleOp extends LinearOpMode {
 
         while (opModeIsActive()){
             driveWithJoystick();
-            ringShooter();
             driveWithDpad();
+
+            ringShooter();
+            wobbleArm();
         }
 
         robot.isRunning = false;
