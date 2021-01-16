@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
@@ -110,8 +111,16 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void wobbleArm(){
-        // hier kan je besturing neerzetten
-        // je kan functies in wobblearm gebruiken zoals dit
-        robot.wobbleArm.armDown();
+
+        if  (gamepad1.left_bumper){
+            //ik weet niet welke btn dit is (is een test)
+            // hier kan je besturing neerzetten
+            // je kan functies in wobblearm gebruiken zoals dit
+            robot.wobbleArm.armDown();
+        }
+        if (gamepad1.left_stick_button){
+            robot.wobbleArm.armUp();
+        }
+
     }
 }
