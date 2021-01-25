@@ -113,7 +113,7 @@ public class MainTeleOp extends LinearOpMode {
         if  (gamepad2.left_bumper){
             robot.wobbleArm.armDown();
         }
-        if (gamepad2.left_stick_button){
+        if (gamepad2.right_bumper){
             robot.wobbleArm.armUp();
         }
 
