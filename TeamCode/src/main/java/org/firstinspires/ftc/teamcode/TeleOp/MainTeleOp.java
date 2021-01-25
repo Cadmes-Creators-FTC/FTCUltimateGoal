@@ -63,9 +63,11 @@ public class MainTeleOp extends LinearOpMode {
         wpc.rf = 0.6*Math.pow(wpc.rf, 3) + 0.4*wpc.rf;
         wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
         wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
-        robot.driving.setWheelPowers(wpc);
 
-        robot.logging.setLog("power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
+        if(wpc.lf != 0 && wpc.rf != 0 && wpc.rb != 0 && wpc.lb != 0){
+            robot.driving.setWheelPowers(wpc);
+            robot.logging.setLog("power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
+        }
     }
 
     private void ringShooter(){
@@ -76,9 +78,11 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void driveWithDpad(){
-       WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
+        boolean dpadEnabled = false;
+        WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
 
         if (gamepad1.dpad_up) {
+            dpadEnabled = true;
             wpc.lf = 0.5;
             wpc.lb = 0.5;
             wpc.rf = 0.5;
@@ -86,6 +90,7 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         if (gamepad1.dpad_down) {
+            dpadEnabled = true;
             wpc.lf = -0.5;
             wpc.lb = -0.5;
             wpc.rf = -0.5;
@@ -93,6 +98,7 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         if (gamepad1.dpad_left) {
+            dpadEnabled = true;
             wpc.lf = -0.5;
             wpc.lb = 0.5;
             wpc.rf = 0.5;
@@ -100,13 +106,15 @@ public class MainTeleOp extends LinearOpMode {
         }
 
         if (gamepad1.dpad_right){
+            dpadEnabled = true;
             wpc.lf = 0.5;
             wpc.lb = -0.5;
             wpc.rf = -0.5;
             wpc.rb = 0.5;
         }
 
-        robot.driving.setWheelPowers(wpc);
+        if(dpadEnabled)
+            robot.driving.setWheelPowers(wpc);
     }
 
     private void wobbleArm(){
