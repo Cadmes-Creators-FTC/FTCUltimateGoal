@@ -16,7 +16,8 @@ public class WobbleArm extends RobotComponent {
     public WobbleArm(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
-
+        arm = hardwareMap.get(Servo.class, "wobbleArm");
+        gripper = hardwareMap.get(Servo.class, "wobbleGripper");
     }
 
     @Override
