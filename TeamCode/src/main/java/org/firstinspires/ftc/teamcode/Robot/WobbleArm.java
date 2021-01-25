@@ -11,7 +11,7 @@ import java.util.HashMap;
 @Disabled
 public class WobbleArm extends RobotComponent {
     private Servo arm;
-    private Servo hand;
+    private Servo gripper;
 
     public WobbleArm(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
@@ -32,13 +32,12 @@ public class WobbleArm extends RobotComponent {
     public void armDown(){
         double armPos = arm.getPosition();
         arm.setPosition(armPos + 0.01);
-
     }
 
-    public void closeHand(){
+    public void closeGripper(){
 
     }
-    public void openHand(){
+    public void openGripper(){
 
     }
 }
