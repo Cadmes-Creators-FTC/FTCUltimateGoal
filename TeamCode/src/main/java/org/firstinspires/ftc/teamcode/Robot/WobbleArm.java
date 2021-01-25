@@ -16,7 +16,7 @@ public class WobbleArm extends RobotComponent {
     public WobbleArm(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
-        // hier servos toewijzen met hardwaremap.get
+
     }
 
     @Override
@@ -25,9 +25,13 @@ public class WobbleArm extends RobotComponent {
     }
 
     public void armUp(){
-        // in deze functies de arm en hand omhoog en omlaag doen.
+        double armPos = arm.getPosition();
+        arm.setPosition(armPos - 0.01);
+
     }
     public void armDown(){
+        double armPos = arm.getPosition();
+        arm.setPosition(armPos + 0.01);
 
     }
 

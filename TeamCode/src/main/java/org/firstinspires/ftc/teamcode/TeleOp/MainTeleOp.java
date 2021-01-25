@@ -87,25 +87,19 @@ public class MainTeleOp extends LinearOpMode {
             wpc.lb = 0.5;
             wpc.rf = 0.5;
             wpc.rb = 0.5;
-        }
-
-        if (gamepad1.dpad_down) {
+        }else if (gamepad1.dpad_down) {
             dpadEnabled = true;
             wpc.lf = -0.5;
             wpc.lb = -0.5;
             wpc.rf = -0.5;
             wpc.rb = -0.5;
-        }
-
-        if (gamepad1.dpad_left) {
+        }else if (gamepad1.dpad_left) {
             dpadEnabled = true;
             wpc.lf = -0.5;
             wpc.lb = 0.5;
             wpc.rf = 0.5;
             wpc.rb = -0.5;
-        }
-
-        if (gamepad1.dpad_right){
+        }else if (gamepad1.dpad_right){
             dpadEnabled = true;
             wpc.lf = 0.5;
             wpc.lb = -0.5;
@@ -118,8 +112,12 @@ public class MainTeleOp extends LinearOpMode {
     }
 
     private void wobbleArm(){
-        // hier kan je besturing neerzetten
-        // je kan functies in wobblearm gebruiken zoals dit
-        robot.wobbleArm.armDown();
+        if  (gamepad2.left_bumper){
+            robot.wobbleArm.armDown();
+        }
+        if (gamepad2.right_bumper){
+            robot.wobbleArm.armUp();
+        }
+
     }
 }
