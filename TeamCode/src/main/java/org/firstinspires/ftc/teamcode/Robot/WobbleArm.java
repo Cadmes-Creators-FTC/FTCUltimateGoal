@@ -26,12 +26,12 @@ public class WobbleArm extends RobotComponent {
 
     public void armUp(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos - 0.1);
+        arm.setPosition(armPos - 0.01);
 
     }
     public void armDown(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos + 0.1);
+        arm.setPosition(armPos + 0.01);
 
     }
 
