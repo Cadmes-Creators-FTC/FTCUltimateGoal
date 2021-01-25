@@ -83,23 +83,17 @@ public class MainTeleOp extends LinearOpMode {
             wpc.lb = 0.5;
             wpc.rf = 0.5;
             wpc.rb = 0.5;
-        }
-
-        if (gamepad1.dpad_down) {
+        }else if (gamepad1.dpad_down) {
             wpc.lf = -0.5;
             wpc.lb = -0.5;
             wpc.rf = -0.5;
             wpc.rb = -0.5;
-        }
-
-        if (gamepad1.dpad_left) {
+        }else if (gamepad1.dpad_left) {
             wpc.lf = -0.5;
             wpc.lb = 0.5;
             wpc.rf = 0.5;
             wpc.rb = -0.5;
-        }
-
-        if (gamepad1.dpad_right){
+        }else if (gamepad1.dpad_right){
             wpc.lf = 0.5;
             wpc.lb = -0.5;
             wpc.rf = -0.5;
