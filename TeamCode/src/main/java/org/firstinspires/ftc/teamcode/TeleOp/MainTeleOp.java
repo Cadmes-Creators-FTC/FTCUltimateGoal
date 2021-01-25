@@ -66,7 +66,7 @@ public class MainTeleOp extends LinearOpMode {
 
         if(wpc.lf != 0 && wpc.rf != 0 && wpc.rb != 0 && wpc.lb != 0){
             robot.driving.setWheelPowers(wpc);
-            robot.logging.setLog("power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
+            robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
         }
     }
 
