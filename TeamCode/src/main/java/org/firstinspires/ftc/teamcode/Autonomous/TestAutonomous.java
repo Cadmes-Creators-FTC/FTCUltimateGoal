@@ -12,8 +12,8 @@ public class TestAutonomous extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] disabledComponents = {};
-        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
 

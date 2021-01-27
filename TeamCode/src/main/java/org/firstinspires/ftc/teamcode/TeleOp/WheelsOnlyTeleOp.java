@@ -11,8 +11,8 @@ public class WheelsOnlyTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] disabledComponents = {"shooter", "wobbleArm", "wobbleArm", "ringStackHeightDetection"};
-        robot = new MainRobot(hardwareMap, telemetry, disabledComponents);
+        String[] enabledComponents = {"logging", "driving"};
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
 

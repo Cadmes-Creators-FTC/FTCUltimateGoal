@@ -21,30 +21,30 @@ public class MainRobot {
     public RingStackHeightDetection ringStackHeightDetection;
     public ArrayList<RobotComponent> componentsList = new ArrayList<RobotComponent>();
 
-    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputDisabledComponents) {
-        List<String> disabledComponents = Arrays.asList(inputDisabledComponents);
+    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputEnabledComponents) {
+        List<String> enabledComponents = Arrays.asList(inputEnabledComponents);
 
-        if(!disabledComponents.contains("logging")) {
+        if(enabledComponents.contains("logging")) {
             logging = new Logging(inputTelemetry, this);
             componentsList.add(logging);
         }
-        if(!disabledComponents.contains("gyroscope")) {
+        if(enabledComponents.contains("gyroscope")) {
             gyroscope = new Gyroscope(hardwareMap, this);
             componentsList.add(gyroscope);
         }
-        if(!disabledComponents.contains("driving")) {
+        if(enabledComponents.contains("driving")) {
             driving = new Driving(hardwareMap, this);
             componentsList.add(driving);
         }
-        if(!disabledComponents.contains("shooter")) {
+        if(enabledComponents.contains("shooter")) {
             shooter = new Shooter(hardwareMap, this);
             componentsList.add(shooter);
         }
-        if(!disabledComponents.contains("wobbleArm")) {
+        if(enabledComponents.contains("wobbleArm")) {
             wobbleArm = new WobbleArm(hardwareMap, this);
             componentsList.add(wobbleArm);
         }
-        if(!disabledComponents.contains("ringStackHeightDetection")) {
+        if(enabledComponents.contains("ringStackHeightDetection")) {
             ringStackHeightDetection = new RingStackHeightDetection(hardwareMap, this);
             componentsList.add(ringStackHeightDetection);
         }
