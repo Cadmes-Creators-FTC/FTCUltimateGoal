@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 
 @TeleOp(name = "shooterOnly", group = "TestingTeleOps")
-public class ShooterOnlyTeleOp extends LinearOpMode {
+public class ShooterOnly extends LinearOpMode {
     private MainRobot robot;
 
     @Override

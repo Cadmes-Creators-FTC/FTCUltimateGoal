@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 @TeleOp(name = "main", group = "GameTeleOps")
-public class MainTeleOp extends LinearOpMode {
+public class Main extends LinearOpMode {
     private MainRobot robot;
 
     @Override

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 
 @Autonomous(name="TestAutonomous", group="TestAutonomous")
-public class TestAutonomous extends LinearOpMode {
+public class TestSequence extends LinearOpMode {
     private MainRobot robot;
 
     @Override
