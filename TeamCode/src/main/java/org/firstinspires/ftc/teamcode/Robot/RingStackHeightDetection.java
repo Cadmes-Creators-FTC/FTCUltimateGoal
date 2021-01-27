@@ -31,6 +31,22 @@ public class RingStackHeightDetection extends RobotComponent {
     public void startThreads(){
 
     }
+
+    public int getStackSize(){
+        int avgRedVal = camPipeline.getAvgRedVal();
+
+        int oneRingThreshhold = 130;
+        int fourRingThreshhold = 150;
+
+        int stackSize = 0;
+        if(avgRedVal > fourRingThreshhold)
+            stackSize = 4;
+        else if(avgRedVal > oneRingThreshhold)
+            stackSize = 1;
+
+        return stackSize;
+    }
+
     private static class RingStackDetermenationPipeline extends OpenCvPipeline{
         static final Scalar BLUE = new Scalar(0, 0, 255);
 
