@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 
-@TeleOp(name = "wheels_only", group = "TeleOp2")
+@TeleOp(name = "wheels_only", group = "TestingTeleOps")
 public class WheelsOnlyTeleOp extends LinearOpMode {
     private MainRobot robot;
 

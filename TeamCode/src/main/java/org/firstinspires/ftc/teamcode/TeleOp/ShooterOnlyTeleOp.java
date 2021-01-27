@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 
-@TeleOp(name = "shooter_only", group = "TeleOp")
+@TeleOp(name = "shooter_only", group = "TestingTeleOps")
 public class ShooterOnlyTeleOp extends LinearOpMode {
     private MainRobot robot;
 
