@@ -25,7 +25,7 @@ public class ShooterOnlyTeleOp extends LinearOpMode {
         robot.logging.setLog("state", "Running");
 
         while (opModeIsActive()){
-            RingShooter();
+            ringShooter();
         }
 
         robot.isRunning = false;
@@ -33,7 +33,7 @@ public class ShooterOnlyTeleOp extends LinearOpMode {
         robot.logging.setLog("state", "Stopped");
     }
 
-    private void RingShooter(){
+    private void ringShooter(){
         if (gamepad2.a)
             robot.shooter.turnOn(1);
         else if(gamepad2.b)
