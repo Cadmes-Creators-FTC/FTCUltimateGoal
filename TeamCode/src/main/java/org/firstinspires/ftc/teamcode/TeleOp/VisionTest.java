@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 
-@TeleOp(name = "shooterOnly", group = "TestingTeleOps")
+@TeleOp(name = "visionTest", group = "TestingTeleOps")
 public class VisionTest extends LinearOpMode {
     private MainRobot robot;
 

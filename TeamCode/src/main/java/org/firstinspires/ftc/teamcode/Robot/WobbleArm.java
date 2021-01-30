@@ -17,7 +17,12 @@ public class WobbleArm extends RobotComponent {
         super(inputRobot);
 
         arm = hardwareMap.get(Servo.class, "wobbleArm");
+        arm.scaleRange(0, 0.6);
+        arm.setPosition(0);
+
         gripper = hardwareMap.get(Servo.class, "wobbleGripper");
+        gripper.scaleRange(0.2, 0.6);
+        gripper.setPosition(0);
     }
 
     @Override
@@ -27,18 +32,19 @@ public class WobbleArm extends RobotComponent {
 
     public void armUp(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos - 0.01);
+        arm.setPosition(armPos - 0.001);
 
     }
     public void armDown(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos + 0.01);
+        arm.setPosition(armPos + 0.001);
     }
 
     public void closeGripper(){
+        gripper.setPosition(0);
 
     }
     public void openGripper(){
-
+        gripper.setPosition(1);
     }
 }
