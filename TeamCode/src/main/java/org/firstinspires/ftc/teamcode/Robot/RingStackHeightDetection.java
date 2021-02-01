@@ -15,8 +15,8 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 @Disabled
 public class RingStackHeightDetection extends RobotComponent {
-    private final OpenCvInternalCamera phoneCam;
-    private final RingStackDetermenationPipeline camPipeline;
+    private OpenCvInternalCamera phoneCam;
+    private RingStackDetermenationPipeline camPipeline;
 
     public RingStackHeightDetection(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
