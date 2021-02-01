@@ -22,7 +22,7 @@ public class RingStackHeightDetection extends RobotComponent {
         super(inputRobot);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.FRONT, cameraMonitorViewId);
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         camPipeline = new RingStackDetermenationPipeline();
         phoneCam.setPipeline(camPipeline);
     }
