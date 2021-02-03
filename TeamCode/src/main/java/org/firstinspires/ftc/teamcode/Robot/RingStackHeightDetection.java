@@ -82,17 +82,16 @@ public class RingStackHeightDetection extends RobotComponent {
 
             avgRedVal = (int) Core.mean(subMat).val[0];
 
-            //display rectangle?
+            //add rectangle to show target zone
+            Imgproc.rectangle(
+                    input,
+                    targetRegionStart,
+                    targetRegionEnd,
+                    new Scalar(0, 250, 0),
+                    2
+            );
 
             return workingMatrix;
-
-//            Imgproc.rectangle(
-//                    input,
-//                    targetRegionStart,
-//                    targetRegionEnd,
-//                    BLUE,
-//                    2
-//            );
         }
 
         public int getAvgRedVal(){
