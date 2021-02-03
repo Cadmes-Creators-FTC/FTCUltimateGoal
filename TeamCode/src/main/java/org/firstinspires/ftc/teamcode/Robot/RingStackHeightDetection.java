@@ -49,6 +49,9 @@ public class RingStackHeightDetection extends RobotComponent {
 
         return stackSize;
     }
+    public int getRedVal(){
+        return camPipeline.getAvgRedVal();
+    }
 
     private static class RingStackDetermenationPipeline extends OpenCvPipeline{
         static final Point REGION_TOPLEFT = new Point(181,98);
