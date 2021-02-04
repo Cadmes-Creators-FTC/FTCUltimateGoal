@@ -12,7 +12,7 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake", "ringStackHeightDetection"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");

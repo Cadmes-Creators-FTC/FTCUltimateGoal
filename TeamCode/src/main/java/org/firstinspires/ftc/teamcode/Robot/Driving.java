@@ -36,11 +36,6 @@ public class Driving extends RobotComponent {
         wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
@@ -107,7 +102,6 @@ public class Driving extends RobotComponent {
             double yScaler = 1.33;
             double xScaler = 1.11;
 
-//            double angle = Math.toRadians(-robot.gyroscope.getCurrentAngle()) + Math.PI/4;
             double angle = Math.PI/4;
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
@@ -143,6 +137,11 @@ public class Driving extends RobotComponent {
         }
     }
     public void driveToPosition(Vector2 targetPos, double power) throws InterruptedException {
+        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
         double stopDistance = 10 * power; //scale with power to minimize error
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
@@ -173,6 +172,11 @@ public class Driving extends RobotComponent {
             deltaPos = Vector2.subtract(targetPos, currentPosition);
         };
 
+
+        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
 
