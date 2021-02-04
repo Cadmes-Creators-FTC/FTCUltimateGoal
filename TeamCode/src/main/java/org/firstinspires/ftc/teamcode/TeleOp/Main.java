@@ -26,25 +26,73 @@ public class Main extends LinearOpMode {
 
         robot.logging.setLog("state", "Running");
 
-        while (opModeIsActive()){
-            driveWithJoystick();
-            driveWithDpad();
-
-            ringShooter();
-            wobbleArm();
-            intake();
-        }
+        startComponents();
+        controlLoop();
+        stopComponents();
 
         robot.isRunning = false;
 
         robot.logging.setLog("state", "Stopped");
     }
-        
+
+    private void startComponents(){
+        robot.intake.turnOn();
+    }
+    private void controlLoop(){
+        while (opModeIsActive()){
+            driveWithJoystick();
+            driveWithDpad();
+
+            shooter();
+            wobbleArm();
+        }
+    }
+    private void stopComponents(){
+        robot.intake.turnOff();
+    }
+
+
+    boolean shooterStateChanged = false;
+    private void shooter(){
+        if (gamepad2.b && !shooterStateChanged){
+            shooterStateChanged = true;
+            if (robot.shooter.isOn())
+                robot.shooter.turnOff();
+            else
+                robot.shooter.turnOn(0.85);
+        }
+        if(!gamepad2.b)
+            shooterStateChanged = false;
+    }
+
+    boolean wobbleArmGripperStateChanged = false;
+    private void wobbleArm(){
+        if (gamepad2.right_trigger > 0){
+            robot.wobbleArm.armDown();
+        } else if (gamepad2.right_bumper){
+            robot.wobbleArm.armUp();
+        }
+
+        if (gamepad2.y && !wobbleArmGripperStateChanged){
+            wobbleArmGripperStateChanged = true;
+            if (robot.wobbleArm.isGripperOpen())
+                robot.wobbleArm.closeGripper();
+            else
+                robot.wobbleArm.closeGripper();
+        }
+        if(!gamepad2.y)
+            wobbleArmGripperStateChanged = false;
+    }
+
     private void driveWithJoystick(){
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
         double joyR = gamepad1.right_stick_x;
+
+        boolean driveWithJoystickEnabled = joyX != 0 || joyY != 0 || joyR != 0;
+        if(!driveWithJoystickEnabled)
+            return;;
 
         //reverse y joystick
         joyY *= -1;
@@ -65,65 +113,22 @@ public class Main extends LinearOpMode {
         wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
         wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
 
-        if(wpc.lf != 0 && wpc.rf != 0 && wpc.rb != 0 && wpc.lb != 0){
-            robot.driving.setWheelPowers(wpc);
-            robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
-        }
+        robot.driving.setWheelPowers(wpc);
+        robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
     }
-
-    private void ringShooter(){
-        if (gamepad2.a)
-            robot.shooter.turnOn(0.85);
-        else
-            robot.shooter.turnOff();
-    }
-
     private void driveWithDpad(){
-        boolean dpadEnabled = false;
-        WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
-
         if (gamepad1.dpad_up) {
-            dpadEnabled = true;
-            wpc.lf = 0.5;
-            wpc.lb = 0.5;
-            wpc.rf = 0.5;
-            wpc.rb = 0.5;
-        }else if (gamepad1.dpad_down) {
-            dpadEnabled = true;
-            wpc.lf = -0.5;
-            wpc.lb = -0.5;
-            wpc.rf = -0.5;
-            wpc.rb = -0.5;
-        }else if (gamepad1.dpad_left) {
-            dpadEnabled = true;
-            wpc.lf = -0.5;
-            wpc.lb = 0.5;
-            wpc.rf = 0.5;
-            wpc.rb = -0.5;
-        }else if (gamepad1.dpad_right){
-            dpadEnabled = true;
-            wpc.lf = 0.5;
-            wpc.lb = -0.5;
-            wpc.rf = -0.5;
-            wpc.rb = 0.5;
-        }
-
-        if(dpadEnabled)
+            WheelPowerConfig wpc = new WheelPowerConfig(0.5, 0.5, 0.5, 0.5);
             robot.driving.setWheelPowers(wpc);
-    }
-
-    private void wobbleArm(){
-        if (gamepad2.left_bumper){
-            robot.wobbleArm.armDown();
-        } else if (gamepad2.right_bumper){
-            robot.wobbleArm.armUp();
-        }
-    }
-    private void intake(){
-        if (gamepad2.a){
-            robot.intake.turnOn();
-        } else {
-            robot.intake.turnOff();
+        }else if (gamepad1.dpad_down) {
+            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, -0.5, -0.5, -0.5);
+            robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.dpad_left) {
+            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, 0.5, -0.5, 0.5);
+            robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.dpad_right){
+            WheelPowerConfig wpc = new WheelPowerConfig(0.5, -0.5, 0.5, -0.5);
+            robot.driving.setWheelPowers(wpc);
         }
     }
 }

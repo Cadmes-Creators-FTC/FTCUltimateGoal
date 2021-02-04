@@ -31,4 +31,8 @@ public class Shooter extends RobotComponent {
         shooterWheelL.setPower(0);
         shooterWheelR.setPower(0);
     }
+
+    public  boolean isOn(){
+        return shooterWheelL.getPower() != 0;
+    }
 }
