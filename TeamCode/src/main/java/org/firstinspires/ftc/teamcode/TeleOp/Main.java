@@ -12,7 +12,8 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
+//        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "intake"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
@@ -43,7 +44,7 @@ public class Main extends LinearOpMode {
             driveWithJoystick();
             driveWithDpad();
 
-            shooter();
+//            shooter();
             wobbleArm();
         }
     }
@@ -84,15 +85,16 @@ public class Main extends LinearOpMode {
             wobbleArmGripperStateChanged = false;
     }
 
+    int enabledDriveControls = 0;
     private void driveWithJoystick(){
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
         double joyR = gamepad1.right_stick_x;
 
-        boolean driveWithJoystickEnabled = joyX != 0 || joyY != 0 || joyR != 0;
-        if(!driveWithJoystickEnabled)
-            return;;
+        enabledDriveControls = (joyX != 0 || joyY != 0 || joyR != 0) ? 0 : enabledDriveControls;
+        if(enabledDriveControls != 0)
+            return;
 
         //reverse y joystick
         joyY *= -1;
@@ -117,6 +119,10 @@ public class Main extends LinearOpMode {
         robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
     }
     private void driveWithDpad(){
+        enabledDriveControls = (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_down || gamepad1.dpad_left) ? 1 : enabledDriveControls;
+        if(enabledDriveControls != 1)
+            return;
+
         if (gamepad1.dpad_up) {
             WheelPowerConfig wpc = new WheelPowerConfig(0.5, 0.5, 0.5, 0.5);
             robot.driving.setWheelPowers(wpc);

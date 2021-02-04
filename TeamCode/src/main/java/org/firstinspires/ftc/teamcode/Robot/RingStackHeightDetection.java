@@ -23,7 +23,8 @@ public class RingStackHeightDetection extends RobotComponent {
         super(inputRobot);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.FRONT, cameraMonitorViewId);
+        phoneCam.openCameraDevice();
 
         camPipeline = new RingStackDetermenationPipeline();
         phoneCam.setPipeline(camPipeline);
@@ -38,8 +39,8 @@ public class RingStackHeightDetection extends RobotComponent {
     public int getStackSize(){
         int avgRedVal = camPipeline.getAvgRedVal();
 
-        int oneRingThreshhold = 130;
-        int fourRingThreshhold = 150;
+        int oneRingThreshhold = 80;
+        int fourRingThreshhold = 120;
 
         int stackSize = 0;
         if(avgRedVal > fourRingThreshhold)
@@ -54,9 +55,9 @@ public class RingStackHeightDetection extends RobotComponent {
     }
 
     private static class RingStackDetermenationPipeline extends OpenCvPipeline{
-        static final Point REGION_TOPLEFT = new Point(181,98);
-        static final int REGION_WIDTH = 35;
-        static final int REGION_HEIGHT = 25;
+        static final Point REGION_TOPLEFT = new Point(55,220);
+        static final int REGION_WIDTH = 90;
+        static final int REGION_HEIGHT = 80;
 
         Point targetRegionStart = new Point(
                 REGION_TOPLEFT.x,
@@ -91,7 +92,7 @@ public class RingStackHeightDetection extends RobotComponent {
                     2
             );
 
-            return workingMatrix;
+            return input;
         }
 
         public int getAvgRedVal(){
