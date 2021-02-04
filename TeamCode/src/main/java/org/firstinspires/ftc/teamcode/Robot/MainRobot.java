@@ -18,6 +18,7 @@ public class MainRobot {
     public Shooter shooter;
     public Logging logging;
     public WobbleArm wobbleArm;
+    public Intake intake;
     public RingStackHeightDetection ringStackHeightDetection;
     public ArrayList<RobotComponent> componentsList = new ArrayList<RobotComponent>();
 
@@ -43,6 +44,10 @@ public class MainRobot {
         if(enabledComponents.contains("wobbleArm")) {
             wobbleArm = new WobbleArm(hardwareMap, this);
             componentsList.add(wobbleArm);
+        }
+        if(enabledComponents.contains("intake")) {
+            intake = new Intake(hardwareMap, this);
+            componentsList.add(intake);
         }
         if(enabledComponents.contains("ringStackHeightDetection")) {
             ringStackHeightDetection = new RingStackHeightDetection(hardwareMap, this);

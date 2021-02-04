@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 @Disabled
 public class Shooter extends RobotComponent {
     private final DcMotor shooterWheelL;
@@ -29,7 +27,7 @@ public class Shooter extends RobotComponent {
         shooterWheelL.setPower(power);
         shooterWheelR.setPower(power);
     }
-    public void turnOf(){
+    public void turnOff(){
         shooterWheelL.setPower(0);
         shooterWheelR.setPower(0);
     }

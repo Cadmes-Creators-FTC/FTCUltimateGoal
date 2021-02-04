@@ -43,6 +43,6 @@ public class ShooterOnly extends LinearOpMode {
         else if(gamepad2.y)
             robot.shooter.turnOn(0.6);
         else
-            robot.shooter.turnOf();
+            robot.shooter.turnOff();
     }
 }

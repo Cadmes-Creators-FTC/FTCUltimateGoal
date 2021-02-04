@@ -12,7 +12,7 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake", "ringStackHeightDetection"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
@@ -32,6 +32,7 @@ public class Main extends LinearOpMode {
 
             ringShooter();
             wobbleArm();
+            intake();
         }
 
         robot.isRunning = false;
@@ -74,7 +75,7 @@ public class Main extends LinearOpMode {
         if (gamepad2.a)
             robot.shooter.turnOn(0.85);
         else
-            robot.shooter.turnOf();
+            robot.shooter.turnOff();
     }
 
     private void driveWithDpad(){
@@ -116,6 +117,13 @@ public class Main extends LinearOpMode {
             robot.wobbleArm.armDown();
         } else if (gamepad2.right_bumper){
             robot.wobbleArm.armUp();
+        }
+    }
+    private void intake(){
+        if (gamepad2.a){
+            robot.intake.turnOn();
+        } else {
+            robot.intake.turnOff();
         }
     }
 }
