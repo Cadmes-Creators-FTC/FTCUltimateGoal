@@ -28,7 +28,7 @@ public class RingStackHeightDetection extends RobotComponent {
 
         camPipeline = new RingStackDetermenationPipeline();
         phoneCam.setPipeline(camPipeline);
-        phoneCam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+        phoneCam.startStreaming(176, 144, OpenCvCameraRotation.UPRIGHT);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class RingStackHeightDetection extends RobotComponent {
     public int getStackSize(){
         int avgRedVal = camPipeline.getAvgRedVal();
 
-        int oneRingThreshhold = 80;
-        int fourRingThreshhold = 120;
+        int oneRingThreshhold = 126;
+        int fourRingThreshhold = 131;
 
         int stackSize = 0;
         if(avgRedVal > fourRingThreshhold)
@@ -55,18 +55,30 @@ public class RingStackHeightDetection extends RobotComponent {
     }
 
     private static class RingStackDetermenationPipeline extends OpenCvPipeline{
-        static final Point REGION_TOPLEFT = new Point(55,220);
-        static final int REGION_WIDTH = 90;
-        static final int REGION_HEIGHT = 80;
+        static final Point REGION1_TOPLEFT = new Point(30,126);
+        static final int REGION1_WIDTH = 35;
+        static final int REGION1_HEIGHT = 30;
+        static final Point region1Start = new Point(
+                REGION1_TOPLEFT.x,
+                REGION1_TOPLEFT.y
+        );
+        static final Point region1End = new Point(
+                REGION1_TOPLEFT.x + REGION1_WIDTH,
+                REGION1_TOPLEFT.y + REGION1_HEIGHT
+        );
 
-        Point targetRegionStart = new Point(
-                REGION_TOPLEFT.x,
-                REGION_TOPLEFT.y
+        static final Point REGION2_TOPLEFT = new Point(101,126);
+        static final int REGION2_WIDTH = 35;
+        static final int REGION2_HEIGHT = 30;
+        static final Point region2Start = new Point(
+                REGION2_TOPLEFT.x,
+                REGION2_TOPLEFT.y
         );
-        Point targetRegionEnd = new Point(
-                REGION_TOPLEFT.x + REGION_WIDTH,
-                REGION_TOPLEFT.y + REGION_HEIGHT
+        static final Point region2End = new Point(
+                REGION2_TOPLEFT.x + REGION2_WIDTH,
+                REGION2_TOPLEFT.y + REGION2_HEIGHT
         );
+
 
         Mat workingMatrix = new Mat();
         int avgRedVal;
@@ -79,17 +91,28 @@ public class RingStackHeightDetection extends RobotComponent {
             Imgproc.cvtColor(workingMatrix, workingMatrix, Imgproc.COLOR_RGB2YCrCb);
             Core.extractChannel(workingMatrix, workingMatrix, 1);
 
-            Mat subMat = workingMatrix.submat(new Rect(targetRegionStart, targetRegionEnd));
+            Mat subMatRegion1 = workingMatrix.submat(new Rect(region1Start, region1End));
+            int avgRedValRegion1 = (int) Core.mean(subMatRegion1).val[0];
 
-            avgRedVal = (int) Core.mean(subMat).val[0];
+            Mat subMatRegion2 = workingMatrix.submat(new Rect(region2Start, region2End));
+            int avgRedValRegion2 = (int) Core.mean(subMatRegion2).val[0];
 
-            //add rectangle to show target zone
+            avgRedVal = (avgRedValRegion1 + avgRedValRegion2)/2;
+
+            //add rectangles to show target zone
             Imgproc.rectangle(
                     input,
-                    targetRegionStart,
-                    targetRegionEnd,
-                    new Scalar(0, 250, 0),
-                    2
+                    region1Start,
+                    region1End,
+                    new Scalar(255, 0, 0),
+                    1
+            );
+            Imgproc.rectangle(
+                    input,
+                    region2Start,
+                    region2End,
+                    new Scalar(255, 0, 0),
+                    1
             );
 
             return input;
