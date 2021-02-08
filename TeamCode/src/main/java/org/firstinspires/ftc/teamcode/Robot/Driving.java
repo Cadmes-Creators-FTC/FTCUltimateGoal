@@ -212,5 +212,18 @@ public class Driving extends RobotComponent {
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
 
+    private double getWheelCorrection(){
+        double scaler = 0.03;
+        double maxCorrection = 0.25;
+
+        double targetAngle = robot.gyroscope.getTargetAngle();
+        double currentAngle = robot.gyroscope.getCurrentAngle();
+        double deltaAngle = targetAngle - currentAngle;
+
+        double correction = deltaAngle*scaler;
+
+        return Math.max(maxCorrection, correction);
+    }
+
     //endregion
 }
