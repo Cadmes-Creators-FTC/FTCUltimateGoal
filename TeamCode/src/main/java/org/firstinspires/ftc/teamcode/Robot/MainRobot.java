@@ -60,4 +60,8 @@ public class MainRobot {
             componentsList.get(i).startThreads();
         }
     }
+
+    public void stopRobot(){
+        isRunning = false;
+    }
 }
