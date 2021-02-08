@@ -14,8 +14,4 @@ public class RobotComponent {
     public void startThreads(){
 
     }
-
-    public void stopComponent(){
-
-    }
 }
