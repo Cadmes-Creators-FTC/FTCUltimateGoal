@@ -176,7 +176,8 @@ public class Driving extends RobotComponent {
             Thread.sleep(50);
         }
     }
-    public void driveToPosition(Vector2 targetPos, double power) throws InterruptedException {
+    public void driveToPosition(Vector2 targetPos, double targetRotation, double power) throws InterruptedException {
+        robot.gyroscope.setTargetAngle(targetRotation);
 
         double stopDistance = 10 * power; //scale with power to minimize error
 
