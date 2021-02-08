@@ -24,12 +24,6 @@ public class WobbleArm extends RobotComponent {
         gripper.setPosition(1);
     }
 
-    @Override
-    public void stopComponent(){
-        arm.scaleRange(0, 1);
-        arm.setPosition(1);
-    }
-
     public void armUp(){
         double armPos = arm.getPosition();
         arm.setPosition(armPos + 0.005);
@@ -47,5 +41,10 @@ public class WobbleArm extends RobotComponent {
     }
     public boolean isGripperOpen(){
         return gripper.getPosition() != 0;
+    }
+
+    public void toStopPosition(){
+        arm.scaleRange(0, 1);
+        arm.setPosition(1);
     }
 }
