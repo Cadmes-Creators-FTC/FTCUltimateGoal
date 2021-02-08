@@ -6,17 +6,20 @@ public class Matrix {
     public int rows, columns;
     public double[][] matrix;
 
-    public Matrix(int t_rows, int t_columns, double[][] t_matrix) {
+    public Matrix(int t_rows, int t_columns){
         rows = t_rows;
         columns = t_columns;
 
-        // make all 0 matrix if input is null
-        if (t_matrix == null){
-            t_matrix = new double[rows][columns];
-            for (double[] row: t_matrix)
-                Arrays.fill(row, 0.0);
-        }
+        matrix = new double[rows][columns];
+        for (double[] row: matrix)
+            Arrays.fill(row, 0.0);
+    }
+    public Matrix(double[][] t_matrix){
+        if(t_matrix == null)
+            return;
 
+        rows = t_matrix.length;
+        columns = t_matrix[0] != null ? t_matrix[0].length : 0;
         matrix = t_matrix;
     }
 
@@ -39,7 +42,7 @@ public class Matrix {
         return a;
     }
     public static Matrix multiply(Matrix a, Matrix b){
-        Matrix c = new Matrix(a.rows, b.columns, null);
+        Matrix c = new Matrix(a.rows, b.columns);
 
         for (int i = 0; i < a.rows; i++) { // aRow
             for (int j = 0; j < b.columns; j++) { // bColumn

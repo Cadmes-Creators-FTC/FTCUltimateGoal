@@ -99,7 +99,7 @@ public class Driving extends RobotComponent {
 
             /* get wheel pos matrix */
             wheelPosDelta.toCM(11*Math.PI, ticksPerRotation);
-            Matrix wheelPosMatrix = new Matrix(1, 4, new double[][]{
+            Matrix wheelPosMatrix = new Matrix(new double[][]{
                     { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.lb, wheelPosDelta.rb }
             });
 
@@ -110,7 +110,7 @@ public class Driving extends RobotComponent {
             double angle = Math.PI/4;
             double sinVal = Math.sqrt(2)*Math.sin(angle);
             double cosVal = Math.sqrt(2)*Math.cos(angle);
-            Matrix transformMatrix = new Matrix(4, 2, new double[][]{
+            Matrix transformMatrix = new Matrix(new double[][]{
                     { xScaler*cosVal,  yScaler*sinVal },
                     { xScaler*-sinVal, yScaler*cosVal },
                     { xScaler*-sinVal, yScaler*cosVal },
@@ -122,7 +122,7 @@ public class Driving extends RobotComponent {
             Matrix deltaPosMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
 
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
-            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+            Matrix rotMatrix = new Matrix(new double[][]{
                     { Math.cos(angleRad), -Math.sin(angleRad) },
                     { Math.sin(angleRad), Math.cos(angleRad) },
             });
@@ -160,10 +160,10 @@ public class Driving extends RobotComponent {
             /* get movement */
             double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4;
             double deltaY = (wheelPosDelta.lf + wheelPosDelta.rf + wheelPosDelta.rb + wheelPosDelta.lb) / 4;
-            Matrix deltaPos = new Matrix(1, 2, new double[][]{{deltaX, deltaY}});
+            Matrix deltaPos = new Matrix(new double[][]{{deltaX, deltaY}});
 
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
-            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+            Matrix rotMatrix = new Matrix(new double[][]{
                     { Math.cos(angleRad), -Math.sin(angleRad) },
                     { Math.sin(angleRad), Math.cos(angleRad) },
             });
@@ -185,7 +185,7 @@ public class Driving extends RobotComponent {
         while ((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)){
 
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
-            Matrix rotMatrix = new Matrix(2, 2, new double[][]{
+            Matrix rotMatrix = new Matrix(new double[][]{
                     { Math.cos(angleRad), -Math.sin(angleRad) },
                     { Math.sin(angleRad), Math.cos(angleRad) },
             });
