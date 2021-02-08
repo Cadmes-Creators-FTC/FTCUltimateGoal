@@ -136,9 +136,6 @@ public class Driving extends RobotComponent {
             /* update position */
             currentPosition = Vector2.add(currentPosition, deltaPosVector);
 
-            robot.logging.setLog("x", currentPosition.x);
-            robot.logging.setLog("y", currentPosition.y);
-
             /* timeout between updates */
             Thread.sleep(50);
         }
