@@ -36,6 +36,11 @@ public class Driving extends RobotComponent {
         wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     @Override
@@ -173,10 +178,6 @@ public class Driving extends RobotComponent {
         }
     }
     public void driveToPosition(Vector2 targetPos, double power) throws InterruptedException {
-        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         double stopDistance = 10 * power; //scale with power to minimize error
 
