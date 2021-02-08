@@ -50,13 +50,6 @@ public class Driving extends RobotComponent {
         }.start();
     }
 
-    @Override
-    public void stopComponent(){
-        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
-        currentPosition = new Vector2(0, 0);
-        currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
-    }
-
     //region teleOp wheelPowers
     public void setWheelPowers(WheelPowerConfig wheelPowerConfig){
         //set motor power
