@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
         import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 
 @TeleOp(name = "wobbleGoalOnly", group = "TestingTeleOps")
-public class WobbleGoalOnly extends LinearOpMode {
+public class WobbleArmOnly extends LinearOpMode {
     private MainRobot robot;
 
     @Override
@@ -19,18 +19,18 @@ public class WobbleGoalOnly extends LinearOpMode {
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
-
         waitForStart();
 
         robot.logging.setLog("state", "Running");
+        controlLoop();
 
+        robot.stopRobot();
+        robot.logging.setLog("state", "Stopped");
+    }
+    public void controlLoop(){
         while (opModeIsActive()){
             wobbleArm();
         }
-
-        robot.isRunning = false;
-
-        robot.logging.setLog("state", "Stopped");
     }
 
     private void wobbleArm(){

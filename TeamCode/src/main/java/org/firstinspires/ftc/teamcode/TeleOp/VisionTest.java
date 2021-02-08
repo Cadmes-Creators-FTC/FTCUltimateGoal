@@ -25,7 +25,7 @@ public class VisionTest extends LinearOpMode {
         robot.logging.setLog("state", "Running");
 
         while (opModeIsActive()){
-            logOrangeVal();
+            logVision();
         }
 
         robot.isRunning = false;
@@ -33,7 +33,7 @@ public class VisionTest extends LinearOpMode {
         robot.logging.setLog("state", "Stopped");
     }
 
-    private void logOrangeVal(){
+    private void logVision(){
         robot.logging.setLog("RedVal", robot.ringStackHeightDetection.getRedVal());
         robot.logging.setLog("StackSize", robot.ringStackHeightDetection.getStackSize());
     }

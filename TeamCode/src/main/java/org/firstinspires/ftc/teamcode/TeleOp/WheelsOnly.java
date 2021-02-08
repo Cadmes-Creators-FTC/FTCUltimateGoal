@@ -20,26 +20,33 @@ public class WheelsOnly extends LinearOpMode {
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
-
         waitForStart();
 
         robot.logging.setLog("state", "Running");
+        controlLoop();
 
-        while (opModeIsActive()){
-            driveWithJoystick();
-            driveWithDpad();
-        }
-
-        robot.isRunning = false;
-
+        robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
     }
+    public void controlLoop(){
+        while (opModeIsActive()){
+            driveWithDpad();
+            driveWithJoystick();
+        }
+    }
 
+    int enabledDriveControls = 0;
     private void driveWithJoystick(){
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
         double joyR = gamepad1.right_stick_x;
+
+        enabledDriveControls = (joyX != 0 || joyY != 0 || joyR != 0) ? 0 : enabledDriveControls;
+        if(enabledDriveControls != 0) {
+            robot.logging.removeLog("Average wheel power");
+            return;
+        }
 
         //reverse y joystick
         joyY *= -1;
@@ -60,46 +67,27 @@ public class WheelsOnly extends LinearOpMode {
         wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
         wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
 
-        if(wpc.lf != 0 && wpc.rf != 0 && wpc.rb != 0 && wpc.lb != 0){
-            robot.driving.setWheelPowers(wpc);
-            robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
-        }
+        robot.driving.setWheelPowers(wpc);
+        robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
     }
 
     private void driveWithDpad(){
-        //remove joystick wheel power log
-        robot.logging.removeLog("Average wheel power");
-
-        boolean dpadEnabled = false;
-        WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
+        enabledDriveControls = (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_down || gamepad1.dpad_left) ? 1 : enabledDriveControls;
+        if(enabledDriveControls != 1)
+            return;
 
         if (gamepad1.dpad_up) {
-            dpadEnabled = true;
-            wpc.lf = 0.5;
-            wpc.lb = 0.5;
-            wpc.rf = 0.5;
-            wpc.rb = 0.5;
-        }else if (gamepad1.dpad_down) {
-            dpadEnabled = true;
-            wpc.lf = -0.5;
-            wpc.lb = -0.5;
-            wpc.rf = -0.5;
-            wpc.rb = -0.5;
-        }else if (gamepad1.dpad_left) {
-            dpadEnabled = true;
-            wpc.lf = -0.5;
-            wpc.lb = 0.5;
-            wpc.rf = 0.5;
-            wpc.rb = -0.5;
-        }else if (gamepad1.dpad_right){
-            dpadEnabled = true;
-            wpc.lf = 0.5;
-            wpc.lb = -0.5;
-            wpc.rf = -0.5;
-            wpc.rb = 0.5;
-        }
-
-        if(dpadEnabled)
+            WheelPowerConfig wpc = new WheelPowerConfig(0.5, 0.5, 0.5, 0.5);
             robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.dpad_down) {
+            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, -0.5, -0.5, -0.5);
+            robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.dpad_left) {
+            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, 0.5, -0.5, 0.5);
+            robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.dpad_right){
+            WheelPowerConfig wpc = new WheelPowerConfig(0.5, -0.5, 0.5, -0.5);
+            robot.driving.setWheelPowers(wpc);
+        }
     }
 }

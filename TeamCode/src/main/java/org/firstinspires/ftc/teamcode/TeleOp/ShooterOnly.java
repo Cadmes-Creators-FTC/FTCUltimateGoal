@@ -15,22 +15,22 @@ public class ShooterOnly extends LinearOpMode {
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
-
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
-
         waitForStart();
 
         robot.logging.setLog("state", "Running");
+        controlLoop();
 
+        robot.stopRobot();
+        robot.logging.setLog("state", "Stopped");
+    }
+
+    private void controlLoop() {
         while (opModeIsActive()){
             ringShooter();
         }
-
-        robot.isRunning = false;
-
-        robot.logging.setLog("state", "Stopped");
     }
 
     private void ringShooter(){

@@ -12,33 +12,23 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-//        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "intake"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
-
         robot.gyroscope.waitForGyroCalibration();
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
-
         waitForStart();
 
         robot.logging.setLog("state", "Running");
-
-        startComponents();
         controlLoop();
-        stopComponents();
 
-        robot.isRunning = false;
-
+        robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
     }
 
-    private void startComponents(){
-        robot.intake.turnOn();
-    }
     private void controlLoop(){
         while (opModeIsActive()){
             driveWithJoystick();
@@ -47,9 +37,6 @@ public class Main extends LinearOpMode {
 //            shooter();
             wobbleArm();
         }
-    }
-    private void stopComponents(){
-        robot.intake.turnOff();
     }
 
 
