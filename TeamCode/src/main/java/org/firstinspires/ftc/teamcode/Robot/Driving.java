@@ -205,7 +205,7 @@ public class Driving extends RobotComponent {
             wpc = WheelPowerConfig.multiply(wpc, power);
             setWheelPowers(wpc);
 
-            Thread.sleep(100);
+            Thread.sleep(50);
 
             deltaPos = Vector2.subtract(targetPos, currentPosition);
         };
