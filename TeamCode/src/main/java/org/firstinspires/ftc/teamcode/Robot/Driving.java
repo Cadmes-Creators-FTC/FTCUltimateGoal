@@ -176,14 +176,21 @@ public class Driving extends RobotComponent {
             Thread.sleep(50);
         }
     }
-    public void driveToPosition(Vector2 targetPos, double targetRotation, double power) throws InterruptedException {
+    public void driveToPosition(Vector2 targetPos, double targetRotation, double maxSpeed) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetRotation);
 
-        double stopDistance = 10 * power; //scale with power to minimize error
-
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
-        while ((Math.abs(deltaPos.x) > stopDistance || Math.abs(deltaPos.y) > stopDistance)){
 
+        double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
+
+        double stopDistance = 5;
+        double accelerationPercentile = 0.1;
+        double accelerationBarrier = accelerationPercentile*totalDistance;
+        double decelerationBarrier = totalDistance - accelerationPercentile*totalDistance;
+
+        double speed = 0;
+        double distance = totalDistance;
+        while (distance > stopDistance){
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
             Matrix rotMatrix = new Matrix(new double[][]{
                     { Math.cos(angleRad), -Math.sin(angleRad) },
@@ -202,12 +209,20 @@ public class Driving extends RobotComponent {
             );
 
             wpc.clamp();
-            wpc = WheelPowerConfig.multiply(wpc, power);
+            wpc = WheelPowerConfig.multiply(wpc, speed);
             setWheelPowers(wpc);
 
             Thread.sleep(50);
 
             deltaPos = Vector2.subtract(targetPos, currentPosition);
+            distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
+
+            //pid
+            double traveledDistance = totalDistance-distance;
+            if(traveledDistance <= accelerationBarrier)
+                speed = traveledDistance/accelerationBarrier;
+            if(traveledDistance >= decelerationBarrier)
+                speed = 1-(traveledDistance-decelerationBarrier)/(totalDistance-decelerationBarrier);
         };
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
