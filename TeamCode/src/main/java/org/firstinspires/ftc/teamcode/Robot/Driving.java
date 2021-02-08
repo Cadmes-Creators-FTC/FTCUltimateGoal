@@ -168,12 +168,7 @@ public class Driving extends RobotComponent {
 
             deltaPos = Vector2.subtract(targetPos, currentPosition);
         };
-
-
-        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
 
