@@ -11,7 +11,7 @@ public class WheelPowerConfig {
     }
 
 
-    public  void clamp(){
+    public void clamp(){
         //clamp all between -1 and 1
         double max1 = Math.max(Math.abs(lf), Math.abs(rf));
         double max2 = Math.max(Math.abs(rb), Math.abs(lb));
@@ -23,6 +23,23 @@ public class WheelPowerConfig {
             rb /= max;
             lb /= max;
         }
+    }
+    public void scale(){
+        //scale all between -1 and 1
+        double max1 = Math.max(Math.abs(lf), Math.abs(rf));
+        double max2 = Math.max(Math.abs(rb), Math.abs(lb));
+        double max = Math.max(max1, max2);
+
+        if(max < 1) {
+            lf /= max;
+            rf /= max;
+            rb /= max;
+            lb /= max;
+        }
+    }
+    public void clampScale(){
+        clamp();
+        scale();
     }
 
     public static WheelPowerConfig add(WheelPowerConfig wpc1, WheelPowerConfig wpc2){

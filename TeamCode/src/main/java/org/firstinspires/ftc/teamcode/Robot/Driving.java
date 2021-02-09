@@ -239,7 +239,7 @@ public class Driving extends RobotComponent {
                     relativeDeltaPosVector.y - relativeDeltaPosVector.x + angleCorrection
             );
 
-            wpc.clamp();
+            wpc.clampScale();
             wpc = WheelPowerConfig.multiply(wpc, speed*speedScaler);
             setWheelPowers(wpc);
 
