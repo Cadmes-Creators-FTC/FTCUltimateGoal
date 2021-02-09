@@ -69,9 +69,9 @@ public class Gyroscope extends RobotComponent{
     public double getCurrentAngle(){
         return currentAngle;
     }
-    public void resetCurrentAngle(){
-        currentAngle = 0;
-        targetAngle = 0;
+    public void setCurrentAngle(double angle){
+        currentAngle = angle;
+        targetAngle = angle;
         lastAngles = new Orientation();
     }
 
