@@ -15,11 +15,11 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 @Disabled
-public class RingStackHeightDetection extends RobotComponent {
+public class RingStackDetection extends RobotComponent {
     private OpenCvInternalCamera phoneCam;
     private RingStackDetermenationPipeline camPipeline;
 
-    public RingStackHeightDetection(HardwareMap hardwareMap, MainRobot inputRobot) {
+    public RingStackDetection(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

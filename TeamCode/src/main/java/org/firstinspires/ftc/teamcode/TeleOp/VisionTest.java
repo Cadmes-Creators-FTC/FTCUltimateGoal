@@ -34,7 +34,7 @@ public class VisionTest extends LinearOpMode {
     }
 
     private void logVision(){
-        robot.logging.setLog("RedVal", robot.ringStackHeightDetection.getRedVal());
-        robot.logging.setLog("StackSize", robot.ringStackHeightDetection.getStackSize());
+        robot.logging.setLog("RedVal", robot.ringStackDetection.getRedVal());
+        robot.logging.setLog("StackSize", robot.ringStackDetection.getStackSize());
     }
 }
