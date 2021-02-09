@@ -95,15 +95,14 @@ public class Main extends LinearOpMode {
         );
         wpc.clamp();
 
-        //smooth out the acceleration
-        //f(x) = 0.6x^2 + 0.4x
-        wpc.lf = 0.6*Math.pow(wpc.lf, 3) + 0.4*wpc.lf;
-        wpc.rf = 0.6*Math.pow(wpc.rf, 3) + 0.4*wpc.rf;
-        wpc.rb = 0.6*Math.pow(wpc.rb, 3) + 0.4*wpc.rb;
-        wpc.lb = 0.6*Math.pow(wpc.lb, 3) + 0.4*wpc.lb;
+        double averageWheelPower = (Math.abs(wpc.lf) + Math.abs(wpc.rf) + Math.abs(wpc.rb) + Math.abs(wpc.lb)) / 4;
+
+        //smooth out the acceleration - f(x) = 0.6x^2 + 0.4x
+        double scalerVal = 0.6*Math.pow(averageWheelPower, 2) + 0.4*averageWheelPower;
+        wpc = WheelPowerConfig.multiply(wpc, scalerVal);
 
         robot.driving.setWheelPowers(wpc);
-        robot.logging.setLog("Average wheel power", (wpc.lf+wpc.rf+wpc.rb+wpc.lb)/4);
+        robot.logging.setLog("Average wheel power", averageWheelPower);
     }
     private void driveWithDpad(){
         enabledDriveControls = (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_down || gamepad1.dpad_left) ? 1 : enabledDriveControls;
