@@ -176,12 +176,15 @@ public class Driving extends RobotComponent {
             Thread.sleep(50);
         }
     }
-    public void driveToPosition(Vector2 targetPos, double targetRotation, double maxSpeed) throws InterruptedException {
+    public void driveToPosition(Vector2 targetPos, double targetRotation, double speedScaler) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetRotation);
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
-
         double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
+
+        double previousDistance = 0;
+        double integralScaler = 0.01;
+
 
         double stopDistance = 5;
         double accelerationPercentile = 0.1;
@@ -191,6 +194,34 @@ public class Driving extends RobotComponent {
         double speed = 0;
         double distance = totalDistance;
         while (distance > stopDistance){
+            /* pid */
+            double traveledDistance = totalDistance-distance;
+            double previousTraveledDistance = totalDistance-previousDistance;
+
+            /* proportional */
+            if(traveledDistance <= accelerationBarrier){
+                double remainingSpeedIncrease = 1-speed;
+
+                double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
+                currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                speed += remainingSpeedIncrease*currentMovementPercentage;
+            }
+            if(traveledDistance >= decelerationBarrier){
+                double remainingSpeedDecrease = speed;
+
+                double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(totalDistance - previousTraveledDistance);
+                currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                speed -= remainingSpeedDecrease*currentMovementPercentage;
+            }
+
+            /* integral */
+            if(distance == previousDistance)
+                speed += integralScaler;
+
+
+            /* drive towards targetPos with speed from pid */
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
             Matrix rotMatrix = new Matrix(new double[][]{
                     { Math.cos(angleRad), -Math.sin(angleRad) },
@@ -209,20 +240,15 @@ public class Driving extends RobotComponent {
             );
 
             wpc.clamp();
-            wpc = WheelPowerConfig.multiply(wpc, speed);
+            wpc = WheelPowerConfig.multiply(wpc, speed*speedScaler);
             setWheelPowers(wpc);
 
             Thread.sleep(50);
 
+            /* set values for next loop run */
+            previousDistance = distance;
             deltaPos = Vector2.subtract(targetPos, currentPosition);
             distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
-
-            //pid
-            double traveledDistance = totalDistance-distance;
-            if(traveledDistance <= accelerationBarrier)
-                speed = traveledDistance/accelerationBarrier;
-            if(traveledDistance >= decelerationBarrier)
-                speed = 1-(traveledDistance-decelerationBarrier)/(totalDistance-decelerationBarrier);
         };
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
