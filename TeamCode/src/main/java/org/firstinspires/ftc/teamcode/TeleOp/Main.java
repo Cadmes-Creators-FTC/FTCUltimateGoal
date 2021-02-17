@@ -12,7 +12,8 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
+//        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "wobbleArm", "intake"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
@@ -23,8 +24,10 @@ public class Main extends LinearOpMode {
         waitForStart();
 
         robot.logging.setLog("state", "Running");
+        robot.intake.turnOn();
         controlLoop();
 
+        robot.intake.turnOn();
         robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
     }
@@ -66,7 +69,7 @@ public class Main extends LinearOpMode {
             if (robot.wobbleArm.isGripperOpen())
                 robot.wobbleArm.closeGripper();
             else
-                robot.wobbleArm.closeGripper();
+                robot.wobbleArm.openGripper();
         }
         if(!gamepad2.y)
             wobbleArmGripperStateChanged = false;

@@ -17,7 +17,7 @@ public class  Vector2 {
     }
 
     public Matrix toMatrix(){
-        return new Matrix(1, 2, new double[][]{
+        return new Matrix(new double[][]{
                 { x, y }
         });
     }
