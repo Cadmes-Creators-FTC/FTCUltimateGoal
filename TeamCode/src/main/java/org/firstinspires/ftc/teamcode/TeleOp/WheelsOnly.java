@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 
@@ -11,12 +13,13 @@ public class WheelsOnly extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-        String[] enabledComponents = {"logging", "driving"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
 
         robot.gyroscope.waitForGyroCalibration();
+        robot.driving.setCurrentPosition(new Vector2(0, 0));
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
@@ -32,6 +35,8 @@ public class WheelsOnly extends LinearOpMode {
         while (opModeIsActive()){
             driveWithDpad();
             driveWithJoystick();
+            robot.logging.setLog("x", robot.driving.getCurrentPosition().x);
+            robot.logging.setLog("y", robot.driving.getCurrentPosition().y);
         }
     }
 
@@ -75,17 +80,22 @@ public class WheelsOnly extends LinearOpMode {
         if(enabledDriveControls != 1)
             return;
 
+        double power = 0.2;
+
         if (gamepad1.dpad_up) {
-            WheelPowerConfig wpc = new WheelPowerConfig(0.5, 0.5, 0.5, 0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(power, power, power, power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_down) {
-            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, -0.5, -0.5, -0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(-power, -power, -power, -power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_left) {
-            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, 0.5, -0.5, 0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(-1.5*power, 1.5*power, -1.5*power, 1.5*power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_right){
-            WheelPowerConfig wpc = new WheelPowerConfig(0.5, -0.5, 0.5, -0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(1.5*power, -1.5*power, 1.5*power, -1.5*power);
+            robot.driving.setWheelPowers(wpc);
+        }else {
+            WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
             robot.driving.setWheelPowers(wpc);
         }
     }

@@ -19,6 +19,10 @@ public class Intake extends RobotComponent {
 
     }
 
+    public boolean isOn(){
+        return intakeMotor.getPower() != 0;
+    }
+
     public void turnOn(){
         intakeMotor.setPower(1);
     }

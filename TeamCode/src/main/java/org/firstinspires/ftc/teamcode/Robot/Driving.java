@@ -157,7 +157,7 @@ public class Driving extends RobotComponent {
             wheelPosDelta.toCM(10*Math.PI, ticksPerRotation);
 
             /* get movement */
-            double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4;
+            double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4 * 1.5;
             double deltaY = (wheelPosDelta.lf + wheelPosDelta.rf + wheelPosDelta.rb + wheelPosDelta.lb) / 4;
             Matrix deltaPos = new Matrix(new double[][]{{deltaX, deltaY}});
 

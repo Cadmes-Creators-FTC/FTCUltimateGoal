@@ -19,6 +19,7 @@ public class MainRobot {
     public Logging logging;
     public WobbleArm wobbleArm;
     public Intake intake;
+    public Conveyor conveyor;
     public RingStackDetection ringStackDetection;
     public ArrayList<RobotComponent> componentsList = new ArrayList<RobotComponent>();
 
@@ -48,6 +49,10 @@ public class MainRobot {
         if(enabledComponents.contains("intake")) {
             intake = new Intake(hardwareMap, this);
             componentsList.add(intake);
+        }
+        if(enabledComponents.contains("conveyor")) {
+            conveyor = new Conveyor(hardwareMap, this);
+            componentsList.add(conveyor);
         }
         if(enabledComponents.contains("ringStackHeightDetection")) {
             ringStackDetection = new RingStackDetection(hardwareMap, this);

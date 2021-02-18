@@ -38,9 +38,9 @@ public class RemoteRedRightLine extends LinearOpMode {
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
         int stackHeight = robot.ringStackDetection.getStackSize();
-        // 22    20.4
 
-        robot.driving.driveToPosition(new Vector2(193, 132), 0, 0.5);
+        robot.driving.driveToPosition(new Vector2(191, 37.5), 0, 0.5);
+        robot.driving.driveToPosition(new Vector2(191, 132), 0, 0.5);
 
         Vector2 targetZonePosition;
         if(stackHeight == 0)
@@ -49,7 +49,10 @@ public class RemoteRedRightLine extends LinearOpMode {
             targetZonePosition = new Vector2(119, 239);
         else
             targetZonePosition = new Vector2(179, 298);
-        robot.driving.driveToPosition(targetZonePosition, 70, 0.5);
+        robot.driving.driveToPosition(new Vector2(robot.driving.getCurrentPosition().x, targetZonePosition.y), 0, 0.5);
+        robot.driving.driveToPosition(new Vector2(robot.driving.getCurrentPosition().x, targetZonePosition.y), 70, 0.5);
+        robot.driving.driveToPosition(new Vector2(targetZonePosition.x, targetZonePosition.y), 0, 0.5);
+        robot.driving.driveToPosition(new Vector2(targetZonePosition.x, targetZonePosition.y), 70, 0.5);
 
         robot.wobbleArm.armDown();
         robot.wobbleArm.openGripper();

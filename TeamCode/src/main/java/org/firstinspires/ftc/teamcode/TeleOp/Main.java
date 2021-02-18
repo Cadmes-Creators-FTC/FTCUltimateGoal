@@ -12,8 +12,7 @@ public class Main extends LinearOpMode {
 
     @Override
     public void runOpMode () throws InterruptedException{
-//        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake"};
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "wobbleArm", "intake"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake", "conveyor"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
@@ -24,10 +23,8 @@ public class Main extends LinearOpMode {
         waitForStart();
 
         robot.logging.setLog("state", "Running");
-        robot.intake.turnOn();
         controlLoop();
 
-        robot.intake.turnOn();
         robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
     }
@@ -37,22 +34,51 @@ public class Main extends LinearOpMode {
             driveWithJoystick();
             driveWithDpad();
 
-//            shooter();
+            intake();
+            conveyor();
+            shooter();
+
             wobbleArm();
         }
     }
 
 
+    boolean intakeStateChanged = false;
+    private void intake(){
+        if (gamepad2.b && !intakeStateChanged){
+            intakeStateChanged = true;
+            if (robot.intake.isOn())
+                robot.intake.turnOff();
+            else
+                robot.intake.turnOn();
+        }
+        if(!gamepad2.b)
+            intakeStateChanged = false;
+    }
+
+    boolean conveyorStateChanged = false;
+    private void conveyor(){
+        if (gamepad2.left_bumper && !conveyorStateChanged){
+            conveyorStateChanged = true;
+            if (robot.conveyor.isOn())
+                robot.conveyor.turnOff();
+            else
+                robot.conveyor.turnOn();
+        }
+        if(!gamepad2.left_bumper)
+            conveyorStateChanged = false;
+    }
+
     boolean shooterStateChanged = false;
     private void shooter(){
-        if (gamepad2.b && !shooterStateChanged){
+        if (gamepad2.a && !shooterStateChanged){
             shooterStateChanged = true;
             if (robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
                 robot.shooter.turnOn(0.85);
         }
-        if(!gamepad2.b)
+        if(!gamepad2.a)
             shooterStateChanged = false;
     }
 
@@ -112,17 +138,22 @@ public class Main extends LinearOpMode {
         if(enabledDriveControls != 1)
             return;
 
+        double power = 0.2;
+
         if (gamepad1.dpad_up) {
-            WheelPowerConfig wpc = new WheelPowerConfig(0.5, 0.5, 0.5, 0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(power, power, power, power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_down) {
-            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, -0.5, -0.5, -0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(-power, -power, -power, -power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_left) {
-            WheelPowerConfig wpc = new WheelPowerConfig(-0.5, 0.5, -0.5, 0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(-1.5*power, 1.5*power, -1.5*power, 1.5*power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_right){
-            WheelPowerConfig wpc = new WheelPowerConfig(0.5, -0.5, 0.5, -0.5);
+            WheelPowerConfig wpc = new WheelPowerConfig(1.5*power, -1.5*power, 1.5*power, -1.5*power);
+            robot.driving.setWheelPowers(wpc);
+        }else {
+            WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
             robot.driving.setWheelPowers(wpc);
         }
     }
