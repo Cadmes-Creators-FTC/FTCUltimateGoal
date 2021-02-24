@@ -31,6 +31,11 @@ public class Driving extends RobotComponent {
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);
 
+        wheelLF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelRF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelRB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelLB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         wheelLF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

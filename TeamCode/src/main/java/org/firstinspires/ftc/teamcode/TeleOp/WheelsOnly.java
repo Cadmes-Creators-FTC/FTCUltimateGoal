@@ -37,6 +37,7 @@ public class WheelsOnly extends LinearOpMode {
             driveWithJoystick();
 
             robot.logging.setLog("wheelTicks", robot.driving.getWheelTicks());
+            robot.logging.setLog("wheelPowers", robot.driving.getWheelPowers());
         }
     }
 
@@ -46,6 +47,8 @@ public class WheelsOnly extends LinearOpMode {
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
         double joyR = gamepad1.right_stick_x;
+        robot.logging.setLog("joyX", joyX);
+        robot.logging.setLog("joyY", joyY);
 
         enabledDriveControls = (joyX != 0 || joyY != 0 || joyR != 0) ? 0 : enabledDriveControls;
         if(enabledDriveControls != 0) {
@@ -72,7 +75,6 @@ public class WheelsOnly extends LinearOpMode {
         wpc = WheelPowerConfig.multiply(wpc, scalerVal);
 
         robot.driving.setWheelPowers(wpc);
-        robot.logging.setLog("Average wheel power", averageWheelPower);
     }
 
     private void driveWithDpad(){

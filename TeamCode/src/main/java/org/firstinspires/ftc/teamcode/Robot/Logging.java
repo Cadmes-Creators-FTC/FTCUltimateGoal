@@ -5,15 +5,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 @Disabled
 public class Logging extends RobotComponent {
     //hardwareMap and telemetry
     private final Telemetry telemetry;
 
-    private HashMap<String, Object> logs = new HashMap<String, Object>();
+    private TreeMap<String, Object> logs = new TreeMap<String, Object>();
     private int updateDelay = 100;
 
     public Logging(Telemetry inputTelemetry, MainRobot inputRobot) {
@@ -35,10 +38,31 @@ public class Logging extends RobotComponent {
     }
 
     public void setLog(String key, Object value){
-        logs.put(key, value);
+        formatSetLog(key, value);
     }
     public void removeLog(String key){
         logs.remove(key);
+    }
+
+    private void formatSetLog(String key, Object value){
+        if(value.getClass() == WheelPosition.class){
+            WheelPosition castValue = (WheelPosition) value;
+
+            logs.put(key+"-lf", castValue.lf);
+            logs.put(key+"-rf", castValue.rf);
+            logs.put(key+"-rb", castValue.rb);
+            logs.put(key+"-lb", castValue.lb);
+        }
+        else if(value.getClass() == WheelPowerConfig.class){
+            WheelPowerConfig castValue = (WheelPowerConfig) value;
+
+            logs.put(key+"-lf", castValue.lf);
+            logs.put(key+"-rf", castValue.rf);
+            logs.put(key+"-rb", castValue.rb);
+            logs.put(key+"-lb", castValue.lb);
+        }
+        else
+            logs.put(key, value);
     }
 
     public void updateLogs() throws InterruptedException {

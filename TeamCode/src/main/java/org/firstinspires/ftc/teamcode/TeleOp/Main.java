@@ -122,7 +122,7 @@ public class Main extends LinearOpMode {
                 joyY + joyX - joyR,
                 joyY - joyX + joyR
         );
-        wpc.clamp();
+        wpc.clampScale();
 
         double averageWheelPower = (Math.abs(wpc.lf) + Math.abs(wpc.rf) + Math.abs(wpc.rb) + Math.abs(wpc.lb)) / 4;
 
@@ -131,7 +131,6 @@ public class Main extends LinearOpMode {
         wpc = WheelPowerConfig.multiply(wpc, scalerVal);
 
         robot.driving.setWheelPowers(wpc);
-        robot.logging.setLog("Average wheel power", averageWheelPower);
     }
     private void driveWithDpad(){
         enabledDriveControls = (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_down || gamepad1.dpad_left) ? 1 : enabledDriveControls;
