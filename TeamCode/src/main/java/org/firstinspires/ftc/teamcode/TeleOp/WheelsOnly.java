@@ -49,14 +49,16 @@ public class WheelsOnly extends LinearOpMode {
         double joyR = gamepad1.right_stick_x;
 
         enabledDriveControls = (joyX != 0 || joyY != 0 || joyR != 0) ? 0 : enabledDriveControls;
-        if(enabledDriveControls != 0) {
-            robot.logging.removeLog("Average wheel power");
+        if(enabledDriveControls != 0)
             return;
-        }
 
-        //scale joystick values with 1.25
-        joyX = Math.max(Math.min(1, joyX*1.25), -1);
-        joyY = Math.max(Math.min(1, joyY*1.25), -1);
+        //smooth out the joysticks - f(x) = 0.6x^2 + 0.4x
+        if(joyX != 0)
+            joyX *= 0.6*(Math.pow(joyX, 2)*(joyX/Math.abs(joyX)))+0.4*joyX;
+        if(joyY != 0)
+            joyY *= 0.6*(Math.pow(joyY, 2)*(joyY/Math.abs(joyY)))+0.4*joyY;
+        if(joyR != 0)
+            joyR *= 0.6*(Math.pow(joyR, 2)*(joyR/Math.abs(joyR)))+0.4*joyR;
 
         //reverse y joystick
         joyY *= -1;
@@ -69,12 +71,6 @@ public class WheelsOnly extends LinearOpMode {
                 joyY - joyX + joyR
         );
         wpc.clamp();
-
-        double averageWheelPower = (Math.abs(wpc.lf) + Math.abs(wpc.rf) + Math.abs(wpc.rb) + Math.abs(wpc.lb)) / 4;
-
-        //smooth out the acceleration - f(x) = 0.6x^2 + 0.4x
-        double scalerVal = 0.6*Math.pow(averageWheelPower, 2) + 0.4*averageWheelPower;
-        wpc = WheelPowerConfig.multiply(wpc, scalerVal);
 
         robot.driving.setWheelPowers(wpc);
     }
