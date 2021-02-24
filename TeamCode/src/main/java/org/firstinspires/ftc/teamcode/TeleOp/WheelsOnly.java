@@ -47,8 +47,6 @@ public class WheelsOnly extends LinearOpMode {
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
         double joyR = gamepad1.right_stick_x;
-        robot.logging.setLog("joyX", joyX);
-        robot.logging.setLog("joyY", joyY);
 
         enabledDriveControls = (joyX != 0 || joyY != 0 || joyR != 0) ? 0 : enabledDriveControls;
         if(enabledDriveControls != 0) {
