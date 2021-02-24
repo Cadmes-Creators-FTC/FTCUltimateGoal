@@ -76,7 +76,7 @@ public class Main extends LinearOpMode {
             if (robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
-                robot.shooter.turnOn(0.85);
+                robot.shooter.turnOn(1);
         }
         if(!gamepad2.a)
             shooterStateChanged = false;

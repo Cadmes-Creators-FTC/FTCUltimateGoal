@@ -54,7 +54,7 @@ public class Driving extends RobotComponent {
         }.start();
     }
 
-    //region teleOp wheelPowers
+
     public void setWheelPowers(WheelPowerConfig wheelPowerConfig){
         //set motor power
         wheelLF.setPower(wheelPowerConfig.lf);
@@ -70,9 +70,18 @@ public class Driving extends RobotComponent {
                 wheelLB.getPower()
         );
     }
-    //endregion
 
-    //region Position
+
+    public WheelPosition getWheelTicks() {
+        return new WheelPosition(
+                wheelLF.getCurrentPosition()*-1,
+                wheelRF.getCurrentPosition()*-1,
+                wheelRB.getCurrentPosition()*-1,
+                wheelLB.getCurrentPosition()*-1
+        );
+    }
+
+
     public Vector2 getCurrentPosition(){
         return currentPosition;
     }
@@ -80,78 +89,11 @@ public class Driving extends RobotComponent {
         currentPosition = pos;
     }
 
-    public void keepPositionUpdatedOld() throws InterruptedException{
-        while (robot.isRunning){
-            /* get and update wheel tick positions */
-            WheelPosition wheelPosDelta = new WheelPosition(
-                    wheelLF.getCurrentPosition()*-1 - currentWheelPosTicks.lf,
-                    wheelRF.getCurrentPosition()*-1 - currentWheelPosTicks.rf,
-                    wheelRB.getCurrentPosition()*-1 - currentWheelPosTicks.rb,
-                    wheelLB.getCurrentPosition()*-1 - currentWheelPosTicks.lb
-            );
-            currentWheelPosTicks = new WheelPosition(
-                    wheelLF.getCurrentPosition()*-1,
-                    wheelRF.getCurrentPosition()*-1,
-                    wheelRB.getCurrentPosition()*-1,
-                    wheelLB.getCurrentPosition()*-1
-            );
-
-            /* get wheel pos matrix */
-            wheelPosDelta.toCM(11*Math.PI, ticksPerRotation);
-            Matrix wheelPosMatrix = new Matrix(new double[][]{
-                    { wheelPosDelta.lf, wheelPosDelta.rf, wheelPosDelta.lb, wheelPosDelta.rb }
-            });
-
-            /* get transformation matrix */
-            double yScaler = 1.33;
-            double xScaler = 1.11;
-
-            double angle = Math.PI/4;
-            double sinVal = Math.sqrt(2)*Math.sin(angle);
-            double cosVal = Math.sqrt(2)*Math.cos(angle);
-            Matrix transformMatrix = new Matrix(new double[][]{
-                    { xScaler*cosVal,  yScaler*sinVal },
-                    { xScaler*-sinVal, yScaler*cosVal },
-                    { xScaler*-sinVal, yScaler*cosVal },
-                    { xScaler*cosVal,  yScaler*sinVal },
-            });
-            transformMatrix = Matrix.scale(transformMatrix, 0.25);
-
-            /* get movement */
-            Matrix deltaPosMatrix = Matrix.multiply(wheelPosMatrix, transformMatrix);
-
-            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
-            Matrix rotMatrix = new Matrix(new double[][]{
-                    { Math.cos(angleRad), -Math.sin(angleRad) },
-                    { Math.sin(angleRad), Math.cos(angleRad) },
-            });
-
-            deltaPosMatrix = Matrix.multiply(deltaPosMatrix, rotMatrix);
-
-            Vector2 deltaPosVector = deltaPosMatrix.toVector2();
-
-            /* update position */
-            currentPosition = Vector2.add(currentPosition, deltaPosVector);
-
-            /* timeout between updates */
-            Thread.sleep(50);
-        }
-    }
     public void keepPositionUpdated() throws InterruptedException{
         while (robot.isRunning){
             /* get and update wheel tick positions */
-            WheelPosition wheelPosDelta = new WheelPosition(
-                    wheelLF.getCurrentPosition()*-1 - currentWheelPosTicks.lf,
-                    wheelRF.getCurrentPosition()*-1 - currentWheelPosTicks.rf,
-                    wheelRB.getCurrentPosition()*-1 - currentWheelPosTicks.rb,
-                    wheelLB.getCurrentPosition()*-1 - currentWheelPosTicks.lb
-            );
-            currentWheelPosTicks = new WheelPosition(
-                    wheelLF.getCurrentPosition()*-1,
-                    wheelRF.getCurrentPosition()*-1,
-                    wheelRB.getCurrentPosition()*-1,
-                    wheelLB.getCurrentPosition()*-1
-            );
+            WheelPosition wheelPosDelta = WheelPosition.subtract(getWheelTicks(), currentWheelPosTicks);
+            currentWheelPosTicks = getWheelTicks();
 
             /* get wheel pos matrix */
             wheelPosDelta.toCM(10*Math.PI, ticksPerRotation);
@@ -266,6 +208,4 @@ public class Driving extends RobotComponent {
 
         return Math.max(maxCorrection, correction);
     }
-
-    //endregion
 }

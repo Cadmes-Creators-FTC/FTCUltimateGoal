@@ -35,8 +35,8 @@ public class WheelsOnly extends LinearOpMode {
         while (opModeIsActive()){
             driveWithDpad();
             driveWithJoystick();
-            robot.logging.setLog("x", robot.driving.getCurrentPosition().x);
-            robot.logging.setLog("y", robot.driving.getCurrentPosition().y);
+
+            robot.logging.setLog("wheelTicks", robot.driving.getWheelTicks());
         }
     }
 
