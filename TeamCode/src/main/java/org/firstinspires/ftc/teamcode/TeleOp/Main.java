@@ -122,7 +122,7 @@ public class Main extends LinearOpMode {
                 joyY + joyX - joyR,
                 joyY - joyX + joyR
         );
-        wpc.clampScale();
+        wpc.clamp();
 
         double averageWheelPower = (Math.abs(wpc.lf) + Math.abs(wpc.rf) + Math.abs(wpc.rb) + Math.abs(wpc.lb)) / 4;
 
