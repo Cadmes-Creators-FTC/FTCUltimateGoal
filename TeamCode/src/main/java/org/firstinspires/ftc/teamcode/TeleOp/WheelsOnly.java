@@ -56,6 +56,10 @@ public class WheelsOnly extends LinearOpMode {
             return;
         }
 
+        //scale joystick values with 1.25
+        joyX = Math.max(Math.min(1, joyX*1.25), -1);
+        joyY = Math.max(Math.min(1, joyY*1.25), -1);
+
         //reverse y joystick
         joyY *= -1;
 
