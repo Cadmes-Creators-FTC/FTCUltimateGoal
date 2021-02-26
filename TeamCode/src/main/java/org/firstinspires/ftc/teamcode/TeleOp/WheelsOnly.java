@@ -54,11 +54,11 @@ public class WheelsOnly extends LinearOpMode {
 
         //smooth out the joysticks - f(x) = 0.6x^2 + 0.4x
         if(joyX != 0)
-            joyX *= 0.6*(Math.pow(joyX, 2)*(joyX/Math.abs(joyX)))+0.4*joyX;
+            joyX = 0.6*(Math.pow(joyX, 2)*(joyX/Math.abs(joyX)))+0.4*joyX;
         if(joyY != 0)
-            joyY *= 0.6*(Math.pow(joyY, 2)*(joyY/Math.abs(joyY)))+0.4*joyY;
+            joyY = 0.6*(Math.pow(joyY, 2)*(joyY/Math.abs(joyY)))+0.4*joyY;
         if(joyR != 0)
-            joyR *= 0.6*(Math.pow(joyR, 2)*(joyR/Math.abs(joyR)))+0.4*joyR;
+            joyR = 0.6*(Math.pow(joyR, 2)*(joyR/Math.abs(joyR)))+0.4*joyR;
 
         //reverse y joystick
         joyY *= -1;

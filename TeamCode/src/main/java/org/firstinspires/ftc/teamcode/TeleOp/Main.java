@@ -32,7 +32,7 @@ public class Main extends LinearOpMode {
     private void controlLoop(){
         while (opModeIsActive()){
             driveWithJoystick();
-            driveWithDpad();
+            slowMovement();
 
             intake();
             conveyor();
@@ -63,7 +63,7 @@ public class Main extends LinearOpMode {
             if (robot.conveyor.isOn())
                 robot.conveyor.turnOff();
             else
-                robot.conveyor.turnOn();
+                robot.conveyor.turnOn(0.3);
         }
         if(!gamepad2.left_bumper)
             conveyorStateChanged = false;
@@ -114,11 +114,11 @@ public class Main extends LinearOpMode {
 
         //smooth out the joysticks - f(x) = 0.6x^2 + 0.4x
         if(joyX != 0)
-            joyX *= 0.6*(Math.pow(joyX, 2)*(joyX/Math.abs(joyX)))+0.4*joyX;
+            joyX = 0.6*(Math.pow(joyX, 2)*(joyX/Math.abs(joyX)))+0.4*joyX;
         if(joyY != 0)
-            joyY *= 0.6*(Math.pow(joyY, 2)*(joyY/Math.abs(joyY)))+0.4*joyY;
+            joyY = 0.6*(Math.pow(joyY, 2)*(joyY/Math.abs(joyY)))+0.4*joyY;
         if(joyR != 0)
-            joyR *= 0.6*(Math.pow(joyR, 2)*(joyR/Math.abs(joyR)))+0.4*joyR;
+            joyR = 0.6*(Math.pow(joyR, 2)*(joyR/Math.abs(joyR)))+0.4*joyR;
 
         //reverse y joystick
         joyY *= -1;
@@ -134,8 +134,8 @@ public class Main extends LinearOpMode {
 
         robot.driving.setWheelPowers(wpc);
     }
-    private void driveWithDpad(){
-        enabledDriveControls = (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_down || gamepad1.dpad_left) ? 1 : enabledDriveControls;
+    private void slowMovement(){
+        enabledDriveControls = (gamepad1.dpad_up || gamepad1.dpad_right || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.left_bumper || gamepad2.right_bumper) ? 1 : enabledDriveControls;
         if(enabledDriveControls != 1)
             return;
 
@@ -152,6 +152,12 @@ public class Main extends LinearOpMode {
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_right){
             WheelPowerConfig wpc = new WheelPowerConfig(1.5*power, -1.5*power, 1.5*power, -1.5*power);
+            robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.left_bumper) {
+            WheelPowerConfig wpc = new WheelPowerConfig(-1.5*power, 1.5*power, 1.5*power, -1.5*power);
+            robot.driving.setWheelPowers(wpc);
+        }else if (gamepad1.right_bumper) {
+            WheelPowerConfig wpc = new WheelPowerConfig(1.5*power, -1.5*power, -1.5*power, 1.5*power);
             robot.driving.setWheelPowers(wpc);
         }else {
             WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
