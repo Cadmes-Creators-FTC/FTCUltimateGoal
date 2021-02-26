@@ -33,6 +33,7 @@ public class Main extends LinearOpMode {
         while (opModeIsActive()){
             driveWithJoystick();
             slowMovement();
+            setDrivingDirection();
 
             intake();
             conveyor();
@@ -163,5 +164,11 @@ public class Main extends LinearOpMode {
             WheelPowerConfig wpc = new WheelPowerConfig(0, 0, 0, 0);
             robot.driving.setWheelPowers(wpc);
         }
+    }
+    private void setDrivingDirection(){
+        if(gamepad1.a)
+            robot.driving.setReverseDriving(true);
+        if(gamepad1.b)
+            robot.driving.setReverseDriving(false);
     }
 }
