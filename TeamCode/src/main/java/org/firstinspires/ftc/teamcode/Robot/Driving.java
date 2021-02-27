@@ -138,6 +138,22 @@ public class Driving extends RobotComponent {
             Thread.sleep(50);
         }
     }
+
+    public void driveToPositionForwardOnly(Vector2 targetPos, Double targetRotation, double speedScaler) throws InterruptedException{
+        Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
+
+        double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
+
+        robot.gyroscope.setTargetAngle(angle);
+        rotateToTargetAngle(speedScaler);
+
+        driveToPosition(targetPos, angle, speedScaler);
+
+        if(targetRotation != null){
+            robot.gyroscope.setTargetAngle(targetRotation);
+            rotateToTargetAngle(speedScaler);
+        }
+    }
     public void driveToPosition(Vector2 targetPos, double targetRotation, double speedScaler) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetRotation);
 
