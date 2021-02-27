@@ -154,7 +154,7 @@ public class Main extends LinearOpMode {
         if(enabledDriveControls != 1)
             return;
 
-        double power = 0.2;
+        double power = 0.3;
 
         if (gamepad1.dpad_up) {
             power *= drivingDirection;
@@ -183,10 +183,14 @@ public class Main extends LinearOpMode {
             robot.driving.setWheelPowers(wpc);
         }
     }
+    boolean drivingDirectionStateChanged = false;
     private void setDrivingDirection(){
-        if(gamepad1.a)
-            drivingDirection = 1;
-        if(gamepad1.b)
-            drivingDirection = -1;
+        if (gamepad1.a && !drivingDirectionStateChanged){
+            drivingDirectionStateChanged = true;
+
+            drivingDirection *= -1;
+        }
+        if(!gamepad1.a)
+            drivingDirectionStateChanged = false;
     }
 }

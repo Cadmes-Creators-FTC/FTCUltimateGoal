@@ -29,17 +29,26 @@ public class TestSequence extends LinearOpMode {
 
         autonomousSequence();
 
-        robot.isRunning = false;
+        robot.logging.clearLogs();
 
+        robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
+
     }
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        robot.driving.driveToPositionForwardOnly(new Vector2(0, 100), null, 0.4);
-        Thread.sleep(2000);
-        robot.driving.driveToPositionForwardOnly(new Vector2(100, 100), null, 0.4);
-        Thread.sleep(2000);
+        robot.wobbleArm.armDownAutonomous();
+        robot.wobbleArm.openGripperAutonomous();
+        robot.driving.driveToPositionForwardOnly(new Vector2(0, 60), null, 0.4);
+
+        robot.wobbleArm.closeGripperAutonomous();
+        robot.wobbleArm.armUpAutonomous();
+        robot.driving.driveToPositionForwardOnly(new Vector2(80, 80), 90.0, 0.4);
+
+        robot.wobbleArm.armDownAutonomous();
+        robot.wobbleArm.openGripperAutonomous();
+
         robot.driving.driveToPositionForwardOnly(new Vector2(0, 0), 0.0, 0.4);
     }
 }
