@@ -4,11 +4,12 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.Misc.MathFunctions;
 
 @Disabled
@@ -28,12 +29,15 @@ public class Gyroscope extends RobotComponent{
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
         imu.initialize(parameters);
     }
 
     @Override
     public void startThreads(){
+        imu.startAccelerationIntegration(new Position(), new Velocity(), 10);
+
         new Thread(){
             @Override
             public void run(){
@@ -45,13 +49,27 @@ public class Gyroscope extends RobotComponent{
     }
 
     public void waitForGyroCalibration() throws InterruptedException{
-        while (!imu.isGyroCalibrated()) {
+        while (!imu.isGyroCalibrated() || !imu.isAccelerometerCalibrated()) {
             Thread.sleep(50);
         }
     }
 
     private void keepCurrentAngleUpdated() throws InterruptedException {
         while (robot.isRunning){
+            Position p = imu.getPosition();
+            robot.logging.setLog("p-x", p.x);
+            robot.logging.setLog("p-y", p.y);
+            robot.logging.setLog("p-z", p.z);
+            robot.logging.setLog("p-unit", p.unit);
+
+            Velocity v = imu.getVelocity();
+            robot.logging.setLog("v-x", v.xVeloc);
+            robot.logging.setLog("v-y", v.yVeloc);
+            robot.logging.setLog("v-z", v.zVeloc);
+            robot.logging.setLog("v-unit", v.unit);
+
+
+
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
