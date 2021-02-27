@@ -122,6 +122,9 @@ public class Driving extends RobotComponent {
             /* update position */
             currentPosition = Vector2.add(currentPosition, deltaPos.toVector2());
 
+            robot.logging.setLog("x", currentPosition.x);
+            robot.logging.setLog("y", currentPosition.y);
+
             /* timeout between updates */
             Thread.sleep(50);
         }
@@ -147,6 +150,9 @@ public class Driving extends RobotComponent {
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
+
+        robot.logging.setLog("delta-x", deltaPos.x);
+        robot.logging.setLog("delta-y", deltaPos.y);
 
         double previousDistance = 0;
 
@@ -191,12 +197,15 @@ public class Driving extends RobotComponent {
             /* drive towards targetPos with speed from pid */
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
             Matrix rotMatrix = new Matrix(new double[][]{
-                    { Math.cos(angleRad), -Math.sin(angleRad) },
-                    { Math.sin(angleRad), Math.cos(angleRad) },
+                    { Math.cos(-angleRad), -Math.sin(-angleRad) },
+                    { Math.sin(-angleRad), Math.cos(-angleRad)  },
             });
 
             Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
             Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
+
+            robot.logging.setLog("rel-delta-x", relativeDeltaPosVector.x);
+            robot.logging.setLog("rel-delta-y", relativeDeltaPosVector.y);
 
             double angleCorrection = getWheelCorrection();
             WheelPowerConfig wpc = new WheelPowerConfig(

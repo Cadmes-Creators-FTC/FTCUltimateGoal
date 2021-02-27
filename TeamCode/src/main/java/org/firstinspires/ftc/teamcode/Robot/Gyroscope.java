@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -49,27 +50,13 @@ public class Gyroscope extends RobotComponent{
     }
 
     public void waitForGyroCalibration() throws InterruptedException{
-        while (!imu.isGyroCalibrated() || !imu.isAccelerometerCalibrated()) {
+        while (!imu.isGyroCalibrated()) {
             Thread.sleep(50);
         }
     }
 
     private void keepCurrentAngleUpdated() throws InterruptedException {
         while (robot.isRunning){
-            Position p = imu.getPosition();
-            robot.logging.setLog("p-x", p.x);
-            robot.logging.setLog("p-y", p.y);
-            robot.logging.setLog("p-z", p.z);
-            robot.logging.setLog("p-unit", p.unit);
-
-            Velocity v = imu.getVelocity();
-            robot.logging.setLog("v-x", v.xVeloc);
-            robot.logging.setLog("v-y", v.yVeloc);
-            robot.logging.setLog("v-z", v.zVeloc);
-            robot.logging.setLog("v-unit", v.unit);
-
-
-
             Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
