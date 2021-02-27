@@ -25,6 +25,8 @@ public class Main extends LinearOpMode {
         robot.logging.setLog("state", "Running");
         controlLoop();
 
+        robot.logging.clearLogs();
+
         robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
     }

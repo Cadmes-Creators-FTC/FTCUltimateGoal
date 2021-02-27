@@ -44,6 +44,10 @@ public class Logging extends RobotComponent {
         logs.remove(key);
     }
 
+    public void clearLogs(){
+        logs.clear();
+    }
+
     private void formatSetLog(String key, Object value){
         if(value.getClass() == WheelPosition.class){
             WheelPosition castValue = (WheelPosition) value;
