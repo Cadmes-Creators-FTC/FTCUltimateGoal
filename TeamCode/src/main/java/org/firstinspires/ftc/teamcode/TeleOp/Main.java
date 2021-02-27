@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 public class Main extends LinearOpMode {
     private MainRobot robot;
 
+    double drivingDirection = 1;
+
     @Override
     public void runOpMode () throws InterruptedException{
         String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake", "conveyor"};
@@ -52,12 +54,12 @@ public class Main extends LinearOpMode {
                 robot.intake.turnOff();
             else
                 robot.intake.turnOn();
-        }
-        if(!gamepad2.b)
+        }else if(!gamepad2.b)
             intakeStateChanged = false;
     }
 
     boolean conveyorStateChanged = false;
+    boolean conveyorTriggerState = false;
     private void conveyor(){
         if (gamepad2.left_bumper && !conveyorStateChanged){
             conveyorStateChanged = true;
@@ -65,9 +67,16 @@ public class Main extends LinearOpMode {
                 robot.conveyor.turnOff();
             else
                 robot.conveyor.turnOn(0.3);
-        }
-        if(!gamepad2.left_bumper)
+        } else if(!gamepad2.left_bumper)
             conveyorStateChanged = false;
+
+            if(gamepad2.left_trigger > 0.5){
+                conveyorTriggerState = true;
+                robot.conveyor.turnOn(1);
+            }else if (gamepad2.left_trigger < 0.5 && conveyorTriggerState){
+                conveyorTriggerState = false;
+                robot.conveyor.turnOff();
+            }
     }
 
     boolean shooterStateChanged = false;
@@ -121,6 +130,9 @@ public class Main extends LinearOpMode {
         if(joyR != 0)
             joyR = 0.6*(Math.pow(joyR, 2)*(joyR/Math.abs(joyR)))+0.4*joyR;
 
+        joyX *= drivingDirection;
+        joyY *= drivingDirection;
+
         //reverse y joystick
         joyY *= -1;
 
@@ -143,15 +155,19 @@ public class Main extends LinearOpMode {
         double power = 0.2;
 
         if (gamepad1.dpad_up) {
+            power *= drivingDirection;
             WheelPowerConfig wpc = new WheelPowerConfig(power, power, power, power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_down) {
+            power *= drivingDirection;
             WheelPowerConfig wpc = new WheelPowerConfig(-power, -power, -power, -power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_left) {
+            power *= drivingDirection;
             WheelPowerConfig wpc = new WheelPowerConfig(-1.5*power, 1.5*power, -1.5*power, 1.5*power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.dpad_right){
+            power *= drivingDirection;
             WheelPowerConfig wpc = new WheelPowerConfig(1.5*power, -1.5*power, 1.5*power, -1.5*power);
             robot.driving.setWheelPowers(wpc);
         }else if (gamepad1.left_bumper) {
@@ -167,8 +183,8 @@ public class Main extends LinearOpMode {
     }
     private void setDrivingDirection(){
         if(gamepad1.a)
-            robot.driving.setReverseDriving(true);
+            drivingDirection = 1;
         if(gamepad1.b)
-            robot.driving.setReverseDriving(false);
+            drivingDirection = -1;
     }
 }

@@ -20,8 +20,6 @@ public class Driving extends RobotComponent {
     private Vector2 currentPosition = new Vector2(0, 0);
     private WheelPosition currentWheelPosTicks = new WheelPosition(0, 0, 0, 0);
 
-    private boolean reverseDriving = false;
-
     public Driving(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
@@ -62,22 +60,12 @@ public class Driving extends RobotComponent {
     }
 
 
-    public void setReverseDriving(boolean newReverseDriving){
-        reverseDriving = newReverseDriving;
-    }
-    public boolean getReverseDriving(){
-        return reverseDriving;
-    }
-
-
     public void setWheelPowers(WheelPowerConfig wheelPowerConfig){
-        double directionMultiplier = reverseDriving ? -1 : 1;
-
         //set motor power
-        wheelLF.setPower(directionMultiplier*wheelPowerConfig.lf);
-        wheelRF.setPower(directionMultiplier*wheelPowerConfig.rf);
-        wheelRB.setPower(directionMultiplier*wheelPowerConfig.rb);
-        wheelLB.setPower(directionMultiplier*wheelPowerConfig.lb);
+        wheelLF.setPower(wheelPowerConfig.lf);
+        wheelRF.setPower(wheelPowerConfig.rf);
+        wheelRB.setPower(wheelPowerConfig.rb);
+        wheelLB.setPower(wheelPowerConfig.lb);
     }
     public WheelPowerConfig getWheelPowers(){
         return new WheelPowerConfig(
