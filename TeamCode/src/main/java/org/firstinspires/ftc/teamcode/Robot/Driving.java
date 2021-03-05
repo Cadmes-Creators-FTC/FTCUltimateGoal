@@ -151,7 +151,7 @@ public class Driving extends RobotComponent {
         double previousDistance = 0;
 
         /* pid */
-        double integralScaler = 0.01;
+        double integralScaler = 0.001;
         double accelerationPercentile = 0.1;
         double accelerationBarrier = accelerationPercentile*totalDistance;
         double decelerationBarrier = totalDistance - accelerationPercentile*totalDistance;
