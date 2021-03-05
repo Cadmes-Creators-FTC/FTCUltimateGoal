@@ -23,5 +23,9 @@ public class MathFunctions {
         return angle;
     }
     //endregion
+
+    public static double xOverAbsX(double x){
+        return x/Math.abs(x);
+    }
 }
 

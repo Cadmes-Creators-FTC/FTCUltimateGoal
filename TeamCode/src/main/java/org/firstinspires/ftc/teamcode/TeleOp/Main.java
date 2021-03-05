@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Misc.MathFunctions;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
@@ -35,7 +36,8 @@ public class Main extends LinearOpMode {
 
     private void controlLoop(){
         while (opModeIsActive()){
-            driveWithJoystick();
+//            driveWithJoystick();
+            drive();
             slowMovement();
             setDrivingDirection();
 
@@ -144,6 +146,38 @@ public class Main extends LinearOpMode {
                 joyY - joyX - joyR,
                 joyY + joyX - joyR,
                 joyY - joyX + joyR
+        );
+        wpc.clamp();
+
+        robot.driving.setWheelPowers(wpc);
+    }
+    private void drive(){
+        //get joystick input
+        double forwardInput = gamepad1.left_stick_y*-1;//reversing joystick so up becomes forward
+        double strafeInput = gamepad1.right_stick_x;
+        double rotationInput = gamepad1.right_trigger - gamepad1.left_trigger;
+
+        enabledDriveControls = (forwardInput != 0 || strafeInput != 0 || rotationInput != 0) ? 0 : enabledDriveControls;
+        if(enabledDriveControls != 0)
+            return;
+
+        forwardInput *= drivingDirection;
+        strafeInput *= drivingDirection;
+
+        double joyMinInput = 0.2;
+        double triggerMinInput = 0.2;
+
+        //              keep negative or positive                 move from 0 to 1-minInput                                              scale from 0 to 1
+        forwardInput  = MathFunctions.xOverAbsX(forwardInput)  * (Math.max(Math.abs(forwardInput), joyMinInput)-joyMinInput)          * (1/(1-joyMinInput));
+        strafeInput   = MathFunctions.xOverAbsX(strafeInput)   * (Math.max(Math.abs(strafeInput), joyMinInput)-joyMinInput)           * (1/(1-joyMinInput));
+        rotationInput = MathFunctions.xOverAbsX(rotationInput) * (Math.max(Math.abs(rotationInput), triggerMinInput)-triggerMinInput) * (1/(1-triggerMinInput));
+
+        //create wheel power config
+        WheelPowerConfig wpc = new WheelPowerConfig(
+                forwardInput + strafeInput + rotationInput,
+                forwardInput - strafeInput - rotationInput,
+                forwardInput + strafeInput - rotationInput,
+                forwardInput - strafeInput + rotationInput
         );
         wpc.clamp();
 
