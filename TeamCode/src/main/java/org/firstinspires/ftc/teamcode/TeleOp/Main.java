@@ -47,6 +47,8 @@ public class Main extends LinearOpMode {
             wobbleArm();
 
             robot.logging.setLog("average wheel speed", robot.driving.getWheelPowers().getAverage());
+            robot.logging.setLog("drive-direction", drivingDirection == 1 ? "forward" : "reverse");
+            robot.logging.setLog("pos", robot.driving.getCurrentPosition());
         }
     }
 
@@ -96,7 +98,7 @@ public class Main extends LinearOpMode {
         if(!gamepad2.a)
             shooterStateChanged = false;
     }
-
+    double counter = 0;
     boolean wobbleArmGripperStateChanged = false;
     private void wobbleArm(){
         if (gamepad2.right_trigger > 0){
@@ -165,19 +167,13 @@ public class Main extends LinearOpMode {
         forwardInput *= drivingDirection;
         strafeInput *= drivingDirection;
 
-        double joyMinInput = 0.2;
-        double triggerMinInput = 0.2;
+        double joyMinInput = 0.05;
+        double triggerMinInput = 0.05;
 
         //scale 0.2-1 to 0-1
-        robot.logging.setLog("f-1", forwardInput);
-        robot.logging.setLog("s-1", strafeInput);
-        robot.logging.setLog("r-1", rotationInput);
         forwardInput = MathFunctions.absXOverX(forwardInput) * Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
         strafeInput = MathFunctions.absXOverX(strafeInput) * Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
         rotationInput = MathFunctions.absXOverX(rotationInput) * Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
-        robot.logging.setLog("f-2", forwardInput);
-        robot.logging.setLog("s-2", strafeInput);
-        robot.logging.setLog("r-2", rotationInput);
 
         //smooth out the values - f(x) = curveVal*x^2 + (1-curveVal)*x
         double curveVal = 0.3;
@@ -187,9 +183,6 @@ public class Main extends LinearOpMode {
             strafeInput = curveVal*(Math.pow(strafeInput, 2)*MathFunctions.absXOverX(strafeInput)) + (1-curveVal)*strafeInput;
         if(rotationInput != 0)
             rotationInput = curveVal*(Math.pow(rotationInput, 2)*MathFunctions.absXOverX(rotationInput)) + (1-curveVal)*rotationInput;
-        robot.logging.setLog("f-3", forwardInput);
-        robot.logging.setLog("s-3", strafeInput);
-        robot.logging.setLog("r-3", rotationInput);
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(

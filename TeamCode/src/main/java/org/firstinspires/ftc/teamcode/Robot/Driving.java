@@ -105,11 +105,12 @@ public class Driving extends RobotComponent {
             wheelPosDelta.toCM(10*Math.PI, ticksPerRotation);
 
             /* get movement */
-            double yScaler = 1.5;
+            double yScaler = 1.50;
+            double xScaler = 0.57;
 
             double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4 * 1.5;
             double deltaY = (wheelPosDelta.lf + wheelPosDelta.rf + wheelPosDelta.rb + wheelPosDelta.lb) / 4;
-            Matrix deltaPos = new Matrix(new double[][]{{deltaX, deltaY*yScaler}});
+            Matrix deltaPos = new Matrix(new double[][]{{deltaX*xScaler, deltaY*yScaler}});
 
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
             Matrix rotMatrix = new Matrix(new double[][]{
@@ -206,7 +207,7 @@ public class Driving extends RobotComponent {
             Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
             Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
 
-            double angleCorrection = getWheelCorrection();
+            double angleCorrection = getWheelCorrection()*10;
             WheelPowerConfig wpc = new WheelPowerConfig(
                     relativeDeltaPosVector.y + relativeDeltaPosVector.x + angleCorrection,
                     relativeDeltaPosVector.y - relativeDeltaPosVector.x - angleCorrection,
