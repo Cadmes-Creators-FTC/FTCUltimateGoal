@@ -46,6 +46,8 @@ public class Main extends LinearOpMode {
             shooter();
 
             wobbleArm();
+
+            robot.logging.setLog("position", robot.driving.getCurrentPosition());
         }
     }
 
@@ -168,9 +170,9 @@ public class Main extends LinearOpMode {
         double triggerMinInput = 0.2;
 
         //              keep negative or positive                 move from 0 to 1-minInput                                              scale from 0 to 1
-        forwardInput  = MathFunctions.xOverAbsX(forwardInput)  * (Math.max(Math.abs(forwardInput), joyMinInput)-joyMinInput)          * (1/(1-joyMinInput));
-        strafeInput   = MathFunctions.xOverAbsX(strafeInput)   * (Math.max(Math.abs(strafeInput), joyMinInput)-joyMinInput)           * (1/(1-joyMinInput));
-        rotationInput = MathFunctions.xOverAbsX(rotationInput) * (Math.max(Math.abs(rotationInput), triggerMinInput)-triggerMinInput) * (1/(1-triggerMinInput));
+//        forwardInput  = MathFunctions.xOverAbsX(forwardInput)  * (Math.max(Math.abs(forwardInput), joyMinInput)-joyMinInput)          * (1/(1-joyMinInput));
+//        strafeInput   = MathFunctions.xOverAbsX(strafeInput)   * (Math.max(Math.abs(strafeInput), joyMinInput)-joyMinInput)           * (1/(1-joyMinInput));
+//        rotationInput = MathFunctions.xOverAbsX(rotationInput) * (Math.max(Math.abs(rotationInput), triggerMinInput)-triggerMinInput) * (1/(1-triggerMinInput));
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(
