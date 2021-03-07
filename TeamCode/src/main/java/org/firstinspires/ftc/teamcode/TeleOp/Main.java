@@ -37,7 +37,7 @@ public class Main extends LinearOpMode {
     private void controlLoop(){
         while (opModeIsActive()){
             drive();
-            slowMovement();
+//            slowMovement();
             setDrivingDirection();
 
             intake();
@@ -170,6 +170,15 @@ public class Main extends LinearOpMode {
         forwardInput = Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
         strafeInput = Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
         rotationInput = Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
+
+        //smooth out the values - f(x) = curveVal*x^2 + (1-curveVal)*x
+        double curveVal = 0.3;
+        if(forwardInput != 0)
+            forwardInput = curveVal*(Math.pow(forwardInput, 2)*MathFunctions.xOverAbsX(forwardInput)) + (1-curveVal)*forwardInput;
+        if(strafeInput != 0)
+            strafeInput = curveVal*(Math.pow(strafeInput, 2)*MathFunctions.xOverAbsX(strafeInput)) + (1-curveVal)*strafeInput;
+        if(rotationInput != 0)
+            rotationInput = curveVal*(Math.pow(rotationInput, 2)*MathFunctions.xOverAbsX(rotationInput)) + (1-curveVal)*rotationInput;
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(
