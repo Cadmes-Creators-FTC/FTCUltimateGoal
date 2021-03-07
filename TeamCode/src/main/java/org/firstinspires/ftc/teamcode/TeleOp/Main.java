@@ -115,7 +115,7 @@ public class Main extends LinearOpMode {
     }
 
     int enabledDriveControls = 0;
-    private void driveWithJoystick(){
+    private void driveOld(){
         //get joystick input
         double joyX = gamepad1.left_stick_x;
         double joyY = gamepad1.left_stick_y;
