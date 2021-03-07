@@ -24,8 +24,8 @@ public class MathFunctions {
     }
     //endregion
 
-    public static double xOverAbsX(double x){
-        return x/Math.abs(x);
+    public static double absXOverX(double x){
+        return x == 0 ? 0 : x/Math.abs(x);
     }
 }
 
