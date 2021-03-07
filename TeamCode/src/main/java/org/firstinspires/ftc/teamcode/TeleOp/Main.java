@@ -156,9 +156,9 @@ public class Main extends LinearOpMode {
         double strafeInput = gamepad1.right_stick_x;
         double rotationInput = gamepad1.right_trigger - gamepad1.left_trigger;
 
-        enabledDriveControls = (forwardInput != 0 || strafeInput != 0 || rotationInput != 0) ? 0 : enabledDriveControls;
-        if(enabledDriveControls != 0)
-            return;
+//        enabledDriveControls = (forwardInput != 0 || strafeInput != 0 || rotationInput != 0) ? 0 : enabledDriveControls;
+//        if(enabledDriveControls != 0)
+//            return;
 
         forwardInput *= drivingDirection;
         strafeInput *= drivingDirection;
