@@ -46,7 +46,7 @@ public class Main extends LinearOpMode {
 
             wobbleArm();
 
-            robot.logging.setLog("position", robot.driving.getCurrentPosition());
+            robot.logging.setLog("average wheel speed", robot.driving.getWheelPowers().getAverage());
         }
     }
 

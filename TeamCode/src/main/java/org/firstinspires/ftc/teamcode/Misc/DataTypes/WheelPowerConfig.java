@@ -42,6 +42,10 @@ public class WheelPowerConfig {
         scale();
     }
 
+    public double getAverage(){
+        return (Math.abs(lf)+Math.abs(rf)+Math.abs(rb)+Math.abs(lb))/4;
+    }
+
     public static WheelPowerConfig add(WheelPowerConfig wpc1, WheelPowerConfig wpc2){
         return new WheelPowerConfig(
                 wpc1.lf+wpc2.lf,
