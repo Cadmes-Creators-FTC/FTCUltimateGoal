@@ -169,9 +169,9 @@ public class Main extends LinearOpMode {
         double triggerMinInput = 0.2;
 
         //scale 0.2-1 to 0-1
-        forwardInput = Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
-        strafeInput = Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
-        rotationInput = Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
+        forwardInput = MathFunctions.xOverAbsX(forwardInput) * Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
+        strafeInput = MathFunctions.xOverAbsX(strafeInput) * Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
+        rotationInput = MathFunctions.xOverAbsX(rotationInput) * Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
 
         //smooth out the values - f(x) = curveVal*x^2 + (1-curveVal)*x
         double curveVal = 0.3;
