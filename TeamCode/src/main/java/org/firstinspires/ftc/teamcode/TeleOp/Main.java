@@ -45,6 +45,8 @@ public class Main extends LinearOpMode {
             shooter();
 
             wobbleArm();
+
+            robot.logging.setLog("position", robot.driving.getCurrentPosition());
         }
     }
 

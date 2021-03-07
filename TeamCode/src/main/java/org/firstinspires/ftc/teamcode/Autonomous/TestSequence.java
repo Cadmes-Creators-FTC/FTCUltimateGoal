@@ -18,7 +18,8 @@ public class TestSequence extends LinearOpMode {
         robot.logging.setLog("state", "Initializing");
 
         robot.gyroscope.waitForGyroCalibration();
-        robot.driving.setCurrentPosition(new Vector2(0, 0));
+        robot.driving.setCurrentPosition(new Vector2(165, 20));
+        robot.gyroscope.setCurrentAngle(-90);
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
@@ -38,17 +39,12 @@ public class TestSequence extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
+        robot.driving.driveToPositionForwardOnly(new Vector2(120, 240), 45.0, 0.5);
+
         robot.wobbleArm.armDownAutonomous();
         robot.wobbleArm.openGripperAutonomous();
-        robot.driving.driveToPositionForwardOnly(new Vector2(0, 60), null, 0.4);
-
-        robot.wobbleArm.closeGripperAutonomous();
         robot.wobbleArm.armUpAutonomous();
-        robot.driving.driveToPositionForwardOnly(new Vector2(80, 80), 90.0, 0.4);
 
-        robot.wobbleArm.armDownAutonomous();
-        robot.wobbleArm.openGripperAutonomous();
-
-        robot.driving.driveToPositionForwardOnly(new Vector2(0, 0), 0.0, 0.4);
+        robot.driving.driveToPositionForwardOnly(new Vector2(165, 20), 0.0, 0.5);
     }
 }

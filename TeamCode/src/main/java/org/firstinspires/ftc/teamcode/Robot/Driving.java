@@ -37,10 +37,10 @@ public class Driving extends RobotComponent {
         wheelRB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wheelLB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        wheelLF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheelRF.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheelRB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheelLB.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wheelLF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);

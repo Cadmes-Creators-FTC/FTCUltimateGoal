@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 
@@ -64,6 +65,11 @@ public class Logging extends RobotComponent {
             logs.put(key+"-rf", castValue.rf);
             logs.put(key+"-rb", castValue.rb);
             logs.put(key+"-lb", castValue.lb);
+        }else if(value.getClass() == Vector2.class){
+            Vector2 castValue = (Vector2) value;
+
+            logs.put(key+"-x", castValue.x);
+            logs.put(key+"-y", castValue.y);
         }
         else
             logs.put(key, value);
