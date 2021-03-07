@@ -36,7 +36,6 @@ public class Main extends LinearOpMode {
 
     private void controlLoop(){
         while (opModeIsActive()){
-//            driveWithJoystick();
             drive();
             slowMovement();
             setDrivingDirection();
