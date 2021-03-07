@@ -163,6 +163,13 @@ public class Driving extends RobotComponent {
         double stopDistance = 5;
         while (distance > stopDistance){
             /* pid */
+            robot.logging.setLog("dist", distance);
+            robot.logging.setLog("distTotal", totalDistance);
+            robot.logging.setLog("accelerationBarrier", accelerationBarrier);
+            robot.logging.setLog("pos", getCurrentPosition());
+            robot.logging.setLog("speed", speed);
+            robot.logging.setLog("speedAfterScale", speed*speedScaler);
+
             double traveledDistance = totalDistance-distance;
             double previousTraveledDistance = totalDistance-previousDistance;
 

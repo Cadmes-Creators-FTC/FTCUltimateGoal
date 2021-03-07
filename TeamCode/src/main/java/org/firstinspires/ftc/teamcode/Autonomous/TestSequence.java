@@ -34,7 +34,6 @@ public class TestSequence extends LinearOpMode {
 
         robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
-
     }
 
     //autonomous sequence
