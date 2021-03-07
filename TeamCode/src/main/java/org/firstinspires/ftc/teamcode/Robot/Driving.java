@@ -151,10 +151,11 @@ public class Driving extends RobotComponent {
         double previousDistance = 0;
 
         /* pid */
-        double integralScaler = 0.001;
-        double accelerationPercentile = 0.1;
-        double accelerationBarrier = accelerationPercentile*totalDistance;
-        double decelerationBarrier = totalDistance - accelerationPercentile*totalDistance;
+        double integralScaler = 0.01;
+        double maxAccelerationPercentile = 0.5;
+        double minAccelerationDist = 10;
+        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, minAccelerationDist);
+        double decelerationBarrier = totalDistance - accelerationBarrier;
 
         double speed = 0;
         double distance = totalDistance;
@@ -165,27 +166,27 @@ public class Driving extends RobotComponent {
             double traveledDistance = totalDistance-distance;
             double previousTraveledDistance = totalDistance-previousDistance;
 
-            /* proportional */
-            if(traveledDistance <= accelerationBarrier){
-                double remainingSpeedIncrease = 1-speed;
+            //accelerate/decelerate
+            if(distance != previousDistance){
+                if(traveledDistance <= accelerationBarrier){
+                    double remainingSpeedIncrease = 1-speed;
 
-                double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
-                currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+                    double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
-                speed += remainingSpeedIncrease*currentMovementPercentage;
-            }
-            if(traveledDistance >= decelerationBarrier){
-                double remainingSpeedDecrease = speed;
+                    speed += remainingSpeedIncrease*currentMovementPercentage;
+                }
+                if(traveledDistance >= decelerationBarrier){
+                    double remainingSpeedDecrease = speed;
 
-                double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(totalDistance - previousTraveledDistance);
-                currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+                    double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(totalDistance - previousTraveledDistance);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
-                speed -= remainingSpeedDecrease*currentMovementPercentage;
-            }
-
-            /* integral */
-            if(distance == previousDistance)
+                    speed -= remainingSpeedDecrease*currentMovementPercentage;
+                }
+            }else{ // scale speed if not moved
                 speed += integralScaler;
+            }
 
 
             /* drive towards targetPos with speed from pid */
