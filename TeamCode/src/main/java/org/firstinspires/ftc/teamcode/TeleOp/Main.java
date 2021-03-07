@@ -166,10 +166,10 @@ public class Main extends LinearOpMode {
         double joyMinInput = 0.2;
         double triggerMinInput = 0.2;
 
-        //              keep negative or positive                 move from 0 to 1-minInput                                              scale from 0 to 1
-        forwardInput  = MathFunctions.xOverAbsX(forwardInput)  * (Math.max(Math.abs(forwardInput), joyMinInput)-joyMinInput)          * (1/(1-joyMinInput));
-        strafeInput   = MathFunctions.xOverAbsX(strafeInput)   * (Math.max(Math.abs(strafeInput), joyMinInput)-joyMinInput)           * (1/(1-joyMinInput));
-        rotationInput = MathFunctions.xOverAbsX(rotationInput) * (Math.max(Math.abs(rotationInput), triggerMinInput)-triggerMinInput) * (1/(1-triggerMinInput));
+        //scale 0.2-1 to 0-1
+        forwardInput = Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
+        strafeInput = Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
+        rotationInput = Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
 
         //create wheel power config
         WheelPowerConfig wpc = new WheelPowerConfig(
