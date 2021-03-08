@@ -155,14 +155,15 @@ public class Driving extends RobotComponent {
 
         double stopDistance = 5;
         while (robot.isRunning && (distance > stopDistance)){
-            /* pid */
-            robot.logging.setLog("dist", distance);
-            robot.logging.setLog("distTotal", totalDistance);
-            robot.logging.setLog("accelerationBarrier", accelerationBarrier);
-            robot.logging.setLog("pos", getCurrentPosition());
-            robot.logging.setLog("speed", speed);
-            robot.logging.setLog("speedAfterScale", speed*speedScaler);
+            /* debugging */
+            robot.logging.setLog("driveToPos-dist", distance);
+            robot.logging.setLog("driveToPos-distTotal", totalDistance);
+            robot.logging.setLog("driveToPos-accelerationBarrier", accelerationBarrier);
+            robot.logging.setLog("driveToPos-pos", getCurrentPosition());
+            robot.logging.setLog("driveToPos-speed", speed);
+            robot.logging.setLog("driveToPos-speedAfterScale", speed*speedScaler);
 
+            /* pid */
             double traveledDistance = totalDistance-distance;
             double previousTraveledDistance = totalDistance-previousDistance;
 
@@ -219,6 +220,13 @@ public class Driving extends RobotComponent {
             deltaPos = Vector2.subtract(targetPos, currentPosition);
             distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
         }
+        /* debugging */
+        robot.logging.removeLog("driveToPos-dist");
+        robot.logging.removeLog("driveToPos-distTotal");
+        robot.logging.removeLog("driveToPos-accelerationBarrier");
+        robot.logging.removeLog("driveToPos-pos");
+        robot.logging.removeLog("driveToPos-speed");
+        robot.logging.removeLog("driveToPos-speedAfterScale");
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
@@ -233,7 +241,7 @@ public class Driving extends RobotComponent {
         /* pid */
         double integralScaler = 0.01;
         double maxAccelerationPercentile = 0.5;
-        double AccelerationAngle = 50;
+        double AccelerationAngle = 10;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
         double decelerationBarrier = totalAngle - accelerationBarrier;
 
@@ -242,6 +250,14 @@ public class Driving extends RobotComponent {
 
         double stopAngle = 3;
         while (robot.isRunning && (angle > stopAngle)){
+            /* debugging */
+            robot.logging.setLog("rotateToAngle-angle", angle);
+            robot.logging.setLog("rotateToAngle-angleTotal", totalAngle);
+            robot.logging.setLog("rotateToAngle-accelerationBarrier", accelerationBarrier);
+            robot.logging.setLog("rotateToAngle-rot", robot.gyroscope.getCurrentAngle());
+            robot.logging.setLog("rotateToAngle-speed", speed);
+            robot.logging.setLog("rotateToAngle-speedAfterScale", speed*speedScaler);
+
             /* pid */
             double traveledAngle = totalAngle-angle;
             double previousTraveledAngle= totalAngle-previousAngle;
@@ -288,6 +304,13 @@ public class Driving extends RobotComponent {
             deltaAngle = MathFunctions.clambAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
             angle = Math.abs(deltaAngle);
         }
+        /* debugging */
+        robot.logging.removeLog("rotateToAngle-angle");
+        robot.logging.removeLog("rotateToAngle-angleTotal");
+        robot.logging.removeLog("rotateToAngle-accelerationBarrier");
+        robot.logging.removeLog("rotateToAngle-rot");
+        robot.logging.removeLog("rotateToAngle-speed");
+        robot.logging.removeLog("rotateToAngle-speedAfterScale");
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
