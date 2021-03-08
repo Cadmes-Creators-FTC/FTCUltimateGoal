@@ -133,8 +133,7 @@ public class Driving extends RobotComponent {
 
         double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
 
-        robot.gyroscope.setTargetAngle(angle);
-        rotateToTargetAngle(speedScaler);
+        rotateToAngle(angle, speedScaler);
 
         driveToPosition(targetPos, speedScaler);
     }
@@ -223,7 +222,9 @@ public class Driving extends RobotComponent {
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
-    public void rotateToTargetAngle(double speedScaler) throws InterruptedException {
+    public void rotateToAngle(double targetAngle, double speedScaler) throws InterruptedException {
+        robot.gyroscope.setTargetAngle(targetAngle);
+
         double deltaAngle = MathFunctions.clambAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
         double totalAngle = Math.abs(deltaAngle);
 
