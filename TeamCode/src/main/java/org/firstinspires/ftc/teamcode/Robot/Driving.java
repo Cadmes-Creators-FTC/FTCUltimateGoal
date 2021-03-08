@@ -128,7 +128,7 @@ public class Driving extends RobotComponent {
         }
     }
 
-    public void driveToPositionForwardOnly(Vector2 targetPos, Double targetRotation, double speedScaler) throws InterruptedException{
+    public void driveToPositionForwardOnly(Vector2 targetPos, double speedScaler) throws InterruptedException{
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
 
         double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
@@ -136,16 +136,9 @@ public class Driving extends RobotComponent {
         robot.gyroscope.setTargetAngle(angle);
         rotateToTargetAngle(speedScaler);
 
-        driveToPosition(targetPos, angle, speedScaler);
-
-        if(targetRotation != null){
-            robot.gyroscope.setTargetAngle(targetRotation);
-            rotateToTargetAngle(speedScaler);
-        }
+        driveToPosition(targetPos, speedScaler);
     }
-    public void driveToPosition(Vector2 targetPos, double targetRotation, double speedScaler) throws InterruptedException {
-        robot.gyroscope.setTargetAngle(targetRotation);
-
+    public void driveToPosition(Vector2 targetPos, double speedScaler) throws InterruptedException {
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
 
@@ -160,17 +153,14 @@ public class Driving extends RobotComponent {
 
         double speed = 0;
         double distance = totalDistance;
-        double angle = Math.abs(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
 
         double stopDistance = 5;
-        double stopAngle = 2;
-        while (robot.isRunning && (distance > stopDistance || angle > stopAngle)){
+        while (robot.isRunning && (distance > stopDistance)){
             /* pid */
             robot.logging.setLog("dist", distance);
             robot.logging.setLog("distTotal", totalDistance);
             robot.logging.setLog("accelerationBarrier", accelerationBarrier);
             robot.logging.setLog("pos", getCurrentPosition());
-            robot.logging.setLog("angle", angle);
             robot.logging.setLog("speed", speed);
             robot.logging.setLog("speedAfterScale", speed*speedScaler);
 
@@ -210,7 +200,7 @@ public class Driving extends RobotComponent {
             Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
             Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
 
-            double angleCorrection = getWheelCorrection()*30;
+            double angleCorrection = getWheelCorrection();
             WheelPowerConfig wpc = new WheelPowerConfig(
                     relativeDeltaPosVector.y + relativeDeltaPosVector.x + angleCorrection,
                     relativeDeltaPosVector.y - relativeDeltaPosVector.x - angleCorrection,
@@ -229,12 +219,9 @@ public class Driving extends RobotComponent {
             previousDistance = distance;
             deltaPos = Vector2.subtract(targetPos, currentPosition);
             distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
-            angle = Math.abs(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
         }
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
-
-//        rotateToTargetAngle(speedScaler);
     }
     public void rotateToTargetAngle(double speedScaler) throws InterruptedException {
         double deltaAngle = MathFunctions.clambAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
