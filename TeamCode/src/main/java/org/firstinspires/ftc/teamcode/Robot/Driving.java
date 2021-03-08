@@ -201,18 +201,18 @@ public class Driving extends RobotComponent {
             Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
 
             WheelPowerConfig wpc = new WheelPowerConfig(
-                    relativeDeltaPosVector.y + relativeDeltaPosVector.x + angleCorrection,
-                    relativeDeltaPosVector.y - relativeDeltaPosVector.x - angleCorrection,
-                    relativeDeltaPosVector.y + relativeDeltaPosVector.x - angleCorrection,
-                    relativeDeltaPosVector.y - relativeDeltaPosVector.x + angleCorrection
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
+                    relativeDeltaPosVector.y - relativeDeltaPosVector.x
             );
             wpc.clampScale();
 
             double angleCorrection = getWheelCorrection();
             WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
                     angleCorrection,
-                    angleCorrection,
-                    angleCorrection,
+                    -angleCorrection,
+                    -angleCorrection,
                     angleCorrection
             );
             angleCorrectionWPC.clampScale();
