@@ -144,7 +144,7 @@ public class Driving extends RobotComponent {
         double previousDistance = 0;
 
         /* pid */
-        double integralScaler = 0.01;
+        double integralScaler = 0.001;
         double maxAccelerationPercentile = 0.5;
         double AccelerationDist = 10;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
@@ -250,7 +250,7 @@ public class Driving extends RobotComponent {
         double previousAngle = 0;
 
         /* pid */
-        double integralScaler = 0.01;
+        double integralScaler = 0.001;
         double maxAccelerationPercentile = 0.5;
         double AccelerationAngle = 10;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
