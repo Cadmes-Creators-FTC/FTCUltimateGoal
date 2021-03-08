@@ -149,6 +149,8 @@ public class Driving extends RobotComponent {
         double AccelerationDist = 10;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double decelerationBarrier = totalDistance - accelerationBarrier;
+        double maxAngleCorrection = 0.25;
+
 
         double speed = 0;
         double distance = totalDistance;
@@ -208,7 +210,7 @@ public class Driving extends RobotComponent {
             );
             wpc.clampScale();
 
-            double angleCorrection = getWheelCorrection();
+            double angleCorrection = Math.max(getWheelCorrection(), maxAngleCorrection);
             WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
                     angleCorrection,
                     -angleCorrection,
