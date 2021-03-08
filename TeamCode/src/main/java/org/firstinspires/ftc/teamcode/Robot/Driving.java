@@ -316,8 +316,7 @@ public class Driving extends RobotComponent {
     }
 
     private double getWheelCorrection(){
-        double scaler = 0.3;
-        double maxCorrection = 0.25;
+        double scaler = 0.05;
 
         double targetAngle = robot.gyroscope.getTargetAngle();
         double currentAngle = robot.gyroscope.getCurrentAngle();
@@ -325,6 +324,6 @@ public class Driving extends RobotComponent {
 
         double correction = deltaAngle*scaler;
 
-        return Math.max(maxCorrection, correction);
+        return correction;
     }
 }
