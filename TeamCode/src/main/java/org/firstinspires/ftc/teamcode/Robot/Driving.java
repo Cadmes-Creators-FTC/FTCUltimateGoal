@@ -32,7 +32,6 @@ public class Driving extends RobotComponent {
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);
 
-        setWheelRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setWheelRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         setWheelZeroPowerBehaviour(DcMotor.ZeroPowerBehavior.FLOAT);
     }
@@ -88,6 +87,10 @@ public class Driving extends RobotComponent {
                 wheelRB.getCurrentPosition()*-1,
                 wheelLB.getCurrentPosition()*-1
         );
+    }
+    public void resetWheelTicks(){
+        setWheelRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setWheelRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 

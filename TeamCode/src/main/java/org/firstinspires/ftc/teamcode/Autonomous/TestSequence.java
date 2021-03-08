@@ -18,6 +18,7 @@ public class TestSequence extends LinearOpMode {
         robot.logging.setLog("state", "Initializing");
 
         robot.gyroscope.waitForGyroCalibration();
+        robot.driving.resetWheelTicks();
         robot.driving.setCurrentPosition(new Vector2(119, 0));
         robot.gyroscope.setCurrentAngle(0);
         robot.startThreads();

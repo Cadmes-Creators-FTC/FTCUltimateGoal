@@ -21,6 +21,7 @@ public class Main extends LinearOpMode {
 
         robot.logging.setLog("state", "Initializing");
         robot.gyroscope.waitForGyroCalibration();
+        robot.driving.resetWheelTicks();
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
