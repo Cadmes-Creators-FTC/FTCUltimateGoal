@@ -19,8 +19,8 @@ public class TestSequence extends LinearOpMode {
 
         robot.gyroscope.waitForGyroCalibration();
         robot.driving.resetWheelTicks();
-        robot.driving.setCurrentPosition(new Vector2(119, 0));
-        robot.gyroscope.setCurrentAngle(0);
+        robot.driving.setCurrentPosition(new Vector2(170, 20));
+        robot.gyroscope.setCurrentAngle(-90);
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");
@@ -39,7 +39,8 @@ public class TestSequence extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        robot.wobbleArm.armDownAutonomous();
+        // put arm in autonomous up pos to extend arm
+        robot.wobbleArm.armUpAutonomous();
 
         robot.driving.driveToPosition(new Vector2(100, 240), 45.0, 0.5);
 
