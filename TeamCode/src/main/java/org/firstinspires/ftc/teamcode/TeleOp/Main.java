@@ -159,7 +159,7 @@ public class Main extends LinearOpMode {
     }
     private void driveToShootingPos() throws InterruptedException{
         if(gamepad1.b){
-            robot.driving.driveToPosition(new Vector2(115, 160), -180, 0.5);
+            robot.driving.driveToPosition(new Vector2(115, 160), -180.0, 0.5);
             robot.logging.removeLog("dist");
             robot.logging.removeLog("distTotal");
             robot.logging.removeLog("accelerationBarrier");

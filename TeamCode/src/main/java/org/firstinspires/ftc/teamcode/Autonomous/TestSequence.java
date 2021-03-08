@@ -44,6 +44,6 @@ public class TestSequence extends LinearOpMode {
 
         robot.wobbleArm.openGripperAutonomous();
 
-        robot.driving.driveToPosition(new Vector2(50, 50), 0, 0.5);
+        robot.driving.driveToPosition(new Vector2(50, 50), 0.0, 0.5);
     }
 }

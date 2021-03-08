@@ -135,10 +135,14 @@ public class Driving extends RobotComponent {
 
         rotateToAngle(angle, speedScaler);
 
-        driveToPosition(targetPos, targetAngle, speedScaler);
+        driveToPosition(targetPos, null, speedScaler);
+
+        if(targetAngle != null)
+            robot.driving.rotateToAngle(targetAngle, speedScaler);
     }
     public void driveToPosition(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException {
-        robot.gyroscope.setTargetAngle(targetAngle);
+        if(targetAngle != null)
+            robot.gyroscope.setTargetAngle(targetAngle);
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
