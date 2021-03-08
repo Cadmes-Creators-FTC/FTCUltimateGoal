@@ -154,20 +154,23 @@ public class Driving extends RobotComponent {
         /* pid */
         double integralScaler = 0.01;
         double maxAccelerationPercentile = 0.5;
-        double minAccelerationDist = 10;
-        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, minAccelerationDist);
+        double AccelerationDist = 10;
+        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double decelerationBarrier = totalDistance - accelerationBarrier;
 
         double speed = 0;
         double distance = totalDistance;
+        double angle = Math.abs(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
 
         double stopDistance = 5;
-        while (distance > stopDistance){
+        double stopAngle = 2;
+        while (robot.isRunning && (distance > stopDistance || angle > stopAngle)){
             /* pid */
             robot.logging.setLog("dist", distance);
             robot.logging.setLog("distTotal", totalDistance);
             robot.logging.setLog("accelerationBarrier", accelerationBarrier);
             robot.logging.setLog("pos", getCurrentPosition());
+            robot.logging.setLog("angle", angle);
             robot.logging.setLog("speed", speed);
             robot.logging.setLog("speedAfterScale", speed*speedScaler);
 
@@ -207,7 +210,7 @@ public class Driving extends RobotComponent {
             Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
             Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
 
-            double angleCorrection = getWheelCorrection()*10;
+            double angleCorrection = getWheelCorrection()*30;
             WheelPowerConfig wpc = new WheelPowerConfig(
                     relativeDeltaPosVector.y + relativeDeltaPosVector.x + angleCorrection,
                     relativeDeltaPosVector.y - relativeDeltaPosVector.x - angleCorrection,
@@ -226,11 +229,12 @@ public class Driving extends RobotComponent {
             previousDistance = distance;
             deltaPos = Vector2.subtract(targetPos, currentPosition);
             distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
+            angle = Math.abs(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
         }
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
 
-        rotateToTargetAngle(speedScaler);
+//        rotateToTargetAngle(speedScaler);
     }
     public void rotateToTargetAngle(double speedScaler) throws InterruptedException {
         double deltaAngle = MathFunctions.clambAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
@@ -240,15 +244,16 @@ public class Driving extends RobotComponent {
 
         /* pid */
         double integralScaler = 0.01;
-        double accelerationPercentile = 0.1;
-        double accelerationBarrier = accelerationPercentile*totalAngle;
-        double decelerationBarrier = totalAngle - accelerationPercentile*totalAngle;
+        double maxAccelerationPercentile = 0.5;
+        double AccelerationAngle = 50;
+        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
+        double decelerationBarrier = totalAngle - accelerationBarrier;
 
         double speed = 0;
         double angle = totalAngle;
 
-        double stopAngle = 5;
-        while (angle > stopAngle){
+        double stopAngle = 3;
+        while (robot.isRunning && (angle > stopAngle)){
             /* pid */
             double traveledAngle = totalAngle-angle;
             double previousTraveledAngle= totalAngle-previousAngle;
@@ -300,7 +305,7 @@ public class Driving extends RobotComponent {
     }
 
     private double getWheelCorrection(){
-        double scaler = 0.03;
+        double scaler = 0.3;
         double maxCorrection = 0.25;
 
         double targetAngle = robot.gyroscope.getTargetAngle();

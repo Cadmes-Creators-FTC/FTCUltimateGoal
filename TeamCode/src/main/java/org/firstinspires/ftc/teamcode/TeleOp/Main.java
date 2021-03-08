@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 import org.firstinspires.ftc.teamcode.Misc.MathFunctions;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
@@ -34,10 +35,11 @@ public class Main extends LinearOpMode {
         robot.logging.setLog("state", "Stopped");
     }
 
-    private void controlLoop(){
+    private void controlLoop() throws InterruptedException{
         while (opModeIsActive()){
             drive();
             setDrivingDirection();
+            driveToShootingPos();
 
             intake();
             conveyor();
@@ -48,6 +50,7 @@ public class Main extends LinearOpMode {
             robot.logging.setLog("average wheel speed", robot.driving.getWheelPowers().getAverage());
             robot.logging.setLog("drive-direction", drivingDirection == 1 ? "forward" : "reverse");
             robot.logging.setLog("pos", robot.driving.getCurrentPosition());
+            robot.logging.setLog("rot", robot.gyroscope.getCurrentAngle());
         }
     }
 
@@ -92,7 +95,7 @@ public class Main extends LinearOpMode {
             if (robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
-                robot.shooter.turnOn(0.95);
+                robot.shooter.turnOn(0.97);
         }
         if(!gamepad2.a)
             shooterStateChanged = false;
@@ -153,6 +156,17 @@ public class Main extends LinearOpMode {
         wpc.clamp();
 
         robot.driving.setWheelPowers(wpc);
+    }
+    private void driveToShootingPos() throws InterruptedException{
+        if(gamepad1.b){
+            robot.driving.driveToPosition(new Vector2(115, 160), -180, 0.5);
+            robot.logging.removeLog("dist");
+            robot.logging.removeLog("distTotal");
+            robot.logging.removeLog("accelerationBarrier");
+            robot.logging.removeLog("pos");
+            robot.logging.removeLog("speed");
+            robot.logging.removeLog("speedAfterScale");
+        }
     }
     boolean drivingDirectionStateChanged = false;
     private void setDrivingDirection(){
