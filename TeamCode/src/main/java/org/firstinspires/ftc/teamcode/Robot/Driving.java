@@ -128,14 +128,14 @@ public class Driving extends RobotComponent {
         }
     }
 
-    public void driveToPositionForwardOnly(Vector2 targetPos, double speedScaler) throws InterruptedException{
+    public void driveToPositionForwardOnly(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException{
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
 
         double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
 
         rotateToAngle(angle, speedScaler);
 
-        driveToPosition(targetPos, speedScaler);
+        driveToPosition(targetPos, targetAngle, speedScaler);
     }
     public void driveToPosition(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetAngle);
@@ -274,28 +274,27 @@ public class Driving extends RobotComponent {
             double traveledAngle = totalAngle-angle;
             double previousTraveledAngle= totalAngle-previousAngle;
 
-            /* proportional */
-            if(traveledAngle <= accelerationBarrier){
-                double remainingSpeedIncrease = 1-speed;
+            //accelerate/decelerate
+            if(angle != previousAngle) {
+                if (traveledAngle <= accelerationBarrier) {
+                    double remainingSpeedIncrease = 1 - speed;
 
-                double currentMovementPercentage = (traveledAngle - previousTraveledAngle)/(accelerationBarrier - previousTraveledAngle);
-                currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (accelerationBarrier - previousTraveledAngle);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
-                speed += remainingSpeedIncrease*currentMovementPercentage;
+                    speed += remainingSpeedIncrease * currentMovementPercentage;
+                }
+                if (traveledAngle >= decelerationBarrier) {
+                    double remainingSpeedDecrease = speed;
+
+                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (totalAngle - previousTraveledAngle);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                    speed -= remainingSpeedDecrease * currentMovementPercentage;
+                }
+            }else { // scale speed if not moved
+                speed = MathFunctions.clamb(integralScaler+speed, -1, 1);
             }
-            if(traveledAngle >= decelerationBarrier){
-                double remainingSpeedDecrease = speed;
-
-                double currentMovementPercentage = (traveledAngle - previousTraveledAngle)/(totalAngle - previousTraveledAngle);
-                currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                speed -= remainingSpeedDecrease*currentMovementPercentage;
-            }
-
-            /* integral */
-            if(angle == previousAngle)
-                speed += integralScaler;
-
 
             WheelPowerConfig wpc = new WheelPowerConfig(
                     deltaAngle,
