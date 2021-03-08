@@ -137,7 +137,9 @@ public class Driving extends RobotComponent {
 
         driveToPosition(targetPos, speedScaler);
     }
-    public void driveToPosition(Vector2 targetPos, double speedScaler) throws InterruptedException {
+    public void driveToPosition(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException {
+        robot.gyroscope.setTargetAngle(targetAngle);
+
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
 
@@ -150,7 +152,6 @@ public class Driving extends RobotComponent {
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double decelerationBarrier = totalDistance - accelerationBarrier;
         double maxAngleCorrection = 0.25;
-
 
         double speed = 0;
         double distance = totalDistance;
