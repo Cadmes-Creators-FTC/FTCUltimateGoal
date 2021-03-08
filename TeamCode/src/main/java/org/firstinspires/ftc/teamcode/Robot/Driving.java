@@ -198,15 +198,13 @@ public class Driving extends RobotComponent {
                     { Math.cos(-angleRad), -Math.sin(-angleRad) },
                     { Math.sin(-angleRad), Math.cos(-angleRad)  },
             });
-
-            Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
-            Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
+            Vector2 relativeDeltaPos = Matrix.multiply(deltaPos.toMatrix(), rotMatrix).toVector2();
 
             WheelPowerConfig wpc = new WheelPowerConfig(
-                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
-                    relativeDeltaPosVector.y - relativeDeltaPosVector.x,
-                    relativeDeltaPosVector.y + relativeDeltaPosVector.x,
-                    relativeDeltaPosVector.y - relativeDeltaPosVector.x
+                    relativeDeltaPos.y + relativeDeltaPos.x,
+                    relativeDeltaPos.y - relativeDeltaPos.x,
+                    relativeDeltaPos.y + relativeDeltaPos.x,
+                    relativeDeltaPos.y - relativeDeltaPos.x
             );
             wpc.clampScale();
 
