@@ -188,7 +188,7 @@ public class Driving extends RobotComponent {
                     speed -= remainingSpeedDecrease*currentMovementPercentage;
                 }
             }else{ // scale speed if not moved
-                speed += integralScaler;
+                speed = MathFunctions.clamb(integralScaler+speed, -1, 1);
             }
 
 
