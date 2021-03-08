@@ -193,7 +193,7 @@ public class Driving extends RobotComponent {
                     speed -= remainingSpeedDecrease*currentMovementPercentage;
                 }
             }else{ // scale speed if not moved
-                speed = MathFunctions.clamb(integralScaler+speed, -1, 1);
+                speed = MathFunctions.clamp(integralScaler+speed, -1, 1);
             }
 
 
@@ -249,7 +249,7 @@ public class Driving extends RobotComponent {
     public void rotateToAngle(double targetAngle, double speedScaler) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetAngle);
 
-        double deltaAngle = MathFunctions.clambAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
+        double deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
         double totalAngle = Math.abs(deltaAngle);
 
         double previousAngle = 0;
@@ -297,7 +297,7 @@ public class Driving extends RobotComponent {
                     speed -= remainingSpeedDecrease * currentMovementPercentage;
                 }
             }else { // scale speed if not moved
-                speed = MathFunctions.clamb(integralScaler+speed, -1, 1);
+                speed = MathFunctions.clamp(integralScaler+speed, -1, 1);
             }
 
             WheelPowerConfig wpc = new WheelPowerConfig(
@@ -316,7 +316,7 @@ public class Driving extends RobotComponent {
 
             /* set values for next loop run */
             previousAngle = angle;
-            deltaAngle = MathFunctions.clambAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
+            deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
             angle = Math.abs(deltaAngle);
         }
         /* debugging */

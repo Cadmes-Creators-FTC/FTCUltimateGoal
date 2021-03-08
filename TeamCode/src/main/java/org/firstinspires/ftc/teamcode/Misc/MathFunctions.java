@@ -14,7 +14,7 @@ public class MathFunctions {
     //endregion
 
     //region angles
-    public static double clambAngleDegrees(double angle){
+    public static double clampAngleDegrees(double angle){
         while (angle < -180)
             angle += 360;
         while (angle > 180)
@@ -27,7 +27,7 @@ public class MathFunctions {
     public static double absXOverX(double x){
         return x == 0 ? 0 : x/Math.abs(x);
     }
-    public static double clamb(double x, double min, double max){
+    public static double clamp(double x, double min, double max){
         return Math.max(min, Math.min(x, max));
     }
 }

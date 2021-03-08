@@ -4,7 +4,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -64,7 +63,7 @@ public class Gyroscope extends RobotComponent{
 
             currentAngle += deltaAngle;
 
-            currentAngle = MathFunctions.clambAngleDegrees(currentAngle);
+            currentAngle = MathFunctions.clampAngleDegrees(currentAngle);
             lastAngles = angles;
 
             Thread.sleep(50);
@@ -82,6 +81,6 @@ public class Gyroscope extends RobotComponent{
 
     public double getTargetAngle() { return targetAngle; }
     public void setTargetAngle(double newTargetAngle) {
-        targetAngle = MathFunctions.clambAngleDegrees(newTargetAngle);
+        targetAngle = MathFunctions.clampAngleDegrees(newTargetAngle);
     }
 }
