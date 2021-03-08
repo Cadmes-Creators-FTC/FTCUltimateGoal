@@ -337,8 +337,6 @@ public class Driving extends RobotComponent {
         double currentAngle = robot.gyroscope.getCurrentAngle();
         double deltaAngle = targetAngle - currentAngle;
 
-        double correction = deltaAngle*scaler;
-
-        return correction;
+        return deltaAngle*scaler;
     }
 }
