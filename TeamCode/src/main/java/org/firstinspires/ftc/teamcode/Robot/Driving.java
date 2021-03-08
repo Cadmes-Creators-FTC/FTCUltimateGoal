@@ -213,7 +213,7 @@ public class Driving extends RobotComponent {
             );
             wpc.clampScale();
 
-            double angleCorrection = Math.max(getWheelCorrection(), maxAngleCorrection);
+            double angleCorrection = Math.max(getAngleCorrection(), maxAngleCorrection);
             WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
                     angleCorrection,
                     -angleCorrection,
@@ -330,7 +330,7 @@ public class Driving extends RobotComponent {
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
 
-    private double getWheelCorrection(){
+    private double getAngleCorrection(){
         double scaler = 0.05;
 
         double targetAngle = robot.gyroscope.getTargetAngle();
