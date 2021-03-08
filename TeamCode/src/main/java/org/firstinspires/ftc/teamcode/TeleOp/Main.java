@@ -37,7 +37,6 @@ public class Main extends LinearOpMode {
     private void controlLoop(){
         while (opModeIsActive()){
             drive();
-//            slowMovement();
             setDrivingDirection();
 
             intake();
