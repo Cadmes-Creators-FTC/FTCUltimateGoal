@@ -27,5 +27,8 @@ public class MathFunctions {
     public static double absXOverX(double x){
         return x == 0 ? 0 : x/Math.abs(x);
     }
+    public static double clamb(double x, double min, double max){
+        return Math.max(min, Math.min(x, max));
+    }
 }
 
