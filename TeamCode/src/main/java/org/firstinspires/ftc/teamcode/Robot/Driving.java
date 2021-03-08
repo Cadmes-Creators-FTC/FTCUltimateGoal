@@ -32,20 +32,9 @@ public class Driving extends RobotComponent {
         wheelLF.setDirection(DcMotor.Direction.REVERSE);
         wheelLB.setDirection(DcMotor.Direction.REVERSE);
 
-        wheelLF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheelRF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheelRB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        wheelLB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        wheelLF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelRF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelRB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheelLB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        wheelLF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        wheelRF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        wheelRB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        wheelLB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        setWheelRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setWheelRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setWheelZeroPowerBehaviour(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     @Override
@@ -58,6 +47,20 @@ public class Driving extends RobotComponent {
                 } catch (InterruptedException ignored) { }
             }
         }.start();
+    }
+
+
+    public void setWheelRunMode(DcMotor.RunMode mode){
+        wheelLF.setMode(mode);
+        wheelRF.setMode(mode);
+        wheelRB.setMode(mode);
+        wheelLB.setMode(mode);
+    }
+    public void setWheelZeroPowerBehaviour(DcMotor.ZeroPowerBehavior zeroPowerBehaviour){
+        wheelLF.setZeroPowerBehavior(zeroPowerBehaviour);
+        wheelRF.setZeroPowerBehavior(zeroPowerBehaviour);
+        wheelRB.setZeroPowerBehavior(zeroPowerBehaviour);
+        wheelLB.setZeroPowerBehavior(zeroPowerBehaviour);
     }
 
 
