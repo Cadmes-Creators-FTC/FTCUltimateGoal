@@ -215,7 +215,7 @@ public class Driving extends RobotComponent {
                     -angleCorrection,
                     angleCorrection
             );
-            angleCorrectionWPC.clampScale();
+            angleCorrectionWPC.clamp();
 
             wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
             wpc.clampScale();
