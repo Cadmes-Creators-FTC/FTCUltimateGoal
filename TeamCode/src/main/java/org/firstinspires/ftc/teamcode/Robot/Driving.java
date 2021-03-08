@@ -200,13 +200,24 @@ public class Driving extends RobotComponent {
             Matrix relativeDeltaPosMatrix = Matrix.multiply(deltaPos.toMatrix(), rotMatrix);
             Vector2 relativeDeltaPosVector = relativeDeltaPosMatrix.toVector2();
 
-            double angleCorrection = getWheelCorrection();
             WheelPowerConfig wpc = new WheelPowerConfig(
                     relativeDeltaPosVector.y + relativeDeltaPosVector.x + angleCorrection,
                     relativeDeltaPosVector.y - relativeDeltaPosVector.x - angleCorrection,
                     relativeDeltaPosVector.y + relativeDeltaPosVector.x - angleCorrection,
                     relativeDeltaPosVector.y - relativeDeltaPosVector.x + angleCorrection
             );
+            wpc.clampScale();
+
+            double angleCorrection = getWheelCorrection();
+            WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
+                    angleCorrection,
+                    angleCorrection,
+                    angleCorrection,
+                    angleCorrection
+            );
+            angleCorrectionWPC.clampScale();
+
+            wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
             wpc.clampScale();
 
             wpc = WheelPowerConfig.multiply(wpc, speed*speedScaler);
