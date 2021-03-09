@@ -19,7 +19,7 @@ public class RemoteRed extends LinearOpMode {
 
         robot.gyroscope.waitForGyroCalibration();
         robot.driving.resetWheelTicks();
-        robot.driving.setCurrentPosition(new Vector2(170, 20));
+        robot.driving.setCurrentPosition(new Vector2(192, 20));
         robot.gyroscope.setCurrentAngle(-90);
         robot.startThreads();
 
@@ -42,18 +42,23 @@ public class RemoteRed extends LinearOpMode {
         // put arm in autonomous up pos to extend arm
         robot.wobbleArm.armUpAutonomous();
 
-        robot.driving.driveToPosition(new Vector2(210, 180), 45.0, 0.75);
+        robot.driving.driveToPosition(new Vector2(200, 190), 45.0, 1);
+//        robot.driving.driveToPositionForwardOnly(new Vector2(200, 190), 45.0, 1);
         robot.wobbleArm.armDownAutonomous();
         robot.wobbleArm.openGripperAutonomous();
 
-//        robot.driving.driveToPosition(new Vector2(110, 80), 180.0, 1);
-//        robot.wobbleArm.closeGripperAutonomous();
-//        robot.wobbleArm.armUpAutonomous();
-//
-//        robot.driving.driveToPosition(new Vector2(190, 180), 45.0, 1);
-//        robot.wobbleArm.armDownAutonomous();
-//        robot.wobbleArm.openGripperAutonomous();
-//
-//        robot.driving.driveToPosition(new Vector2(100, 210), 45.0, 1);
+        robot.driving.driveToPosition(new Vector2(110, 90), 180.0, 1);
+//        robot.driving.driveToPositionForwardOnly(new Vector2(110, 90), 180.0, 1);
+        robot.wobbleArm.closeGripperAutonomous();
+        robot.wobbleArm.armUpAutonomous();
+
+        robot.driving.driveToPosition(new Vector2(180, 190), 45.0, 1);
+//        robot.driving.driveToPositionForwardOnly(new Vector2(180, 190), 45.0, 1);
+        robot.wobbleArm.armDownAutonomous();
+        robot.wobbleArm.openGripperAutonomous();
+        robot.wobbleArm.armUpAutonomous();
+
+        robot.driving.driveToPosition(new Vector2(120, 210), 45.0, 1);
+//        robot.driving.driveToPositionForwardOnly(new Vector2(120, 210), 45.0, 1);
     }
 }
