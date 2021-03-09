@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 
-@Autonomous(name="RemoteRedRightLine", group="RedAutonomous")
+@Autonomous(name="RemoteRed", group="RedAutonomous")
 public class RemoteRed extends LinearOpMode {
     private MainRobot robot;
 
