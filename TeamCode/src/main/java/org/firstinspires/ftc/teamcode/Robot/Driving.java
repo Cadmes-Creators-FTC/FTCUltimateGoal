@@ -156,12 +156,13 @@ public class Driving extends RobotComponent {
         double previousDistance = 0;
 
         /* pid */
-        double integralScaler = 0.001;
+        double integralScaler = 0.005;
         double maxAccelerationPercentile = 0.5;
         double AccelerationDist = 10;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double decelerationBarrier = totalDistance - accelerationBarrier;
         double maxAngleCorrection = 0.25;
+        double minSpeedForMovement = 0.1;
 
         double speed = 0;
         double distance = totalDistance;
@@ -231,7 +232,8 @@ public class Driving extends RobotComponent {
             wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
             wpc.clampScale();
 
-            wpc = WheelPowerConfig.multiply(wpc, speed*speedScaler);
+            double scaledSpeed = ((speed*(1-minSpeedForMovement))+minSpeedForMovement)*speedScaler;
+            wpc = WheelPowerConfig.multiply(wpc, scaledSpeed);
             setWheelPowers(wpc);
 
 
@@ -250,6 +252,8 @@ public class Driving extends RobotComponent {
         robot.logging.removeLog("driveToPos-speed");
         robot.logging.removeLog("driveToPos-speedAfterScale");
 
+        rotateToAngle(targetAngle, 0.75*speedScaler);
+
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
     public void rotateToAngle(double targetAngle, double speedScaler) throws InterruptedException {
@@ -261,16 +265,17 @@ public class Driving extends RobotComponent {
         double previousAngle = 0;
 
         /* pid */
-        double integralScaler = 0.001;
+        double integralScaler = 0.01;
         double maxAccelerationPercentile = 0.5;
-        double AccelerationAngle = 10;
+        double AccelerationAngle = 45;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
         double decelerationBarrier = totalAngle - accelerationBarrier;
+        double minSpeedForMovement = 0.15;
 
         double speed = 0;
         double angle = totalAngle;
 
-        double stopAngle = 3;
+        double stopAngle = 4;
         while (robot.isRunning && (angle > stopAngle)){
             /* debugging */
             robot.logging.setLog("rotateToAngle-angle", angle);
@@ -314,7 +319,8 @@ public class Driving extends RobotComponent {
             );
             wpc.clampScale();
 
-            wpc = WheelPowerConfig.multiply(wpc, speed*speedScaler);
+            double scaledSpeed = ((speed*(1-minSpeedForMovement))+minSpeedForMovement)*speedScaler;
+            wpc = WheelPowerConfig.multiply(wpc, scaledSpeed);
             setWheelPowers(wpc);
 
 

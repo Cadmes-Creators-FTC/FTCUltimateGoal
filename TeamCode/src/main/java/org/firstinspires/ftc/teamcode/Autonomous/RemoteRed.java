@@ -42,18 +42,18 @@ public class RemoteRed extends LinearOpMode {
         // put arm in autonomous up pos to extend arm
         robot.wobbleArm.armUpAutonomous();
 
-        robot.driving.driveToPosition(new Vector2(210, 180), 45.0, 0.5);
+        robot.driving.driveToPosition(new Vector2(210, 180), 45.0, 0.75);
         robot.wobbleArm.armDownAutonomous();
         robot.wobbleArm.openGripperAutonomous();
 
-        robot.driving.driveToPosition(new Vector2(110, 80), 180.0, 0.5);
-        robot.wobbleArm.closeGripperAutonomous();
-        robot.wobbleArm.armUpAutonomous();
-
-        robot.driving.driveToPosition(new Vector2(190, 180), 45.0, 0.5);
-        robot.wobbleArm.armDownAutonomous();
-        robot.wobbleArm.openGripperAutonomous();
-
-        robot.driving.driveToPosition(new Vector2(100, 210), 45.0, 0.5);
+//        robot.driving.driveToPosition(new Vector2(110, 80), 180.0, 1);
+//        robot.wobbleArm.closeGripperAutonomous();
+//        robot.wobbleArm.armUpAutonomous();
+//
+//        robot.driving.driveToPosition(new Vector2(190, 180), 45.0, 1);
+//        robot.wobbleArm.armDownAutonomous();
+//        robot.wobbleArm.openGripperAutonomous();
+//
+//        robot.driving.driveToPosition(new Vector2(100, 210), 45.0, 1);
     }
 }
