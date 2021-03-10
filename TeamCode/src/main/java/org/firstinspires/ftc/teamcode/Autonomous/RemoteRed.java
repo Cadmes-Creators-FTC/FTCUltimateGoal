@@ -39,25 +39,30 @@ public class RemoteRed extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        // put arm in autonomous up pos to extend arm
-        robot.wobbleArm.armUpAutonomous();
-
+        //drop off first wobble goal
         robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
         robot.wobbleArm.armDownAutonomous();
         robot.wobbleArm.openGripperAutonomous();
 
-//        robot.driving.driveToPosition(new Vector2(110, 90), 180.0, 1);
-////        robot.driving.driveToPositionForwardOnly(new Vector2(110, 90), 180.0, 1);
-//        robot.wobbleArm.closeGripperAutonomous();
-//        robot.wobbleArm.armUpAutonomous();
-//
-//        robot.driving.driveToPosition(new Vector2(180, 190), 45.0, 1);
-////        robot.driving.driveToPositionForwardOnly(new Vector2(180, 190), 45.0, 1);
-//        robot.wobbleArm.armDownAutonomous();
-//        robot.wobbleArm.openGripperAutonomous();
-//        robot.wobbleArm.armUpAutonomous();
-//
-//        robot.driving.driveToPosition(new Vector2(120, 210), 45.0, 1);
-////        robot.driving.driveToPositionForwardOnly(new Vector2(120, 210), 45.0, 1);
+        //shoot rings
+        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 0.0, 0.75);
+        robot.shooter.turnOn(0.92);
+        robot.conveyor.turnOn(1);
+        Thread.sleep(1000);
+        robot.shooter.turnOff();
+        robot.conveyor.turnOff();
+
+        //pick up second wobble goal
+        robot.driving.driveToPositionForwardOnly(new Vector2(130, 100), null, 0.75);
+        robot.wobbleArm.closeGripperAutonomous();
+        robot.wobbleArm.armUpAutonomous();
+
+        //drop off second wobble goal
+        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
+        robot.wobbleArm.openGripperAutonomous();
+        robot.wobbleArm.toStopPosition();
+
+        //drive to launch line
+        robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
     }
 }
