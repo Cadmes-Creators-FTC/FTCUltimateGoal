@@ -111,7 +111,7 @@ public class Driving extends RobotComponent {
             wheelPosDelta.toCM(10*Math.PI, ticksPerRotation);
 
             /* get movement */
-            double yScaler = 1.50;
+            double yScaler = 1.52;
             double xScaler = 0.57;
 
             double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4 * 1.5;
@@ -158,7 +158,7 @@ public class Driving extends RobotComponent {
         /* pid */
         double integralScaler = 0.005;
         double maxAccelerationPercentile = 0.5;
-        double AccelerationDist = 10;
+        double AccelerationDist = 50;
         double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double decelerationBarrier = totalDistance - accelerationBarrier;
         double maxAngleCorrection = 0.25;
@@ -220,7 +220,7 @@ public class Driving extends RobotComponent {
             );
             wpc.clampScale();
 
-            double angleCorrection = Math.max(getAngleCorrection(), maxAngleCorrection);
+            double angleCorrection = MathFunctions.clamp(getAngleCorrection(), -maxAngleCorrection, maxAngleCorrection);
             WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
                     angleCorrection,
                     -angleCorrection,
@@ -252,7 +252,8 @@ public class Driving extends RobotComponent {
         robot.logging.removeLog("driveToPos-speed");
         robot.logging.removeLog("driveToPos-speedAfterScale");
 
-        rotateToAngle(targetAngle, 0.75*speedScaler);
+        if(targetAngle != null)
+            rotateToAngle(targetAngle, 0.75*speedScaler);
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }

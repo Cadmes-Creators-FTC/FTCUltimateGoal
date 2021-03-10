@@ -27,13 +27,13 @@ public class WobbleArm extends RobotComponent {
     public void armUpAutonomous(){
         arm.setPosition(0.4);
         try{
-            Thread.sleep(1000);
+            Thread.sleep(2500);
         } catch (InterruptedException ignored){}
     }
     public void armDownAutonomous(){
         arm.setPosition(0);
         try{
-            Thread.sleep(1000);
+            Thread.sleep(2500);
         } catch (InterruptedException ignored){}
     }
     public void closeGripperAutonomous(){
