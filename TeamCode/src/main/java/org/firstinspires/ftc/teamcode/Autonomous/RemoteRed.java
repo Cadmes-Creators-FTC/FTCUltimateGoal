@@ -13,7 +13,7 @@ public class RemoteRed extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException{
         String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
 
         robot.logging.setLog("state", "Initializing");
 

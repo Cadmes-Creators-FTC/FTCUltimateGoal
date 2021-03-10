@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
@@ -23,7 +24,11 @@ public class MainRobot {
     public RingStackDetection ringStackDetection;
     public ArrayList<RobotComponent> componentsList = new ArrayList<RobotComponent>();
 
-    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputEnabledComponents) {
+    public LinearOpMode opMode;
+
+    public MainRobot(HardwareMap hardwareMap, Telemetry inputTelemetry, String[] inputEnabledComponents, LinearOpMode inputOpmode) {
+        opMode = inputOpmode;
+
         List<String> enabledComponents = Arrays.asList(inputEnabledComponents);
 
         if(enabledComponents.contains("logging")) {
@@ -60,7 +65,25 @@ public class MainRobot {
         }
     }
 
+    public void checkForStop() throws InterruptedException{
+        while(isRunning){
+            if(opMode.isStopRequested())
+                stopRobot();
+
+            Thread.sleep(50);
+        }
+    }
+
     public void startThreads(){
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    checkForStop();
+                } catch (InterruptedException ignored) { }
+            }
+        }.start();
+
         for(int i = 0; i < componentsList.size(); i++){
             componentsList.get(i).startThreads();
         }
