@@ -159,8 +159,8 @@ public class Driving extends RobotComponent {
         double integralScaler = 0.005;
         double maxAccelerationPercentile = 0.5;
         double AccelerationDist = 50;
-        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
-        double decelerationBarrier = totalDistance - accelerationBarrier;
+        double accelerationBarrier = AccelerationDist;
+        double decelerationBarrier = totalDistance - Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double maxAngleCorrection = 0.25;
         double minSpeedForMovement = 0.1;
 
@@ -184,13 +184,6 @@ public class Driving extends RobotComponent {
             //accelerate/decelerate
             if(distance != previousDistance){
                 if(traveledDistance <= accelerationBarrier){
-                    double remainingSpeedIncrease = 1-speed;
-
-                    double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
-                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                    speed += remainingSpeedIncrease*currentMovementPercentage;
-                }
                 if(traveledDistance >= decelerationBarrier){
                     double remainingSpeedDecrease = speed;
 
@@ -198,6 +191,13 @@ public class Driving extends RobotComponent {
                     currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
                     speed -= remainingSpeedDecrease*currentMovementPercentage;
+                }else if(traveledDistance <= accelerationBarrier){
+                    double remainingSpeedIncrease = 1-speed;
+
+                    double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                    speed += remainingSpeedIncrease*currentMovementPercentage;
                 }
             }else{ // scale speed if not moved
                 speed = MathFunctions.clamp(integralScaler+speed, -1, 1);
@@ -269,8 +269,8 @@ public class Driving extends RobotComponent {
         double integralScaler = 0.01;
         double maxAccelerationPercentile = 0.5;
         double AccelerationAngle = 45;
-        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
-        double decelerationBarrier = totalAngle - accelerationBarrier;
+        double accelerationBarrier = AccelerationAngle;
+        double decelerationBarrier = totalAngle - Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
         double minSpeedForMovement = 0.15;
 
         double speed = 0;
@@ -292,14 +292,6 @@ public class Driving extends RobotComponent {
 
             //accelerate/decelerate
             if(angle != previousAngle) {
-                if (traveledAngle <= accelerationBarrier) {
-                    double remainingSpeedIncrease = 1 - speed;
-
-                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (accelerationBarrier - previousTraveledAngle);
-                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                    speed += remainingSpeedIncrease * currentMovementPercentage;
-                }
                 if (traveledAngle >= decelerationBarrier) {
                     double remainingSpeedDecrease = speed;
 
@@ -307,6 +299,13 @@ public class Driving extends RobotComponent {
                     currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
                     speed -= remainingSpeedDecrease * currentMovementPercentage;
+                }else if(traveledAngle <= accelerationBarrier){
+                    double remainingSpeedIncrease = 1 - speed;
+
+                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (accelerationBarrier - previousTraveledAngle);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                    speed += remainingSpeedIncrease * currentMovementPercentage;
                 }
             }else { // scale speed if not moved
                 speed = MathFunctions.clamp(integralScaler+speed, -1, 1);
