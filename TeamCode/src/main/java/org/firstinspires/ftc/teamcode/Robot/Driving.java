@@ -183,7 +183,6 @@ public class Driving extends RobotComponent {
 
             //accelerate/decelerate
             if(distance != previousDistance){
-                if(traveledDistance <= accelerationBarrier){
                 if(traveledDistance >= decelerationBarrier){
                     double remainingSpeedDecrease = speed;
 
