@@ -19,7 +19,7 @@ public class RemoteRed extends LinearOpMode {
 
         robot.gyroscope.waitForGyroCalibration();
         robot.driving.resetWheelTicks();
-        robot.driving.setCurrentPosition(new Vector2(170, 20));
+        robot.driving.setCurrentPosition(new Vector2(170, 40));
         robot.gyroscope.setCurrentAngle(-90);
         robot.startThreads();
 
@@ -42,7 +42,7 @@ public class RemoteRed extends LinearOpMode {
         // put arm in autonomous up pos to extend arm
         robot.wobbleArm.armUpAutonomous();
 
-        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), 45.0, 0.75);
+        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
         robot.wobbleArm.armDownAutonomous();
         robot.wobbleArm.openGripperAutonomous();
 
