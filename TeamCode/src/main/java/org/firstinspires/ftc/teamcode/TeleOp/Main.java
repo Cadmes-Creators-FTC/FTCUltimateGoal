@@ -40,7 +40,7 @@ public class Main extends LinearOpMode {
         while (opModeIsActive()){
             drive();
             setDrivingDirection();
-            driveToShootingPos();
+            rotateStraight();
 
             intake();
             conveyor();
@@ -96,7 +96,7 @@ public class Main extends LinearOpMode {
             if (robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
-                robot.shooter.turnOn(0.97);
+                robot.shooter.turnOn(0.92);
         }
         if(!gamepad2.a)
             shooterStateChanged = false;
@@ -158,16 +158,9 @@ public class Main extends LinearOpMode {
 
         robot.driving.setWheelPowers(wpc);
     }
-    private void driveToShootingPos() throws InterruptedException{
-        if(gamepad1.b){
-            robot.driving.driveToPosition(new Vector2(115, 160), -180.0, 0.5);
-            robot.logging.removeLog("dist");
-            robot.logging.removeLog("distTotal");
-            robot.logging.removeLog("accelerationBarrier");
-            robot.logging.removeLog("pos");
-            robot.logging.removeLog("speed");
-            robot.logging.removeLog("speedAfterScale");
-        }
+    private void rotateStraight() throws InterruptedException{
+        if(gamepad1.b)
+            robot.driving.rotateToAngle(-180, 0.75);
     }
     boolean drivingDirectionStateChanged = false;
     private void setDrivingDirection(){

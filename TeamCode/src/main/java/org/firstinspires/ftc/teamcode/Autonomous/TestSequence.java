@@ -39,6 +39,7 @@ public class TestSequence extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        robot.driving.driveToPosition(new Vector2(0, 100), 0.0, 1);
+//        robot.driving.driveToPosition(new Vector2(0, 210), 0.0, 0.75);
+        robot.driving.driveToPosition(new Vector2(210, 0), 0.0, 0.75);
     }
 }
