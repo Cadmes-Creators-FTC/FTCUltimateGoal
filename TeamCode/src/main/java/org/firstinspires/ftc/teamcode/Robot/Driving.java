@@ -315,7 +315,6 @@ public class Driving extends RobotComponent {
             robot.logging.setLog("driveToPos-pos", currentPosition);
             robot.logging.setLog("driveToPos-targetPos", targetPos);
         }
-        /* debugging */
         robot.logging.removeLog("driveToPos-dist");
         robot.logging.removeLog("driveToPos-distTotal");
         robot.logging.removeLog("driveToPos-pos");
@@ -408,6 +407,54 @@ public class Driving extends RobotComponent {
         robot.logging.removeLog("rotateToAngle-rot");
         robot.logging.removeLog("rotateToAngle-speed");
         robot.logging.removeLog("rotateToAngle-speedAfterScale");
+
+        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
+    }
+    public void rotateToAnglePID(double targetAngle, double maxSpeed) throws InterruptedException {
+        robot.gyroscope.setTargetAngle(targetAngle);
+
+        double minSpeedForMovement = 0.1;
+        double maxSpeedChangePerCycle = 0.01;
+
+        MiniPID pid = new MiniPID(0.05, 0.005, 0.005);
+        pid.setOutputLimits(minSpeedForMovement, maxSpeed);
+        pid.setOutputRampRate(maxSpeedChangePerCycle);
+
+        double deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
+        double angle = deltaAngle;
+        robot.logging.setLog("rotateToAngle-angleTotal", angle);
+
+        double stopAngle = 4;
+        while (robot.isRunning && (angle > stopAngle)){
+            WheelPowerConfig wpc = new WheelPowerConfig(
+                    deltaAngle,
+                    -deltaAngle,
+                    -deltaAngle,
+                    deltaAngle
+            );
+            wpc.clampScale();
+
+            double speed = pid.getOutput(angle, 0);
+            robot.logging.setLog("driveToPos-speed", speed);
+            wpc = WheelPowerConfig.multiply(wpc, speed);
+            setWheelPowers(wpc);
+
+
+            Thread.sleep(50);
+
+            /* set values for next loop run */
+            deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
+            angle = Math.abs(deltaAngle);
+            robot.logging.setLog("rotateToAngle-angle", angle);
+
+            robot.logging.setLog("rotateToAngle-rot", robot.gyroscope.getCurrentAngle());
+            robot.logging.setLog("rotateToAngle-rotTarget", robot.gyroscope.getTargetAngle());
+        }
+        robot.logging.removeLog("rotateToAngle-angle");
+        robot.logging.removeLog("rotateToAngle-angleTotal");
+        robot.logging.removeLog("rotateToAngle-rot");
+        robot.logging.removeLog("rotateToAngle-rotTarget");
+        robot.logging.removeLog("rotateToAngle-speed");
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
