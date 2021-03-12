@@ -257,75 +257,6 @@ public class Driving extends RobotComponent {
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
-    public void driveToPositionPID(Vector2 targetPos, Double targetAngle, double maxSpeed) throws InterruptedException {
-        if(targetAngle != null)
-            robot.gyroscope.setTargetAngle(targetAngle);
-
-        double minSpeedForMovement = 0.1;
-        double maxSpeedChangePerCycle = 0.01;
-        double maxAngleCorrection = 0.25;
-
-        MiniPID pid = new MiniPID(0.05, 0.005, 0.005);
-        pid.setOutputLimits(minSpeedForMovement, maxSpeed);
-        pid.setOutputRampRate(maxSpeedChangePerCycle);
-
-        Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
-        double distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
-        robot.logging.setLog("driveToPos-distTotal", distance);
-
-        double stopDistance = 5;
-        while (robot.isRunning && (distance > stopDistance)){
-            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
-            Matrix rotMatrix = new Matrix(new double[][]{
-                    { Math.cos(-angleRad), -Math.sin(-angleRad) },
-                    { Math.sin(-angleRad), Math.cos(-angleRad)  },
-            });
-            Vector2 relativeDeltaPos = Matrix.multiply(deltaPos.toMatrix(), rotMatrix).toVector2();
-
-            WheelPowerConfig wpc = new WheelPowerConfig(
-                    relativeDeltaPos.y + relativeDeltaPos.x,
-                    relativeDeltaPos.y - relativeDeltaPos.x,
-                    relativeDeltaPos.y + relativeDeltaPos.x,
-                    relativeDeltaPos.y - relativeDeltaPos.x
-            );
-            wpc.clampScale();
-
-            double angleCorrection = MathFunctions.clamp(getAngleCorrection(), -maxAngleCorrection, maxAngleCorrection);
-            WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
-                    angleCorrection,
-                    -angleCorrection,
-                    -angleCorrection,
-                    angleCorrection
-            );
-
-            wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
-            wpc.clampScale();
-
-            double speed = pid.getOutput(distance, 0);
-            robot.logging.setLog("driveToPos-speed", speed);
-            wpc = WheelPowerConfig.multiply(wpc, speed);
-            setWheelPowers(wpc);
-
-            Thread.sleep(50);
-
-            deltaPos = Vector2.subtract(targetPos, currentPosition);
-            distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
-            robot.logging.setLog("driveToPos-dist", distance);
-
-            robot.logging.setLog("driveToPos-pos", currentPosition);
-            robot.logging.setLog("driveToPos-targetPos", targetPos);
-        }
-        robot.logging.removeLog("driveToPos-dist");
-        robot.logging.removeLog("driveToPos-distTotal");
-        robot.logging.removeLog("driveToPos-pos");
-        robot.logging.removeLog("driveToPos-targetPos");
-        robot.logging.removeLog("driveToPos-speed");
-
-        if(targetAngle != null)
-            rotateToAngle(targetAngle, maxSpeed);
-
-        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
-    }
     public void rotateToAngle(double targetAngle, double speedScaler) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetAngle);
 
@@ -407,54 +338,6 @@ public class Driving extends RobotComponent {
         robot.logging.removeLog("rotateToAngle-rot");
         robot.logging.removeLog("rotateToAngle-speed");
         robot.logging.removeLog("rotateToAngle-speedAfterScale");
-
-        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
-    }
-    public void rotateToAnglePID(double targetAngle, double maxSpeed) throws InterruptedException {
-        robot.gyroscope.setTargetAngle(targetAngle);
-
-        double minSpeedForMovement = 0.1;
-        double maxSpeedChangePerCycle = 0.01;
-
-        MiniPID pid = new MiniPID(0.05, 0.005, 0.005);
-        pid.setOutputLimits(minSpeedForMovement, maxSpeed);
-        pid.setOutputRampRate(maxSpeedChangePerCycle);
-
-        double deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
-        double angle = deltaAngle;
-        robot.logging.setLog("rotateToAngle-angleTotal", angle);
-
-        double stopAngle = 4;
-        while (robot.isRunning && (angle > stopAngle)){
-            WheelPowerConfig wpc = new WheelPowerConfig(
-                    deltaAngle,
-                    -deltaAngle,
-                    -deltaAngle,
-                    deltaAngle
-            );
-            wpc.clampScale();
-
-            double speed = pid.getOutput(angle, 0);
-            robot.logging.setLog("driveToPos-speed", speed);
-            wpc = WheelPowerConfig.multiply(wpc, speed);
-            setWheelPowers(wpc);
-
-
-            Thread.sleep(50);
-
-            /* set values for next loop run */
-            deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
-            angle = Math.abs(deltaAngle);
-            robot.logging.setLog("rotateToAngle-angle", angle);
-
-            robot.logging.setLog("rotateToAngle-rot", robot.gyroscope.getCurrentAngle());
-            robot.logging.setLog("rotateToAngle-rotTarget", robot.gyroscope.getTargetAngle());
-        }
-        robot.logging.removeLog("rotateToAngle-angle");
-        robot.logging.removeLog("rotateToAngle-angleTotal");
-        robot.logging.removeLog("rotateToAngle-rot");
-        robot.logging.removeLog("rotateToAngle-rotTarget");
-        robot.logging.removeLog("rotateToAngle-speed");
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
