@@ -132,8 +132,6 @@ public class Main extends LinearOpMode {
 
         double joyMinInput = 0.05;
         double triggerMinInput = 0.05;
-
-        //scale 0.2-1 to 0-1
         forwardInput = MathFunctions.absXOverX(forwardInput) * Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
         strafeInput = MathFunctions.absXOverX(strafeInput) * Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
         rotationInput = MathFunctions.absXOverX(rotationInput) * Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
