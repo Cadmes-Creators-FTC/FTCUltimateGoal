@@ -12,7 +12,7 @@ public class WobbleArmOnly extends LinearOpMode {
     @Override
     public void runOpMode () throws InterruptedException{
         String[] enabledComponents = {"logging", "wobbleArm"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents,this);
 
         robot.logging.setLog("state", "Initializing");
 
