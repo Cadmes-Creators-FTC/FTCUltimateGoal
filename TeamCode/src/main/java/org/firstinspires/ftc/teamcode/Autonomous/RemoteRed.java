@@ -12,7 +12,7 @@ public class RemoteRed extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "conveyor", "wobbleArm", "ringStackHeightDetection"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
 
         robot.logging.setLog("state", "Initializing");
@@ -39,29 +39,30 @@ public class RemoteRed extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
+//        robot.wobbleArm.armUpAutonomous(2500);
         //drop off first wobble goal
-        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
-        robot.wobbleArm.armDownAutonomous();
-        robot.wobbleArm.openGripperAutonomous();
+//        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
+//        robot.wobbleArm.armDownAutonomous(400);
+//        robot.wobbleArm.openGripperAutonomous(400);
 
         //shoot rings
-        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 0.0, 0.75);
+        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
         robot.shooter.turnOn(0.92);
         robot.conveyor.turnOn(1);
         Thread.sleep(1000);
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
-
-        //pick up second wobble goal
-        robot.driving.driveToPositionForwardOnly(new Vector2(130, 100), null, 0.75);
-        robot.wobbleArm.closeGripperAutonomous();
-        robot.wobbleArm.armUpAutonomous();
-
-        //drop off second wobble goal
-        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
-        robot.wobbleArm.openGripperAutonomous();
-        robot.wobbleArm.toStopPosition();
-
+//
+//        //pick up second wobble goal
+//        robot.driving.driveToPositionForwardOnly(new Vector2(130, 100), null, 0.75);
+//        robot.wobbleArm.closeGripperAutonomous();
+//        robot.wobbleArm.armUpAutonomous();
+//
+//        //drop off second wobble goal
+//        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
+//        robot.wobbleArm.openGripperAutonomous();
+//        robot.wobbleArm.toStopPosition();
+//
         //drive to launch line
         robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
     }
