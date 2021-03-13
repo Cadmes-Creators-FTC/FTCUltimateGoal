@@ -63,16 +63,6 @@ public class RemoteRed extends LinearOpMode {
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
 
-//        //pick up second wobble goal
-//        robot.driving.driveToPositionForwardOnly(new Vector2(130, 100), null, 0.75);
-//        robot.wobbleArm.closeGripperAutonomous();
-//        robot.wobbleArm.armUpAutonomous();
-//
-//        //drop off second wobble goal
-//        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
-//        robot.wobbleArm.openGripperAutonomous();
-//        robot.wobbleArm.toStopPosition();
-
         //drive to launch line
         robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
     }
