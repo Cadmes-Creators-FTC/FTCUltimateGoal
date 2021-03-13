@@ -28,7 +28,7 @@ public class RingStackDetection extends RobotComponent {
 
         camPipeline = new RingStackDetermenationPipeline();
         phoneCam.setPipeline(camPipeline);
-        phoneCam.startStreaming(176, 144, OpenCvCameraRotation.UPSIDE_DOWN);
+        phoneCam.startStreaming(176, 144, OpenCvCameraRotation.UPRIGHT);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class RingStackDetection extends RobotComponent {
     public int getStackSize(){
         int avgRedVal = camPipeline.getAvgRedVal();
 
-        int oneRingThreshhold = 127;
-        int fourRingThreshhold = 145;
+        int oneRingThreshhold = 126;
+        int fourRingThreshhold = 131;
 
         int stackSize = 0;
         if(avgRedVal > fourRingThreshhold)
@@ -55,9 +55,9 @@ public class RingStackDetection extends RobotComponent {
     }
 
     private static class RingStackDetermenationPipeline extends OpenCvPipeline{
-        static final Point REGION1_TOPLEFT = new Point(10,110);
-        static final int REGION1_WIDTH = 45;
-        static final int REGION1_HEIGHT = 33;
+        static final Point REGION1_TOPLEFT = new Point(30,126);
+        static final int REGION1_WIDTH = 35;
+        static final int REGION1_HEIGHT = 30;
         static final Point region1Start = new Point(
                 REGION1_TOPLEFT.x,
                 REGION1_TOPLEFT.y
@@ -65,6 +65,18 @@ public class RingStackDetection extends RobotComponent {
         static final Point region1End = new Point(
                 REGION1_TOPLEFT.x + REGION1_WIDTH,
                 REGION1_TOPLEFT.y + REGION1_HEIGHT
+        );
+
+        static final Point REGION2_TOPLEFT = new Point(101,126);
+        static final int REGION2_WIDTH = 35;
+        static final int REGION2_HEIGHT = 30;
+        static final Point region2Start = new Point(
+                REGION2_TOPLEFT.x,
+                REGION2_TOPLEFT.y
+        );
+        static final Point region2End = new Point(
+                REGION2_TOPLEFT.x + REGION2_WIDTH,
+                REGION2_TOPLEFT.y + REGION2_HEIGHT
         );
 
 
@@ -80,7 +92,12 @@ public class RingStackDetection extends RobotComponent {
             Core.extractChannel(workingMatrix, workingMatrix, 1);
 
             Mat subMatRegion1 = workingMatrix.submat(new Rect(region1Start, region1End));
-            avgRedVal = (int) Core.mean(subMatRegion1).val[0];
+            int avgRedValRegion1 = (int) Core.mean(subMatRegion1).val[0];
+
+            Mat subMatRegion2 = workingMatrix.submat(new Rect(region2Start, region2End));
+            int avgRedValRegion2 = (int) Core.mean(subMatRegion2).val[0];
+
+            avgRedVal = (avgRedValRegion1 + avgRedValRegion2)/2;
 
             //add rectangles to show target zone
             Imgproc.rectangle(
@@ -90,10 +107,17 @@ public class RingStackDetection extends RobotComponent {
                     new Scalar(255, 0, 0),
                     1
             );
+            Imgproc.rectangle(
+                    input,
+                    region2Start,
+                    region2End,
+                    new Scalar(255, 0, 0),
+                    1
+            );
 
             return input;
         }
-        
+
         public int getAvgRedVal(){
             return avgRedVal;
         }

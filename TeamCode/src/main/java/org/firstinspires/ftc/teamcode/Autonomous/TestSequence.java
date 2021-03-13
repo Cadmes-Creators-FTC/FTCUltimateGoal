@@ -12,8 +12,8 @@ public class TestSequence extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "conveyor", "wobbleArm", "ringStackHeightDetection"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
 
@@ -31,7 +31,7 @@ public class TestSequence extends LinearOpMode {
 
         autonomousSequence();
 
-//        robot.logging.clearLogs();
+        robot.logging.clearLogs();
 
         robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
@@ -39,9 +39,7 @@ public class TestSequence extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        while (true){
-            robot.logging.setLog("redVal", robot.ringStackDetection.getRedVal());
-            robot.logging.setLog("numOfRings", robot.ringStackDetection.getStackSize());
-        }
+//        robot.driving.driveToPosition(new Vector2(0, 210), 0.0, 0.75);
+        robot.driving.driveToPosition(new Vector2(210, 0), 0.0, 0.75);
     }
 }

@@ -12,7 +12,7 @@ public class ShooterOnly extends LinearOpMode {
     @Override
     public void runOpMode () throws InterruptedException{
         String[] enabledComponents = {"logging", "shooter"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
         robot.startThreads();

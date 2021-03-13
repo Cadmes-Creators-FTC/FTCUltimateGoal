@@ -12,8 +12,8 @@ public class RemoteRed extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "conveyor", "wobbleArm", "ringStackHeightDetection"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
 
@@ -39,7 +39,6 @@ public class RemoteRed extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-<<<<<<< HEAD
         // put arm in autonomous up pos to extend arm
         robot.wobbleArm.armUpAutonomous();
 
@@ -61,33 +60,5 @@ public class RemoteRed extends LinearOpMode {
 //
 //        robot.driving.driveToPosition(new Vector2(120, 210), 45.0, 1);
 ////        robot.driving.driveToPositionForwardOnly(new Vector2(120, 210), 45.0, 1);
-=======
-        double numOfRings = robot.ringStackDetection.getStackSize();
-        robot.logging.setLog("numOfRings", numOfRings);
-        Vector2 wobbleDropPoint = new Vector2(200, 170);
-        if(numOfRings == 1)
-            wobbleDropPoint = new Vector2(140, 230);
-        else if(numOfRings == 4)
-            wobbleDropPoint = new Vector2(200, 290);
-
-        robot.wobbleArm.armDownAutonomous(2500);
-        robot.wobbleArm.armUpAutonomous(500);
-        //drop off first wobble goal
-        robot.driving.driveToPositionForwardOnly(new Vector2(210, 120), null, 0.75);
-        robot.driving.driveToPositionForwardOnly(wobbleDropPoint, 30.0, 0.75);
-        robot.wobbleArm.armDownAutonomous(400);
-        robot.wobbleArm.openGripperAutonomous(400);
-
-        //shoot rings
-        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
-        robot.shooter.turnOn(0.92);
-        robot.conveyor.turnOn(1);
-        Thread.sleep(1000);
-        robot.shooter.turnOff();
-        robot.conveyor.turnOff();
-
-        //drive to launch line
-        robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
->>>>>>> a1d98a6f0e7e302be43d9bb2e930130a946d4156
     }
 }

@@ -14,7 +14,7 @@ public class WheelsOnly extends LinearOpMode {
     @Override
     public void runOpMode () throws InterruptedException{
         String[] enabledComponents = {"logging", "gyroscope", "driving"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
 
         robot.logging.setLog("state", "Initializing");
 
