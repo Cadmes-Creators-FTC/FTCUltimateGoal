@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPosition;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.WheelPowerConfig;
 import org.firstinspires.ftc.teamcode.Misc.MathFunctions;
+import org.firstinspires.ftc.teamcode.Misc.MiniPID;
 
 @Disabled
 public class Driving extends RobotComponent {
@@ -139,12 +140,12 @@ public class Driving extends RobotComponent {
 
         double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
 
-        rotateToAngle(angle, speedScaler);
+        rotateToAngleFixed(angle);
 
         driveToPosition(targetPos, null, speedScaler);
 
         if(targetAngle != null)
-            robot.driving.rotateToAngle(targetAngle, speedScaler);
+            robot.driving.rotateToAngleFixed(targetAngle);
     }
     public void driveToPosition(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException {
         if(targetAngle != null)
@@ -159,8 +160,8 @@ public class Driving extends RobotComponent {
         double integralScaler = 0.005;
         double maxAccelerationPercentile = 0.5;
         double AccelerationDist = 50;
-        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
-        double decelerationBarrier = totalDistance - accelerationBarrier;
+        double accelerationBarrier = AccelerationDist;
+        double decelerationBarrier = totalDistance - Math.min(maxAccelerationPercentile*totalDistance, AccelerationDist);
         double maxAngleCorrection = 0.25;
         double minSpeedForMovement = 0.1;
 
@@ -183,14 +184,6 @@ public class Driving extends RobotComponent {
 
             //accelerate/decelerate
             if(distance != previousDistance){
-                if(traveledDistance <= accelerationBarrier){
-                    double remainingSpeedIncrease = 1-speed;
-
-                    double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
-                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                    speed += remainingSpeedIncrease*currentMovementPercentage;
-                }
                 if(traveledDistance >= decelerationBarrier){
                     double remainingSpeedDecrease = speed;
 
@@ -198,9 +191,16 @@ public class Driving extends RobotComponent {
                     currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
                     speed -= remainingSpeedDecrease*currentMovementPercentage;
+                }else if(traveledDistance <= accelerationBarrier){
+                    double remainingSpeedIncrease = 1-speed;
+
+                    double currentMovementPercentage = (traveledDistance - previousTraveledDistance)/(accelerationBarrier - previousTraveledDistance);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                    speed += remainingSpeedIncrease*currentMovementPercentage;
                 }
             }else{ // scale speed if not moved
-                speed = MathFunctions.clamp(integralScaler+speed, -1, 1);
+                speed = MathFunctions.clamp(integralScaler+speed, 0, 1);
             }
 
 
@@ -253,7 +253,7 @@ public class Driving extends RobotComponent {
         robot.logging.removeLog("driveToPos-speedAfterScale");
 
         if(targetAngle != null)
-            rotateToAngle(targetAngle, 0.75*speedScaler);
+            rotateToAngleFixed(targetAngle);
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
@@ -266,11 +266,11 @@ public class Driving extends RobotComponent {
         double previousAngle = 0;
 
         /* pid */
-        double integralScaler = 0.01;
+        double integralScaler = 0.005;
         double maxAccelerationPercentile = 0.5;
-        double AccelerationAngle = 45;
-        double accelerationBarrier = Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
-        double decelerationBarrier = totalAngle - accelerationBarrier;
+        double AccelerationAngle = 20;
+        double accelerationBarrier = AccelerationAngle;
+        double decelerationBarrier = totalAngle - Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
         double minSpeedForMovement = 0.15;
 
         double speed = 0;
@@ -281,10 +281,10 @@ public class Driving extends RobotComponent {
             /* debugging */
             robot.logging.setLog("rotateToAngle-angle", angle);
             robot.logging.setLog("rotateToAngle-angleTotal", totalAngle);
+            robot.logging.setLog("rotateToAngle-deltaAngle", angle);
             robot.logging.setLog("rotateToAngle-accelerationBarrier", accelerationBarrier);
             robot.logging.setLog("rotateToAngle-rot", robot.gyroscope.getCurrentAngle());
             robot.logging.setLog("rotateToAngle-speed", speed);
-            robot.logging.setLog("rotateToAngle-speedAfterScale", speed*speedScaler);
 
             /* pid */
             double traveledAngle = totalAngle-angle;
@@ -292,14 +292,6 @@ public class Driving extends RobotComponent {
 
             //accelerate/decelerate
             if(angle != previousAngle) {
-                if (traveledAngle <= accelerationBarrier) {
-                    double remainingSpeedIncrease = 1 - speed;
-
-                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (accelerationBarrier - previousTraveledAngle);
-                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                    speed += remainingSpeedIncrease * currentMovementPercentage;
-                }
                 if (traveledAngle >= decelerationBarrier) {
                     double remainingSpeedDecrease = speed;
 
@@ -307,10 +299,18 @@ public class Driving extends RobotComponent {
                     currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
 
                     speed -= remainingSpeedDecrease * currentMovementPercentage;
+                }else if(traveledAngle <= accelerationBarrier){
+                    double remainingSpeedIncrease = 1 - speed;
+
+                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (accelerationBarrier - previousTraveledAngle);
+                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
+
+                    speed += remainingSpeedIncrease * currentMovementPercentage;
                 }
             }else { // scale speed if not moved
-                speed = MathFunctions.clamp(integralScaler+speed, -1, 1);
+                speed = MathFunctions.clamp(integralScaler+speed, 0, 1);
             }
+
 
             WheelPowerConfig wpc = new WheelPowerConfig(
                     deltaAngle,
@@ -321,6 +321,7 @@ public class Driving extends RobotComponent {
             wpc.clampScale();
 
             double scaledSpeed = ((speed*(1-minSpeedForMovement))+minSpeedForMovement)*speedScaler;
+            robot.logging.setLog("rotateToAngle-speedAfterScale", scaledSpeed);
             wpc = WheelPowerConfig.multiply(wpc, scaledSpeed);
             setWheelPowers(wpc);
 
@@ -335,10 +336,37 @@ public class Driving extends RobotComponent {
         /* debugging */
         robot.logging.removeLog("rotateToAngle-angle");
         robot.logging.removeLog("rotateToAngle-angleTotal");
+        robot.logging.removeLog("rotateToAngle-deltaAngle");
         robot.logging.removeLog("rotateToAngle-accelerationBarrier");
         robot.logging.removeLog("rotateToAngle-rot");
         robot.logging.removeLog("rotateToAngle-speed");
         robot.logging.removeLog("rotateToAngle-speedAfterScale");
+
+        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
+    }
+    public void rotateToAngleFixed(double targetAngle) throws InterruptedException{
+        robot.gyroscope.setTargetAngle(targetAngle);
+
+        double deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle()-robot.gyroscope.getCurrentAngle());
+
+        double stopAngle = 5;
+        while (robot.isRunning && Math.abs(deltaAngle) > stopAngle){
+            WheelPowerConfig wpc = new WheelPowerConfig(
+                    deltaAngle,
+                    -deltaAngle,
+                    -deltaAngle,
+                    deltaAngle
+            );
+            wpc.clampScale();
+
+            wpc = WheelPowerConfig.multiply(wpc, 0.5);
+            setWheelPowers(wpc);
+
+            Thread.sleep(50);
+
+            deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle()-robot.gyroscope.getCurrentAngle());
+            robot.logging.setLog("deltaAngle", deltaAngle);
+        }
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }

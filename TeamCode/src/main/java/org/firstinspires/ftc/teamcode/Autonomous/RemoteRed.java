@@ -12,14 +12,14 @@ public class RemoteRed extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "ringStackHeightDetection"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "conveyor", "wobbleArm", "ringStackHeightDetection"};
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
 
         robot.logging.setLog("state", "Initializing");
 
         robot.gyroscope.waitForGyroCalibration();
         robot.driving.resetWheelTicks();
-        robot.driving.setCurrentPosition(new Vector2(170, 20));
+        robot.driving.setCurrentPosition(new Vector2(170, 40));
         robot.gyroscope.setCurrentAngle(-90);
         robot.startThreads();
 
@@ -39,7 +39,6 @@ public class RemoteRed extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-
         double numOfRings = robot.ringStackDetection.getStackSize();
         robot.logging.setLog("numOfRings", numOfRings);
         Vector2 wobbleDropPoint = new Vector2(200, 170);
@@ -63,16 +62,6 @@ public class RemoteRed extends LinearOpMode {
         Thread.sleep(1000);
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
-
-//        //pick up second wobble goal
-//        robot.driving.driveToPositionForwardOnly(new Vector2(130, 100), null, 0.75);
-//        robot.wobbleArm.closeGripperAutonomous();
-//        robot.wobbleArm.armUpAutonomous();
-//
-//        //drop off second wobble goal
-//        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
-//        robot.wobbleArm.openGripperAutonomous();
-//        robot.wobbleArm.toStopPosition();
 
         //drive to launch line
         robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);

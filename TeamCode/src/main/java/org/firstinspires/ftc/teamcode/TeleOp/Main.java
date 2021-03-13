@@ -17,7 +17,7 @@ public class Main extends LinearOpMode {
     @Override
     public void runOpMode () throws InterruptedException{
         String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "wobbleArm", "intake", "conveyor"};
-        robot = new MainRobot(hardwareMap, telemetry, enabledComponents);
+        robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
 
         robot.logging.setLog("state", "Initializing");
         robot.gyroscope.waitForGyroCalibration();
@@ -40,7 +40,7 @@ public class Main extends LinearOpMode {
         while (opModeIsActive()){
             drive();
             setDrivingDirection();
-            driveToShootingPos();
+            rotateStraight();
 
             intake();
             conveyor();
@@ -96,7 +96,7 @@ public class Main extends LinearOpMode {
             if (robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
-                robot.shooter.turnOn(0.97);
+                robot.shooter.turnOn(0.92);
         }
         if(!gamepad2.a)
             shooterStateChanged = false;
@@ -132,8 +132,6 @@ public class Main extends LinearOpMode {
 
         double joyMinInput = 0.05;
         double triggerMinInput = 0.05;
-
-        //scale 0.2-1 to 0-1
         forwardInput = MathFunctions.absXOverX(forwardInput) * Math.max(0, (Math.abs(forwardInput)-joyMinInput) / (1-joyMinInput));
         strafeInput = MathFunctions.absXOverX(strafeInput) * Math.max(0, (Math.abs(strafeInput)-joyMinInput) / (1-joyMinInput));
         rotationInput = MathFunctions.absXOverX(rotationInput) * Math.max(0, (Math.abs(rotationInput)-triggerMinInput) / (1-triggerMinInput));
@@ -158,16 +156,9 @@ public class Main extends LinearOpMode {
 
         robot.driving.setWheelPowers(wpc);
     }
-    private void driveToShootingPos() throws InterruptedException{
-        if(gamepad1.b){
-            robot.driving.driveToPosition(new Vector2(115, 160), -180.0, 0.5);
-            robot.logging.removeLog("dist");
-            robot.logging.removeLog("distTotal");
-            robot.logging.removeLog("accelerationBarrier");
-            robot.logging.removeLog("pos");
-            robot.logging.removeLog("speed");
-            robot.logging.removeLog("speedAfterScale");
-        }
+    private void rotateStraight() throws InterruptedException{
+        if(gamepad1.b)
+            robot.driving.rotateToAngle(-180, 0.75);
     }
     boolean drivingDirectionStateChanged = false;
     private void setDrivingDirection(){
