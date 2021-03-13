@@ -31,7 +31,7 @@ public class WobbleArm extends RobotComponent {
         } catch (InterruptedException ignored){}
     }
     public void armDownAutonomous(int delay){
-        arm.setPosition(0);
+        arm.setPosition(0.1);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}

@@ -39,11 +39,21 @@ public class RemoteRed extends LinearOpMode {
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-//        robot.wobbleArm.armUpAutonomous(2500);
+        double numOfRings = robot.ringStackDetection.getStackSize();
+        robot.logging.setLog("numOfRings", numOfRings);
+        Vector2 wobbleDropPoint = new Vector2(200, 170);
+        if(numOfRings == 1)
+            wobbleDropPoint = new Vector2(140, 230);
+        else if(numOfRings == 4)
+            wobbleDropPoint = new Vector2(200, 290);
+
+        robot.wobbleArm.armDownAutonomous(2500);
+        robot.wobbleArm.armUpAutonomous(500);
         //drop off first wobble goal
-//        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
-//        robot.wobbleArm.armDownAutonomous(400);
-//        robot.wobbleArm.openGripperAutonomous(400);
+        robot.driving.driveToPositionForwardOnly(new Vector2(210, 120), null, 0.75);
+        robot.driving.driveToPositionForwardOnly(wobbleDropPoint, 30.0, 0.75);
+        robot.wobbleArm.armDownAutonomous(400);
+        robot.wobbleArm.openGripperAutonomous(400);
 
         //shoot rings
         robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
@@ -52,7 +62,7 @@ public class RemoteRed extends LinearOpMode {
         Thread.sleep(1000);
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
-//
+
 //        //pick up second wobble goal
 //        robot.driving.driveToPositionForwardOnly(new Vector2(130, 100), null, 0.75);
 //        robot.wobbleArm.closeGripperAutonomous();
@@ -62,7 +72,7 @@ public class RemoteRed extends LinearOpMode {
 //        robot.driving.driveToPositionForwardOnly(new Vector2(200, 170), null, 0.75);
 //        robot.wobbleArm.openGripperAutonomous();
 //        robot.wobbleArm.toStopPosition();
-//
+
         //drive to launch line
         robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
     }
