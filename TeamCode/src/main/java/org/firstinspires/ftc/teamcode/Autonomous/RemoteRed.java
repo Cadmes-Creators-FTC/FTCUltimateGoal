@@ -47,8 +47,10 @@ public class RemoteRed extends LinearOpMode {
             hoek = -20;
             wobbleDropPoint = new Vector2(180, 230);//110 290
         }
-        else if(numOfRings == 4)
+        else if(numOfRings == 4) {
+            hoek = 30;
             wobbleDropPoint = new Vector2(180, 290);//200
+        }
 
         robot.wobbleArm.armDownAutonomous(2500);
         robot.wobbleArm.armUpAutonomous(500);
@@ -68,7 +70,7 @@ public class RemoteRed extends LinearOpMode {
         robot.conveyor.turnOff();
 
         //pick rings up and shoot
-        if (numOfRings == 1) {
+        /*if (numOfRings == 1) {
             robot.intake.turnOn();
             robot.conveyor.turnOn(0.5);
             robot.driving.driveToPositionForwardOnly(new Vector2(150, 170), null, 1);
@@ -79,7 +81,7 @@ public class RemoteRed extends LinearOpMode {
             robot.intake.turnOff();
             robot.conveyor.turnOff();
             robot.shooter.turnOff();
-        }
+        }*/
 
         //wobbelgoal
         /*robot.driving.driveToPositionForwardOnly(new Vector2(125, 140), -180.0, 1);
