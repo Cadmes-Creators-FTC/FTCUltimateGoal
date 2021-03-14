@@ -12,7 +12,7 @@ public class RemoteRed extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "conveyor", "wobbleArm", "ringStackHeightDetection"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter","intake", "conveyor", "wobbleArm", "ringStackHeightDetection"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
 
         robot.logging.setLog("state", "Initializing");
@@ -41,25 +41,29 @@ public class RemoteRed extends LinearOpMode {
     private void autonomousSequence() throws InterruptedException {
         double numOfRings = robot.ringStackDetection.getStackSize();
         robot.logging.setLog("numOfRings", numOfRings);
-        Vector2 wobbleDropPoint = new Vector2(200, 170);
-        if(numOfRings == 1)
-            wobbleDropPoint = new Vector2(140, 230);
+        Vector2 wobbleDropPoint = new Vector2(180, 170);//200
+        double hoek = 20;
+        if(numOfRings == 1) {
+            hoek = -20;
+            wobbleDropPoint = new Vector2(180, 230);//110 290
+        }
         else if(numOfRings == 4)
-            wobbleDropPoint = new Vector2(200, 290);
+            wobbleDropPoint = new Vector2(180, 290);//200
 
         robot.wobbleArm.armDownAutonomous(2500);
         robot.wobbleArm.armUpAutonomous(500);
         //drop off first wobble goal
-        robot.driving.driveToPositionForwardOnly(new Vector2(210, 120), null, 0.75);
-        robot.driving.driveToPositionForwardOnly(wobbleDropPoint, 30.0, 0.75);
+        robot.driving.driveToPositionForwardOnly(new Vector2(210, 120), null, 0.80);
+        robot.driving.driveToPositionForwardOnly(wobbleDropPoint, hoek, 0.80);
         robot.wobbleArm.armDownAutonomous(400);
         robot.wobbleArm.openGripperAutonomous(400);
+        robot.wobbleArm.armUpAutonomous(400);
 
         //shoot rings
-        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
+        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 1);
         robot.shooter.turnOn(0.92);
         robot.conveyor.turnOn(1);
-        Thread.sleep(1000);
+        Thread.sleep(1500);
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
 
@@ -67,9 +71,9 @@ public class RemoteRed extends LinearOpMode {
         if (numOfRings == 1) {
             robot.intake.turnOn();
             robot.conveyor.turnOn(0.5);
-            robot.driving.driveToPositionForwardOnly(new Vector2(150, 170), 180.0, 0.5);
-            Thread.sleep(1000);
-            robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
+            robot.driving.driveToPositionForwardOnly(new Vector2(150, 170), null, 1);
+            //Thread.sleep(1000);
+            robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), null, 1);
             robot.shooter.turnOn(0.92);
             Thread.sleep(1000);
             robot.intake.turnOff();
@@ -77,7 +81,12 @@ public class RemoteRed extends LinearOpMode {
             robot.shooter.turnOff();
         }
 
+        //wobbelgoal
+        /*robot.driving.driveToPositionForwardOnly(new Vector2(125, 140), -180.0, 1);
+        robot.wobbleArm.armDownAutonomous(400);
+        robot.driving.driveToPositionForwardOnly(new Vector2(125, 130), null, 0.75);*/
+
         //drive to launch line
-        robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
+        robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 1);
     }
 }

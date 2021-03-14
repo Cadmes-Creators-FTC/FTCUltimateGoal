@@ -359,7 +359,7 @@ public class Driving extends RobotComponent {
             );
             wpc.clampScale();
 
-            wpc = WheelPowerConfig.multiply(wpc, 0.5);
+            wpc = WheelPowerConfig.multiply(wpc, 0.4);
             setWheelPowers(wpc);
 
             Thread.sleep(50);
