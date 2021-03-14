@@ -63,17 +63,19 @@ public class RemoteRed extends LinearOpMode {
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
 
-        //pick rings up and  
-        robot.intake.turnOn();
-        robot.conveyor.turnOn(0.5);
-        robot.driving.driveToPositionForwardOnly(new Vector2(150,170), 180.0, 0.5);
-        Thread.sleep(1000);
-        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
-        robot.shooter.turnOn(0.92);
-        Thread.sleep(1000);
-        robot.intake.turnOff();
-        robot.conveyor.turnOff();
-        robot.shooter.turnOff();
+        //pick rings up and shoot
+        if (numOfRings == 1) {
+            robot.intake.turnOn();
+            robot.conveyor.turnOn(0.5);
+            robot.driving.driveToPositionForwardOnly(new Vector2(150, 170), 180.0, 0.5);
+            Thread.sleep(1000);
+            robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 0.75);
+            robot.shooter.turnOn(0.92);
+            Thread.sleep(1000);
+            robot.intake.turnOff();
+            robot.conveyor.turnOff();
+            robot.shooter.turnOff();
+        }
 
         //drive to launch line
         robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 0.75);
