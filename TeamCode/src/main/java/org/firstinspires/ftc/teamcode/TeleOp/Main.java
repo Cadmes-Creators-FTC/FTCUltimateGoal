@@ -40,7 +40,6 @@ public class Main extends LinearOpMode {
         while (opModeIsActive()){
             drive();
             setDrivingDirection();
-            rotateStraight();
 
             intake();
             conveyor();
@@ -156,18 +155,14 @@ public class Main extends LinearOpMode {
 
         robot.driving.setWheelPowers(wpc);
     }
-    private void rotateStraight() throws InterruptedException{
-        if(gamepad1.b)
-            robot.driving.rotateToAngle(-180, 0.75);
-    }
     boolean drivingDirectionStateChanged = false;
     private void setDrivingDirection(){
-        if (gamepad1.a && !drivingDirectionStateChanged){
+        if (gamepad1.y && !drivingDirectionStateChanged){
             drivingDirectionStateChanged = true;
 
             drivingDirection *= -1;
         }
-        if(!gamepad1.a)
+        if(!gamepad1.y)
             drivingDirectionStateChanged = false;
     }
 }
