@@ -162,12 +162,12 @@ public class Main extends LinearOpMode {
     }
     boolean drivingDirectionStateChanged = false;
     private void setDrivingDirection(){
-        if (gamepad1.a && !drivingDirectionStateChanged){
+        if (gamepad1.y && !drivingDirectionStateChanged){
             drivingDirectionStateChanged = true;
 
             drivingDirection *= -1;
         }
-        if(!gamepad1.a)
+        if(!gamepad1.y)
             drivingDirectionStateChanged = false;
     }
 }
