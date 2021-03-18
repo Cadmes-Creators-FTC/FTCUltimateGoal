@@ -65,7 +65,7 @@ public class RemoteRed extends LinearOpMode {
         robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 1);
         robot.shooter.turnOn(0.92);
         robot.conveyor.turnOn(1);
-        Thread.sleep(1500);
+        Thread.sleep(2000);//1500
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
 

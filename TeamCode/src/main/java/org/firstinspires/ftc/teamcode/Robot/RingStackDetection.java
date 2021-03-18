@@ -39,8 +39,8 @@ public class RingStackDetection extends RobotComponent {
     public int getStackSize(){
         int avgRedVal = camPipeline.getAvgRedVal();
 
-        int oneRingThreshhold = 132;//127
-        int fourRingThreshhold = 140;//145
+        int oneRingThreshhold = 127;//127 licht 132 donker
+        int fourRingThreshhold = 145;//145 licht 140 donker
 
         int stackSize = 0;
         if(avgRedVal > fourRingThreshhold)
