@@ -155,26 +155,33 @@ public class Driving extends RobotComponent {
 
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
         double totalDistance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
-
-
-        double speed = 0;
         double distance = totalDistance;
-        double previousDistance = distance;
 
-        long startTimer = System.currentTimeMillis() ;// stap 1
-        double aceleratieTime = 0.5;
-
+        /* function config */
+        //acceleration
+        long startTime = System.currentTimeMillis();// stap 1
+        double accelerationTime = 0.5;
+        //deceleration
+        double maxSpeedDecelerationDistance = 20;
+        //min speed
         double minSpeedY = 0.15;
-        double minSPeedX = 0.25;
-
+        double minSpeedX = 0.25;
+        //rotation
         double maxAngleCorrection = 0.25;
-
+        //stopping
         double stopDistance = 5;
-        while (robot.isRunning && (distance > stopDistance)){
-            long time = System.currentTimeMillis() - startTimer; //stap 2
-            speed = Math.min(1, time/(aceleratieTime*1000));// stap 3/4
 
-            /* drive towards targetPos with speed from pid */
+        double decelerationDistance = maxSpeedDecelerationDistance*speedScaler;
+
+        while (robot.isRunning && (distance > stopDistance)){
+            double speed;
+            if(distance < decelerationDistance){ //decelerate
+                speed = distance/decelerationDistance;
+            }else{ // accelerate and keep speed
+                long time = System.currentTimeMillis() - startTime; //stap 2
+                speed = Math.min(1, time/(accelerationTime*1000));// stap 3/4
+            }
+
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
             Matrix rotMatrix = new Matrix(new double[][]{
                     { Math.cos(-angleRad), -Math.sin(-angleRad) },
@@ -202,7 +209,7 @@ public class Driving extends RobotComponent {
             wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
             wpc.clampScale();
 
-            double minSpeedForMovement = minSpeedY + (minSPeedX-minSpeedY)*(-(1/90)*Math.abs(Math.abs(robot.gyroscope.getCurrentAngle())-90)+1);
+            double minSpeedForMovement = minSpeedY + (minSpeedX-minSpeedY)*(-(1.0/90.0)*Math.abs(Math.abs(robot.gyroscope.getCurrentAngle())-90)+1);
             double scaledSpeed = ((speed*(1-minSpeedForMovement))+minSpeedForMovement)*speedScaler;
             wpc = WheelPowerConfig.multiply(wpc, scaledSpeed);
             setWheelPowers(wpc);
@@ -211,7 +218,6 @@ public class Driving extends RobotComponent {
             Thread.sleep(50);
 
             /* set values for next loop run */
-            previousDistance = distance;
             deltaPos = Vector2.subtract(targetPos, currentPosition);
             distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
         }
