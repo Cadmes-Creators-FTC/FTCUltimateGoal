@@ -232,55 +232,29 @@ public class Driving extends RobotComponent {
 
         double deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
         double totalAngle = Math.abs(deltaAngle);
-
-        double previousAngle = 0;
-
-        /* pid */
-        double integralScaler = 0.005;
-        double maxAccelerationPercentile = 0.5;
-        double AccelerationAngle = 20;
-        double accelerationBarrier = AccelerationAngle;
-        double decelerationBarrier = totalAngle - Math.min(maxAccelerationPercentile*totalAngle, AccelerationAngle);
-        double minSpeedForMovement = 0.15;
-
-        double speed = 0;
         double angle = totalAngle;
 
+        /* function config */
+        //acceleration
+        long startTime = System.currentTimeMillis();
+        double accelerationTime = 0.5;
+        //deceleration
+        double maxSpeedDecelerationDistance = 20;
+        //min speed
+        double minSpeedForMovement = 0.15;
+        //stopping
         double stopAngle = 4;
+
+        double decelerationDistance = maxSpeedDecelerationDistance*speedScaler;
+
         while (robot.isRunning && (angle > stopAngle)){
-            /* debugging */
-            robot.logging.setLog("rotateToAngle-angle", angle);
-            robot.logging.setLog("rotateToAngle-angleTotal", totalAngle);
-            robot.logging.setLog("rotateToAngle-deltaAngle", angle);
-            robot.logging.setLog("rotateToAngle-accelerationBarrier", accelerationBarrier);
-            robot.logging.setLog("rotateToAngle-rot", robot.gyroscope.getCurrentAngle());
-            robot.logging.setLog("rotateToAngle-speed", speed);
-
-            /* pid */
-            double traveledAngle = totalAngle-angle;
-            double previousTraveledAngle= totalAngle-previousAngle;
-
-            //accelerate/decelerate
-            if(angle != previousAngle) {
-                if (traveledAngle >= decelerationBarrier) {
-                    double remainingSpeedDecrease = speed;
-
-                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (totalAngle - previousTraveledAngle);
-                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                    speed -= remainingSpeedDecrease * currentMovementPercentage;
-                }else if(traveledAngle <= accelerationBarrier){
-                    double remainingSpeedIncrease = 1 - speed;
-
-                    double currentMovementPercentage = (traveledAngle - previousTraveledAngle) / (accelerationBarrier - previousTraveledAngle);
-                    currentMovementPercentage = Math.min(currentMovementPercentage, 1); // clamp at 100%
-
-                    speed += remainingSpeedIncrease * currentMovementPercentage;
-                }
-            }else { // scale speed if not moved
-                speed = MathFunctions.clamp(integralScaler+speed, 0, 1);
+            double speed;
+            if(angle < decelerationDistance){ //decelerate
+                speed = angle/decelerationDistance;
+            }else{ // accelerate and keep speed
+                long time = System.currentTimeMillis() - startTime; //stap 2
+                speed = Math.min(1, time/(accelerationTime*1000));// stap 3/4
             }
-
 
             WheelPowerConfig wpc = new WheelPowerConfig(
                     deltaAngle,
@@ -291,7 +265,6 @@ public class Driving extends RobotComponent {
             wpc.clampScale();
 
             double scaledSpeed = ((speed*(1-minSpeedForMovement))+minSpeedForMovement)*speedScaler;
-            robot.logging.setLog("rotateToAngle-speedAfterScale", scaledSpeed);
             wpc = WheelPowerConfig.multiply(wpc, scaledSpeed);
             setWheelPowers(wpc);
 
@@ -299,18 +272,9 @@ public class Driving extends RobotComponent {
             Thread.sleep(50);
 
             /* set values for next loop run */
-            previousAngle = angle;
             deltaAngle = MathFunctions.clampAngleDegrees(robot.gyroscope.getTargetAngle() - robot.gyroscope.getCurrentAngle());
             angle = Math.abs(deltaAngle);
         }
-        /* debugging */
-        robot.logging.removeLog("rotateToAngle-angle");
-        robot.logging.removeLog("rotateToAngle-angleTotal");
-        robot.logging.removeLog("rotateToAngle-deltaAngle");
-        robot.logging.removeLog("rotateToAngle-accelerationBarrier");
-        robot.logging.removeLog("rotateToAngle-rot");
-        robot.logging.removeLog("rotateToAngle-speed");
-        robot.logging.removeLog("rotateToAngle-speedAfterScale");
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
