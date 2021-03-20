@@ -135,19 +135,6 @@ public class Driving extends RobotComponent {
         }
     }
 
-    public void driveToPositionForwardOnly(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException{
-        Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
-
-        double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
-
-        rotateToAngleFixed(angle);
-
-        driveToPosition(targetPos, null, speedScaler);
-
-        if(targetAngle != null)
-            robot.driving.rotateToAngleFixed(targetAngle);
-    }
-
 
     public void driveToPosition(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException {
         if(targetAngle != null)
@@ -278,6 +265,23 @@ public class Driving extends RobotComponent {
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
+
+
+    //              |
+    //kut functies  |
+    //             \|/
+    public void driveToPositionForwardOnly(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException{
+        Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
+
+        double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
+
+        rotateToAngleFixed(angle);
+
+        driveToPosition(targetPos, null, speedScaler);
+
+        if(targetAngle != null)
+            robot.driving.rotateToAngleFixed(targetAngle);
+    }
     public void rotateToAngleFixed(double targetAngle) throws InterruptedException{
         robot.gyroscope.setTargetAngle(targetAngle);
 
@@ -304,6 +308,10 @@ public class Driving extends RobotComponent {
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
+    //             /|\
+    //kut functies  |
+    //              |
+
 
     private double getAngleCorrection(){
         double scaler = 0.05;
