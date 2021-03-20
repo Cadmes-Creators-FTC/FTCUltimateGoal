@@ -172,7 +172,7 @@ public class Driving extends RobotComponent {
         double stopDistance = 5;
         while (robot.isRunning && (distance > stopDistance)){
             long time = System.currentTimeMillis() - startTimer; //stap 2
-            speed = Math.min(1, time/(aceleratieTime*1000);// stap 3/4
+            speed = Math.min(1, time/(aceleratieTime*1000));// stap 3/4
 
             /* drive towards targetPos with speed from pid */
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
