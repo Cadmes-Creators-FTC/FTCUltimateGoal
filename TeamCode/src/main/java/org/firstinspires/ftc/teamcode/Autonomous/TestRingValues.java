@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 
-@Autonomous(name="TestAutonomous", group="TestAutonomous")
-public class TestSequence extends LinearOpMode {
+@Autonomous(name="TestRingValues", group="TestAutonomous")
+public class TestRingValues extends LinearOpMode {
     private MainRobot robot;
 
     @Override
@@ -31,15 +31,13 @@ public class TestSequence extends LinearOpMode {
 
         autonomousSequence();
 
-//        robot.logging.clearLogs();
-
         robot.stopRobot();
         robot.logging.setLog("state", "Stopped");
     }
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        while (true){
+        while (robot.isRunning){
             robot.logging.setLog("redVal", robot.ringStackDetection.getRedVal());
             robot.logging.setLog("numOfRings", robot.ringStackDetection.getStackSize());
         }
