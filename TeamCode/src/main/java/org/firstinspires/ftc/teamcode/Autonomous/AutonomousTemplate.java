@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Robot.MainRobot;
 import org.firstinspires.ftc.teamcode.Misc.DataTypes.Vector2;
 
 @Disabled
-@Autonomous(name="TestDrivingFunctions", group="TestAutonomous")
+@Autonomous(name="AutonomousTemplate", group="")
 public class AutonomousTemplate extends LinearOpMode {
     private MainRobot robot;
 
