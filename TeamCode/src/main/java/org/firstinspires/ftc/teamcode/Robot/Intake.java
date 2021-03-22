@@ -12,7 +12,6 @@ public class Intake extends RobotComponent {
         super(inputRobot);
 
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
-        intakeMotor.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
