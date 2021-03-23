@@ -25,13 +25,13 @@ public class WobbleArm extends RobotComponent {
     }
 
     public void armUpAutonomous(int delay){
-        arm.setPosition(0.6);
+        arm.setPosition(0.4);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
     }
     public void armDownAutonomous(int delay){
-        arm.setPosition(0.1);
+        arm.setPosition(0.9);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
@@ -51,11 +51,11 @@ public class WobbleArm extends RobotComponent {
 
     public void armUp(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos + 0.01);
+        arm.setPosition(armPos - 0.01);
     }
     public void armDown(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos - 0.01);
+        arm.setPosition(armPos + 0.01);
     }
     public void closeGripper(){
         gripper.setPosition(0);
