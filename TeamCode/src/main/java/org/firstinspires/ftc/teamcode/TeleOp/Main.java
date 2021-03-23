@@ -55,53 +55,51 @@ public class Main extends LinearOpMode {
     }
 
 
-    boolean intakeStateChanged = false;
+    boolean prevIntakeBtn = false;
     private void intake(){
-        if (gamepad2.b && !intakeStateChanged){
-            intakeStateChanged = true;
-            if (robot.intake.isOn())
+        boolean intakeBtn = gamepad2.b;
+        if(intakeBtn != prevIntakeBtn){
+            if(robot.intake.isOn())
                 robot.intake.turnOff();
             else
                 robot.intake.turnOn();
-        }else if(!gamepad2.b)
-            intakeStateChanged = false;
+        }
+        prevIntakeBtn = intakeBtn;
     }
 
-    boolean conveyorStateChanged = false;
-    boolean conveyorTriggerState = false;
+    boolean prevConveyorBtn = false;
     private void conveyor(){
-        if (gamepad2.left_bumper && !conveyorStateChanged){
-            conveyorStateChanged = true;
-            if (robot.conveyor.isOn())
+        boolean conveyorBtn = gamepad2.left_bumper;
+        boolean conveyorTriggerBtn = gamepad2.left_trigger > 0.5;
+
+        if(conveyorBtn != prevConveyorBtn){
+            if(robot.conveyor.isOn())
                 robot.conveyor.turnOff();
             else
                 robot.conveyor.turnOn(0.3);
-        } else if(!gamepad2.left_bumper)
-            conveyorStateChanged = false;
-
-            if(gamepad2.left_trigger > 0.5){
-                conveyorTriggerState = true;
-                robot.conveyor.turnOn(1);
-            }else if (gamepad2.left_trigger < 0.5 && conveyorTriggerState){
-                conveyorTriggerState = false;
+        }else{
+            if(conveyorTriggerBtn)
+                robot.conveyor.turnOn(0.9);
+            else if(robot.conveyor.getPower() == 0.9)
                 robot.conveyor.turnOff();
-            }
+        }
+
+        prevConveyorBtn = conveyorBtn;
     }
 
-    boolean shooterStateChanged = false;
+    boolean prevShooterBtn = false;
     private void shooter(){
-        if (gamepad2.a && !shooterStateChanged){
-            shooterStateChanged = true;
-            if (robot.shooter.isOn())
+        boolean shooterBtn = gamepad2.a;
+        if(shooterBtn != prevShooterBtn){
+            if(robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
                 robot.shooter.turnOn(0.92);
         }
-        if(!gamepad2.a)
-            shooterStateChanged = false;
+        prevShooterBtn = shooterBtn;
     }
     
-    boolean wobbleArmGripperStateChanged = false;
+    boolean prevWobbleArmGripperBtn = false;
     private void wobbleArm(){
         if (gamepad2.right_trigger > 0){
             robot.wobbleArm.armDown();
@@ -109,15 +107,14 @@ public class Main extends LinearOpMode {
             robot.wobbleArm.armUp();
         }
 
-        if (gamepad2.y && !wobbleArmGripperStateChanged){
-            wobbleArmGripperStateChanged = true;
-            if (robot.wobbleArm.isGripperOpen())
+        boolean wobbleArmGripperBtn = gamepad2.y;
+        if(wobbleArmGripperBtn != prevWobbleArmGripperBtn){
+            if(robot.wobbleArm.isGripperOpen())
                 robot.wobbleArm.closeGripper();
             else
                 robot.wobbleArm.openGripper();
         }
-        if(!gamepad2.y)
-            wobbleArmGripperStateChanged = false;
+        prevWobbleArmGripperBtn = wobbleArmGripperBtn;
     }
 
     private void drive(){
@@ -155,14 +152,12 @@ public class Main extends LinearOpMode {
 
         robot.driving.setWheelPowers(wpc);
     }
-    boolean drivingDirectionStateChanged = false;
+    boolean prevDrivingDirectionBtn = false;
     private void setDrivingDirection(){
-        if (gamepad1.y && !drivingDirectionStateChanged){
-            drivingDirectionStateChanged = true;
-
+        boolean drivingDirectionBtn = gamepad1.y;
+        if(drivingDirectionBtn != prevDrivingDirectionBtn){
             drivingDirection *= -1;
         }
-        if(!gamepad1.y)
-            drivingDirectionStateChanged = false;
+        prevDrivingDirectionBtn = drivingDirectionBtn;
     }
 }
