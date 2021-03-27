@@ -24,6 +24,7 @@ public class Conveyor extends RobotComponent {
     public boolean isOn(){
         return conveyorMotor.getPower() != 0;
     }
+    public double getPower(){ return conveyorMotor.getPower(); }
 
     public void turnOn(double power){
         conveyorMotor.setPower(power);

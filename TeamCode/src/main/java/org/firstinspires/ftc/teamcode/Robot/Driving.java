@@ -146,7 +146,6 @@ public class Driving extends RobotComponent {
 
         /* function config */
         //acceleration
-        long startTime = System.currentTimeMillis();// stap 1
         double accelerationTime = 0.5;
         //deceleration
         double maxSpeedDecelerationDistance = 20;
@@ -158,6 +157,7 @@ public class Driving extends RobotComponent {
         //stopping
         double stopDistance = 5;
 
+        long startTime = System.currentTimeMillis();// stap 1
         double decelerationDistance = maxSpeedDecelerationDistance*speedScaler;
 
         while (robot.isRunning && (distance > stopDistance)){
@@ -223,7 +223,6 @@ public class Driving extends RobotComponent {
 
         /* function config */
         //acceleration
-        long startTime = System.currentTimeMillis();
         double accelerationTime = 0.5;
         //deceleration
         double maxSpeedDecelerationDistance = 20;
@@ -232,6 +231,7 @@ public class Driving extends RobotComponent {
         //stopping
         double stopAngle = 4;
 
+        long startTime = System.currentTimeMillis();
         double decelerationDistance = maxSpeedDecelerationDistance*speedScaler;
 
         while (robot.isRunning && (angle > stopAngle)){
