@@ -49,8 +49,8 @@ public class Main extends LinearOpMode {
 
             robot.logging.setLog("average wheel speed", robot.driving.getWheelPowers().getAverage());
             robot.logging.setLog("drive-direction", drivingDirection == 1 ? "forward" : "reverse");
-//            robot.logging.setLog("pos", robot.driving.getCurrentPosition());
-//            robot.logging.setLog("rot", robot.gyroscope.getCurrentAngle());
+            robot.logging.setLog("pos", robot.driving.getCurrentPosition());
+            robot.logging.setLog("rot", robot.gyroscope.getCurrentAngle());
         }
     }
 

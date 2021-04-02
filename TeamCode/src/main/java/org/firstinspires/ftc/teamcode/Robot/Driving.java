@@ -113,7 +113,7 @@ public class Driving extends RobotComponent {
 
             /* get movement */
             double yScaler = 1.52;
-            double xScaler = 0.57;
+            double xScaler = 0.8;
 
             double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4 * 1.5;
             double deltaY = (wheelPosDelta.lf + wheelPosDelta.rf + wheelPosDelta.rb + wheelPosDelta.lb) / 4;
@@ -146,14 +146,14 @@ public class Driving extends RobotComponent {
 
         /* function config */
         //acceleration
-        double accelerationTime = 0.5;
+        double accelerationTime = 1;
         //deceleration
-        double maxSpeedDecelerationDistance = 20;
+        double maxSpeedDecelerationDistance = 50;
         //min speed
         double minSpeedY = 0.15;
-        double minSpeedX = 0.25;
+        double minSpeedX = 0.3;
         //rotation
-        double maxAngleCorrection = 0.25;
+        double maxAngleCorrection = 0.5;
         //stopping
         double stopDistance = 5;
 
@@ -196,7 +196,8 @@ public class Driving extends RobotComponent {
             wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
             wpc.clampScale();
 
-            double minSpeedForMovement = minSpeedY + (minSpeedX-minSpeedY)*(-(1.0/90.0)*Math.abs(Math.abs(robot.gyroscope.getCurrentAngle())-90)+1);
+            double deltaAngle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x))*-1)-90;
+            double minSpeedForMovement = minSpeedY + (minSpeedX-minSpeedY)*(-(1.0/90.0)*Math.abs(Math.abs(deltaAngle)-90)+1);
             double scaledSpeed = ((speed*(1-minSpeedForMovement))+minSpeedForMovement)*speedScaler;
             wpc = WheelPowerConfig.multiply(wpc, scaledSpeed);
             setWheelPowers(wpc);
@@ -207,10 +208,15 @@ public class Driving extends RobotComponent {
             /* set values for next loop run */
             deltaPos = Vector2.subtract(targetPos, currentPosition);
             distance = Math.sqrt(Math.pow(deltaPos.x, 2) + Math.pow(deltaPos.y, 2));
+
+            robot.logging.setLog("pos", getCurrentPosition());
+            robot.logging.setLog("dPos", deltaPos);
+            robot.logging.setLog("scaledSpeed", scaledSpeed);
+            robot.logging.setLog("minSpeed", minSpeedForMovement);
         }
 
         if(targetAngle != null)
-            rotateToAngleFixed(targetAngle);
+            rotateToAngle(targetAngle, speedScaler);
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
@@ -223,9 +229,9 @@ public class Driving extends RobotComponent {
 
         /* function config */
         //acceleration
-        double accelerationTime = 0.5;
+        double accelerationTime = 0.25;
         //deceleration
-        double maxSpeedDecelerationDistance = 20;
+        double maxSpeedDecelerationDistance = 45;
         //min speed
         double minSpeedForMovement = 0.15;
         //stopping

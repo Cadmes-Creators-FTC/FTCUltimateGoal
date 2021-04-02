@@ -30,23 +30,29 @@ public class TestDrivingFunctions extends LinearOpMode {
         robot.logging.setLog("state", "Running");
 
         autonomousSequence();
+        while(!isStopRequested()){
 
-        robot.logging.clearLogs();
-        robot.logging.setLog("pos", robot.driving.getCurrentPosition());
+        }
 
-        robot.stopRobot();
-        robot.logging.setLog("state", "Stopped");
+//        robot.logging.clearLogs();
+
+//        robot.stopRobot();
+//        robot.logging.setLog("state", "Stopped");
     }
 
     //autonomous sequence
     private void autonomousSequence() throws InterruptedException {
-        robot.driving.driveToPosition(new Vector2(0, 100), 0.0, 1);
+//        robot.driving.driveToPosition(new Vector2(0, 100), 0.0, 1);
 
 //        robot.driving.driveToPosition(new Vector2(100, 0), 0.0, 1);
+
 //        robot.driving.driveToPosition(new Vector2(100, 100), 0.0, 1);
+
+//        robot.driving.rotateToAngle(90, 1);
 
 //        robot.driving.driveToPosition(new Vector2(0, 100), 90.0, 1);
 
-//        robot.driving.driveToPosition(new Vector2(100,100), 180.0, 1);
+        robot.driving.driveToPosition(new Vector2(100,100), 180.0, 1);
+//        robot.driving.driveToPosition(new Vector2(0, 100), 90.0, 1);
     }
 }
