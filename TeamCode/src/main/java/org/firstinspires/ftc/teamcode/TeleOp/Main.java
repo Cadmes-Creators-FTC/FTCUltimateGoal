@@ -58,7 +58,7 @@ public class Main extends LinearOpMode {
     boolean prevIntakeBtn = false;
     private void intake(){
         boolean intakeBtn = gamepad2.b;
-        if(intakeBtn != prevIntakeBtn){
+        if(intakeBtn && !prevIntakeBtn){
             if(robot.intake.isOn())
                 robot.intake.turnOff();
             else
@@ -72,7 +72,7 @@ public class Main extends LinearOpMode {
         boolean conveyorBtn = gamepad2.left_bumper;
         boolean conveyorTriggerBtn = gamepad2.left_trigger > 0.5;
 
-        if(conveyorBtn != prevConveyorBtn){
+        if(conveyorBtn && !prevConveyorBtn){
             if(robot.conveyor.isOn())
                 robot.conveyor.turnOff();
             else
@@ -90,7 +90,7 @@ public class Main extends LinearOpMode {
     boolean prevShooterBtn = false;
     private void shooter(){
         boolean shooterBtn = gamepad2.a;
-        if(shooterBtn != prevShooterBtn){
+        if(shooterBtn && !prevShooterBtn){
             if(robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
@@ -108,7 +108,7 @@ public class Main extends LinearOpMode {
         }
 
         boolean wobbleArmGripperBtn = gamepad2.y;
-        if(wobbleArmGripperBtn != prevWobbleArmGripperBtn){
+        if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
             if(robot.wobbleArm.isGripperOpen())
                 robot.wobbleArm.closeGripper();
             else
@@ -155,7 +155,7 @@ public class Main extends LinearOpMode {
     boolean prevDrivingDirectionBtn = false;
     private void setDrivingDirection(){
         boolean drivingDirectionBtn = gamepad1.y;
-        if(drivingDirectionBtn != prevDrivingDirectionBtn){
+        if(drivingDirectionBtn && !prevDrivingDirectionBtn){
             drivingDirection *= -1;
         }
         prevDrivingDirectionBtn = drivingDirectionBtn;
