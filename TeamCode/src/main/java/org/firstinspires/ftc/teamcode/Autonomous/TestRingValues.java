@@ -17,10 +17,6 @@ public class TestRingValues extends LinearOpMode {
 
         robot.logging.setLog("state", "Initializing");
 
-        robot.gyroscope.waitForGyroCalibration();
-        robot.driving.resetWheelTicks();
-        robot.driving.setCurrentPosition(new Vector2(0, 0));
-        robot.gyroscope.setCurrentAngle(0);
         robot.startThreads();
 
         robot.logging.setLog("state", "Initialized, waiting for start");

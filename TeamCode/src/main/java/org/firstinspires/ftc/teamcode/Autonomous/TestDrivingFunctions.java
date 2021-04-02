@@ -36,8 +36,8 @@ public class TestDrivingFunctions extends LinearOpMode {
 
 //        robot.logging.clearLogs();
 
-//        robot.stopRobot();
-//        robot.logging.setLog("state", "Stopped");
+        robot.stopRobot();
+        robot.logging.setLog("state", "Stopped");
     }
 
     //autonomous sequence
