@@ -20,7 +20,7 @@ public class WobbleArm extends RobotComponent {
         arm.scaleRange(0, 0.85);
 
         gripper = hardwareMap.get(Servo.class, "wobbleGripper");
-        gripper.scaleRange(0.25, 0.6);
+        gripper.scaleRange(0.0, 0.8);//0,25, 0,6
         closeGripper();
     }
 
