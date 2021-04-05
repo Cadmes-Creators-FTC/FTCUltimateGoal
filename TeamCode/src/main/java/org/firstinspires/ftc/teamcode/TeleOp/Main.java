@@ -107,14 +107,18 @@ public class Main extends LinearOpMode {
             robot.wobbleArm.armUp();
         }
 
-        boolean wobbleArmGripperBtn = gamepad2.y;
-        if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
-            if(robot.wobbleArm.isGripperOpen())
-                robot.wobbleArm.closeGripper();
-            else
-                robot.wobbleArm.openGripper();
-        }
-        prevWobbleArmGripperBtn = wobbleArmGripperBtn;
+//        boolean wobbleArmGripperBtn = gamepad2.y;
+//        if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
+//            if(robot.wobbleArm.isGripperOpen())
+//                robot.wobbleArm.closeGripper();
+//            else
+//                robot.wobbleArm.openGripper();
+//        }
+//        prevWobbleArmGripperBtn = wobbleArmGripperBtn;
+        if(gamepad2.x)
+            robot.wobbleArm.closeGripper();
+        if(gamepad2.y)
+            robot.wobbleArm.openGripper();
     }
 
     private void drive(){
