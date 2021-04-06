@@ -55,14 +55,14 @@ public class RemoteRed extends LinearOpMode {
         robot.wobbleArm.armDownAutonomous(2500);
         robot.wobbleArm.armUpAutonomous(500);
         //drop off first wobble goal
-        robot.driving.driveToPositionForwardOnly(new Vector2(210, 120), null, 0.80);
-        robot.driving.driveToPositionForwardOnly(wobbleDropPoint, hoek, 0.80);
+        robot.driving.driveToPositionYOnly(new Vector2(210, 120), null, 0.80, null);
+        robot.driving.driveToPositionYOnly(wobbleDropPoint, hoek, 0.80, null);
         robot.wobbleArm.armDownAutonomous(400);
         robot.wobbleArm.openGripperAutonomous(400);
         robot.wobbleArm.armUpAutonomous(400);
 
         //shoot rings
-        robot.driving.driveToPositionForwardOnly(new Vector2(150, 180), 180.0, 1);
+        robot.driving.driveToPositionYOnly(new Vector2(150, 180), 180.0, 1, null);
         robot.shooter.turnOn(0.92);
         robot.conveyor.turnOn(1);
         Thread.sleep(2000);//1500
@@ -75,6 +75,6 @@ public class RemoteRed extends LinearOpMode {
         robot.driving.driveToPositionForwardOnly(new Vector2(125, 130), null, 0.75);*/
 
         //drive to launch line
-        robot.driving.driveToPositionForwardOnly(new Vector2(100, 210), null, 1);
+        robot.driving.driveToPositionYOnly(new Vector2(100, 210), null, 1, null);
     }
 }

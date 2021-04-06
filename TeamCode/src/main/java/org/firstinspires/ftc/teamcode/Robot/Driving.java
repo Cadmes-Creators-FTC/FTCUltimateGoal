@@ -276,12 +276,26 @@ public class Driving extends RobotComponent {
     //              |
     //kut functies  |
     //             \|/
-    public void driveToPositionForwardOnly(Vector2 targetPos, Double targetAngle, double speedScaler) throws InterruptedException{
+    public void driveToPositionYOnly(Vector2 targetPos, Double targetAngle, double speedScaler, Double driveDirection) throws InterruptedException{
         Vector2 deltaPos = Vector2.subtract(targetPos, currentPosition);
+        double angleForward = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
+        double angleBackward = MathFunctions.clampAngleDegrees(angleForward+180);
 
-        double angle = (Math.toDegrees(Math.atan2(deltaPos.y, deltaPos.x)) - 90) * -1;
-
-        rotateToAngleFixed(angle);
+        if(driveDirection == null) {
+            double deltaAngleForward = Math.abs(angleForward - robot.gyroscope.getCurrentAngle());
+            double deltaAngleBackward = Math.abs(angleBackward - robot.gyroscope.getCurrentAngle());
+            if (targetAngle != null) {
+                deltaAngleForward += Math.abs(angleForward - targetAngle);
+                deltaAngleBackward += Math.abs(angleBackward - targetAngle);
+            }
+            if (deltaAngleForward <= deltaAngleBackward)
+                rotateToAngle(angleForward, speedScaler);
+            else
+                rotateToAngle(angleBackward, speedScaler);
+        }else if(driveDirection == 1)
+            rotateToAngle(angleForward, 1);
+        else if(driveDirection == -1)
+            rotateToAngle(angleBackward, 1);
 
         driveToPosition(targetPos, null, speedScaler);
 
