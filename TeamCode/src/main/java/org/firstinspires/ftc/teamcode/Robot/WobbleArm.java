@@ -20,7 +20,7 @@ public class WobbleArm extends RobotComponent {
         arm.scaleRange(0, 0.85);
 
         gripper = hardwareMap.get(Servo.class, "wobbleGripper");
-        gripper.scaleRange(0.15, 0.8);//0,25, 0,6
+        gripper.scaleRange(0.1, 0.6);//0,25, 0,6
         closeGripper();
     }
 
@@ -37,13 +37,13 @@ public class WobbleArm extends RobotComponent {
         } catch (InterruptedException ignored){}
     }
     public void closeGripperAutonomous(int delay){
-        gripper.setPosition(1);
+        gripper.setPosition(0);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
     }
     public void openGripperAutonomous(int delay){
-        gripper.setPosition(0);
+        gripper.setPosition(1);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
@@ -51,17 +51,17 @@ public class WobbleArm extends RobotComponent {
 
     public void armUp(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos - 0.01);
+        arm.setPosition(armPos - 0.004);
     }
     public void armDown(){
         double armPos = arm.getPosition();
-        arm.setPosition(armPos + 0.01);
+        arm.setPosition(armPos + 0.004);
     }
     public void closeGripper(){
-        gripper.setPosition(1);
+        gripper.setPosition(0);
     }
     public void openGripper(){
-        gripper.setPosition(0);
+        gripper.setPosition(1);
     }
     public boolean isGripperOpen(){
         return gripper.getPosition() != 0;

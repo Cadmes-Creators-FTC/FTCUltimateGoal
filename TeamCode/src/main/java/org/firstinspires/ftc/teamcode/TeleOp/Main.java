@@ -98,7 +98,8 @@ public class Main extends LinearOpMode {
         }
         prevShooterBtn = shooterBtn;
     }
-    
+
+    int i = 0;
     boolean prevWobbleArmGripperBtn = false;
     private void wobbleArm(){
         if (gamepad2.right_trigger > 0){
@@ -107,18 +108,22 @@ public class Main extends LinearOpMode {
             robot.wobbleArm.armUp();
         }
 
-//        boolean wobbleArmGripperBtn = gamepad2.y;
-//        if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
-//            if(robot.wobbleArm.isGripperOpen())
-//                robot.wobbleArm.closeGripper();
-//            else
-//                robot.wobbleArm.openGripper();
-//        }
-//        prevWobbleArmGripperBtn = wobbleArmGripperBtn;
-        if(gamepad2.x)
-            robot.wobbleArm.closeGripper();
-        if(gamepad2.y)
-            robot.wobbleArm.openGripper();
+        robot.logging.setLog("test-counter", i);
+        robot.logging.setLog("test-state", robot.wobbleArm.isGripperOpen());
+        robot.logging.setLog("test-btnstate", gamepad2.y);
+        boolean wobbleArmGripperBtn = gamepad2.y;
+        if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
+            i++;
+            if(robot.wobbleArm.isGripperOpen())
+                robot.wobbleArm.closeGripper();
+            else
+                robot.wobbleArm.openGripper();
+        }
+        prevWobbleArmGripperBtn = wobbleArmGripperBtn;
+//        if(gamepad2.x)
+//            robot.wobbleArm.closeGripper();
+//        if(gamepad2.y)
+//            robot.wobbleArm.openGripper();
     }
 
     private void drive(){

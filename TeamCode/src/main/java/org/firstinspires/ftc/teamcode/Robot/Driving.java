@@ -112,7 +112,7 @@ public class Driving extends RobotComponent {
             wheelPosDelta.toCM(10*Math.PI, ticksPerRotation);
 
             /* get movement */
-            double yScaler = 1.52;
+            double yScaler = 1.6;
             double xScaler = 0.8;
 
             double deltaX = ((wheelPosDelta.lf + wheelPosDelta.rb) - (wheelPosDelta.rf + wheelPosDelta.lb)) / 4 * 1.5;
@@ -300,7 +300,7 @@ public class Driving extends RobotComponent {
         driveToPosition(targetPos, null, speedScaler);
 
         if(targetAngle != null)
-            robot.driving.rotateToAngleFixed(targetAngle);
+            robot.driving.rotateToAngle(targetAngle, speedScaler);
     }
     public void rotateToAngleFixed(double targetAngle) throws InterruptedException{
         robot.gyroscope.setTargetAngle(targetAngle);
