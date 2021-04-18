@@ -220,6 +220,69 @@ public class Driving extends RobotComponent {
 
         setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
     }
+    public void driveToPositionPID(Vector2 targetPos, double speedScaler) throws InterruptedException{
+        Vector2 curPos = getCurrentPosition();
+        Vector2 deltaPos = Vector2.subtract(targetPos, curPos);
+        double error = Math.sqrt(Math.pow(deltaPos.x, 2)+Math.pow(deltaPos.y, 2));
+
+        double kP = 0;
+        double kI = 0;
+        double kD = 0;
+
+        double maxAngleCorrection = 0.5;
+
+        double preferredAngle = 0;
+
+        double stopError = 5;
+//        while (robot.isRunning && (error > stopError)) {
+        while (robot.isRunning) {
+            double speed = 0;
+            speed += kP*error;
+
+
+            double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
+            Matrix rotMatrix = new Matrix(new double[][]{
+                    { Math.cos(-angleRad), -Math.sin(-angleRad) },
+                    { Math.sin(-angleRad), Math.cos(-angleRad)  },
+            });
+            Vector2 relativeDeltaPos = Matrix.multiply(deltaPos.toMatrix(), rotMatrix).toVector2();
+
+            WheelPowerConfig wpc = new WheelPowerConfig(
+                    relativeDeltaPos.y + relativeDeltaPos.x,
+                    relativeDeltaPos.y - relativeDeltaPos.x,
+                    relativeDeltaPos.y + relativeDeltaPos.x,
+                    relativeDeltaPos.y - relativeDeltaPos.x
+            );
+            wpc.clampScale();
+
+            double absAngleToTarget = Math.atan2(deltaPos.x, deltaPos.y);
+            robot.gyroscope.setTargetAngle(MathFunctions.clampAngleDegrees(absAngleToTarget+preferredAngle));
+            double angleCorrection = MathFunctions.clamp(getAngleCorrection(), -maxAngleCorrection, maxAngleCorrection);
+            WheelPowerConfig angleCorrectionWPC = new WheelPowerConfig(
+                    angleCorrection,
+                    -angleCorrection,
+                    -angleCorrection,
+                    angleCorrection
+            );
+            angleCorrectionWPC.clamp();
+
+            wpc = WheelPowerConfig.add(wpc, angleCorrectionWPC);
+            wpc.clampScale();
+
+            wpc = WheelPowerConfig.multiply(wpc, speed*speedScaler);
+            setWheelPowers(wpc);
+
+
+            Thread.sleep(20);
+
+
+            curPos = getCurrentPosition();
+            deltaPos = Vector2.subtract(targetPos, curPos);
+            error = Math.sqrt(Math.pow(deltaPos.x, 2)+Math.pow(deltaPos.y, 2));
+        }
+
+        setWheelPowers(new WheelPowerConfig(0, 0, 0, 0));
+    }
     public void rotateToAngle(double targetAngle, double speedScaler) throws InterruptedException {
         robot.gyroscope.setTargetAngle(targetAngle);
 
@@ -334,7 +397,7 @@ public class Driving extends RobotComponent {
 
 
     private double getAngleCorrection(){
-        double scaler = 0.05;
+        double scaler = 0.02;
 
         double targetAngle = robot.gyroscope.getTargetAngle();
         double currentAngle = robot.gyroscope.getCurrentAngle();
