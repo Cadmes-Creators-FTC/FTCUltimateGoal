@@ -131,7 +131,7 @@ public class Driving extends RobotComponent {
             currentPosition = Vector2.add(currentPosition, deltaPos.toVector2());
 
             /* timeout between updates */
-            Thread.sleep(50);
+            Thread.sleep(10);
         }
     }
 
