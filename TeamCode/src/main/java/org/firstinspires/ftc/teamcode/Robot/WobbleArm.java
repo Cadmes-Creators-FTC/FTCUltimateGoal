@@ -13,6 +13,8 @@ public class WobbleArm extends RobotComponent {
     private Servo arm;
     private Servo gripper;
 
+    private Servo autonomousReleaser;
+
     public WobbleArm(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
@@ -22,6 +24,9 @@ public class WobbleArm extends RobotComponent {
         gripper = hardwareMap.get(Servo.class, "wobbleGripper");
         gripper.scaleRange(0.1, 0.6);//0,25, 0,6
         closeGripper();
+
+        autonomousReleaser = hardwareMap.get(Servo.class, "wobbleAutonomousReleaser");
+        autonomousReleaser.scaleRange(0, 1);
         autonomousReleaser.setPosition(0);
     }
 
