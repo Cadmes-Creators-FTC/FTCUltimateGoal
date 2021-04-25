@@ -244,7 +244,7 @@ public class Driving extends RobotComponent {
             double dt = (((double)System.currentTimeMillis())/1000) - lastTimeStamp;
             lastTimeStamp = (((double)System.currentTimeMillis())/1000); //do this as close as possible to dt to minimize time loss
 
-            if(error > iLimit)
+            if(error < iLimit)
                 errorSum += dt*error;
 
             double errorRate = (error-lastError)/dt;
