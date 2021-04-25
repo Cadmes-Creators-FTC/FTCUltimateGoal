@@ -227,7 +227,12 @@ public class Driving extends RobotComponent {
 
         double kP = 0;
         double kI = 0;
+        double iLimit = 0;
         double kD = 0;
+
+        double errorSum = 0;
+        double lastTimeStamp = (((double)System.currentTimeMillis())/1000);
+        double lastError = error;
 
         double maxAngleCorrection = 0.5;
 
@@ -236,8 +241,15 @@ public class Driving extends RobotComponent {
         double stopError = 5;
 //        while (robot.isRunning && (error > stopError)) {
         while (robot.isRunning) {
-            double speed = 0;
-            speed += kP*error;
+            double dt = (((double)System.currentTimeMillis())/1000) - lastTimeStamp;
+            lastTimeStamp = (((double)System.currentTimeMillis())/1000); //do this as close as possible to dt to minimize time loss
+
+            if(error > iLimit)
+                errorSum += dt*error;
+
+            double errorRate = (error-lastError)/dt;
+
+            double speed = kP*error + kI*errorSum + kD*errorRate;
 
 
             double angleRad = Math.toRadians(robot.gyroscope.getCurrentAngle());
@@ -278,6 +290,7 @@ public class Driving extends RobotComponent {
 
             curPos = getCurrentPosition();
             deltaPos = Vector2.subtract(targetPos, curPos);
+            lastError = error;
             error = Math.sqrt(Math.pow(deltaPos.x, 2)+Math.pow(deltaPos.y, 2));
         }
 
