@@ -282,8 +282,8 @@ public class Driving extends RobotComponent {
         double angleBackward = MathFunctions.clampAngleDegrees(angleForward+180);
 
         if(driveDirection == null) {
-            double deltaAngleForward = Math.abs(angleForward - robot.gyroscope.getCurrentAngle());
-            double deltaAngleBackward = Math.abs(angleBackward - robot.gyroscope.getCurrentAngle());
+            double deltaAngleForward = Math.abs(MathFunctions.clampAngleDegrees(angleForward - robot.gyroscope.getCurrentAngle()));
+            double deltaAngleBackward = Math.abs(MathFunctions.clampAngleDegrees(angleBackward - robot.gyroscope.getCurrentAngle()));
             if (targetAngle != null) {
                 deltaAngleForward += Math.abs(angleForward - targetAngle);
                 deltaAngleBackward += Math.abs(angleBackward - targetAngle);
@@ -293,9 +293,9 @@ public class Driving extends RobotComponent {
             else
                 rotateToAngle(angleBackward, speedScaler);
         }else if(driveDirection == 1)
-            rotateToAngle(angleForward, 1);
+            rotateToAngle(angleForward, speedScaler);
         else if(driveDirection == -1)
-            rotateToAngle(angleBackward, 1);
+            rotateToAngle(angleBackward, speedScaler);
 
         driveToPosition(targetPos, null, speedScaler);
 

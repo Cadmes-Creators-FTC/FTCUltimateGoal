@@ -45,39 +45,54 @@ public class RemoteRed extends LinearOpMode {
         double hoek = 20;
         if(numOfRings == 1) {
             hoek = -20;
-            wobbleDropPoint = new Vector2(180, 230);//110 290
+            wobbleDropPoint = new Vector2(160, 230);//110 290
         }
         else if(numOfRings == 4) {
             hoek = 30;
             wobbleDropPoint = new Vector2(180, 290);//200
         }
 
+        robot.intake.turnOn();
+        Thread.sleep(500);
+        robot.intake.turnOff();
+
         robot.wobbleArm.armDownAutonomous(2500);
         robot.wobbleArm.armUpAutonomous(500);
         //drop off first wobble goal
         if(numOfRings != 0){
-            robot.driving.driveToPositionYOnly(new Vector2(210, 120), null, 0.80, 1.0);
+            robot.driving.driveToPositionYOnly(new Vector2(210, 120), null, 0.55, 1.0);
         }
-        robot.driving.driveToPositionYOnly(wobbleDropPoint, hoek, 0.80, null);
+        robot.driving.driveToPositionYOnly(wobbleDropPoint, hoek, 0.55, null);
         robot.wobbleArm.armDownAutonomous(400);
         robot.wobbleArm.openGripperAutonomous(400);
         robot.wobbleArm.armUpAutonomous(400);
 
         //shoot rings
-        robot.driving.driveToPositionYOnly(new Vector2(150, 180), null, 1, null);
-        robot.driving.rotateToAngle(180, 0.3);
-        robot.shooter.turnOn(0.92);
+        robot.driving.driveToPositionYOnly(new Vector2(147, 180), null, 1, null);
+        robot.driving.rotateToAngle(165, 1);
+        robot.driving.rotateToAngle(180, 0.2);
+        robot.shooter.turnOn(0.93);
         robot.conveyor.turnOn(1);
         Thread.sleep(2000);//1500
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
 
-        //wobbelgoal
-        /*robot.driving.driveToPositionForwardOnly(new Vector2(125, 140), -180.0, 1);
-        robot.wobbleArm.armDownAutonomous(400);
-        robot.driving.driveToPositionForwardOnly(new Vector2(125, 130), null, 0.75);*/
+        if(numOfRings == 1){
+            robot.intake.turnOn();
+            robot.conveyor.turnOn(0.6);
+            robot.driving.driveToPositionYOnly(new Vector2(robot.driving.getCurrentPosition().x, 150), null, 0.3, 1.0);
+
+            robot.driving.driveToPositionYOnly(new Vector2(robot.driving.getCurrentPosition().x, 180), null, 1, -1.0);
+            robot.driving.rotateToAngle(165, 1);
+            robot.driving.rotateToAngle(180, 0.2);
+            robot.shooter.turnOn(0.93);
+            robot.conveyor.turnOn(1);
+            while (getRuntime() < 29){ Thread.sleep(50); }
+            robot.shooter.turnOff();
+            robot.conveyor.turnOff();
+        }
 
         //drive to launch line
-        robot.driving.driveToPositionYOnly(new Vector2(100, 210), null, 1, null);
+        robot.driving.driveToPositionYOnly(new Vector2(147, 210), null, 1, -1.0);
     }
 }
