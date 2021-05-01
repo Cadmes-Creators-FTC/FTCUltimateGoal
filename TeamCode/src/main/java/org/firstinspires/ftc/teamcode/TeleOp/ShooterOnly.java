@@ -35,13 +35,13 @@ public class ShooterOnly extends LinearOpMode {
 
     private void ringShooter(){
         if (gamepad2.a)
-            robot.shooter.turnOn(1);
-        else if(gamepad2.b)
-            robot.shooter.turnOn(0.9);
-        else if(gamepad2.x)
-            robot.shooter.turnOn(0.8);
-        else if(gamepad2.y)
             robot.shooter.turnOn(0.6);
+        else if(gamepad2.b)
+            robot.shooter.turnOn(0.5);
+        else if(gamepad2.x)
+            robot.shooter.turnOn(0.4);
+        else if(gamepad2.y)
+            robot.shooter.turnOn(0.3);
         else
             robot.shooter.turnOff();
     }

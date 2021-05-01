@@ -14,7 +14,7 @@ public class AutonomousTemplate extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException{
-        String[] enabledComponents = {"logging", "gyroscope", "driving", "shooter", "intake", "conveyor", "wobbleArm", "ringStackHeightDetection"};
+        String[] enabledComponents = {"logging", "gyroscope", "driving"};
         robot = new MainRobot(hardwareMap, telemetry, enabledComponents, this);
 
         robot.logging.setLog("state", "Initializing");

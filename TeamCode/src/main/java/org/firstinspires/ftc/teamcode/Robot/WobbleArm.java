@@ -10,7 +10,8 @@ import java.util.HashMap;
 
 @Disabled
 public class WobbleArm extends RobotComponent {
-    private Servo arm;
+    private Servo arm1;
+    private Servo arm2;
     private Servo gripper;
 
     private Servo autonomousReleaser;
@@ -18,15 +19,18 @@ public class WobbleArm extends RobotComponent {
     public WobbleArm(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
-        arm = hardwareMap.get(Servo.class, "wobbleArm");
-        arm.scaleRange(0, 0.85);
+        arm1 = hardwareMap.get(Servo.class, "wobbleArm1");
+        arm2 = hardwareMap.get(Servo.class, "wobbleArm2");
+        arm1.scaleRange(0, 0.85);
+        arm2.scaleRange(0, 0.85);
+        arm2.setDirection(Servo.Direction.REVERSE);
 
         gripper = hardwareMap.get(Servo.class, "wobbleGripper");
         gripper.scaleRange(0.1, 0.6);//0,25, 0,6
         closeGripper();
 
         autonomousReleaser = hardwareMap.get(Servo.class, "wobbleAutonomousReleaser");
-        autonomousReleaser.scaleRange(0, 1);
+        autonomousReleaser.scaleRange(0, 0.9);
         autonomousReleaser.setPosition(0);
     }
 
@@ -35,13 +39,15 @@ public class WobbleArm extends RobotComponent {
     }
 
     public void armUpAutonomous(int delay){
-        arm.setPosition(0.4);
+        arm1.setPosition(0.4);
+        arm2.setPosition(0.4);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
     }
     public void armDownAutonomous(int delay){
-        arm.setPosition(0.9);
+        arm1.setPosition(0.9);
+        arm2.setPosition(0.9);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
@@ -60,12 +66,14 @@ public class WobbleArm extends RobotComponent {
     }
 
     public void armUp(){
-        double armPos = arm.getPosition();
-        arm.setPosition(armPos - 0.004);
+        double armPos = arm1.getPosition();
+        arm1.setPosition(armPos - 0.008);
+        arm2.setPosition(armPos - 0.008);
     }
     public void armDown(){
-        double armPos = arm.getPosition();
-        arm.setPosition(armPos + 0.004);
+        double armPos = arm1.getPosition();
+        arm1.setPosition(armPos + 0.008 );
+        arm2.setPosition(armPos + 0.008 );
     }
     public void closeGripper(){
         gripper.setPosition(0);

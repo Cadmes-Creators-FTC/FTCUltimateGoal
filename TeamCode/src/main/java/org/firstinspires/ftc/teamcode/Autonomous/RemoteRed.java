@@ -72,7 +72,7 @@ public class RemoteRed extends LinearOpMode {
         robot.driving.rotateToAngle(165, 1);
         robot.driving.rotateToAngle(180, 0.2);
         robot.shooter.turnOn(0.93);
-        robot.conveyor.turnOn(1);
+        robot.conveyor.turnOn(0.5);
         Thread.sleep(2000);//1500
         robot.shooter.turnOff();
         robot.conveyor.turnOff();
@@ -86,7 +86,7 @@ public class RemoteRed extends LinearOpMode {
             robot.driving.rotateToAngle(165, 1);
             robot.driving.rotateToAngle(180, 0.2);
             robot.shooter.turnOn(0.93);
-            robot.conveyor.turnOn(1);
+            robot.conveyor.turnOn(0.5);
             while (getRuntime() < 29){ Thread.sleep(50); }
             robot.shooter.turnOff();
             robot.conveyor.turnOff();

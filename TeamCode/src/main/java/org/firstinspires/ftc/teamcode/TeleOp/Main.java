@@ -38,6 +38,8 @@ public class Main extends LinearOpMode {
 
     private void controlLoop() throws InterruptedException{
         while (opModeIsActive()){
+            if(gamepad2.dpad_left)
+                robot.wobbleArm.releaseWobbleAutonomous();
             drive();
             setDrivingDirection();
 
@@ -94,7 +96,7 @@ public class Main extends LinearOpMode {
             if(robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
-                robot.shooter.turnOn(0.92);
+                robot.shooter.turnOn(0.5);
         }
         prevShooterBtn = shooterBtn;
     }
@@ -108,9 +110,6 @@ public class Main extends LinearOpMode {
             robot.wobbleArm.armUp();
         }
 
-        robot.logging.setLog("test-counter", i);
-        robot.logging.setLog("test-state", robot.wobbleArm.isGripperOpen());
-        robot.logging.setLog("test-btnstate", gamepad2.y);
         boolean wobbleArmGripperBtn = gamepad2.y;
         if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
             i++;
@@ -120,10 +119,6 @@ public class Main extends LinearOpMode {
                 robot.wobbleArm.openGripper();
         }
         prevWobbleArmGripperBtn = wobbleArmGripperBtn;
-//        if(gamepad2.x)
-//            robot.wobbleArm.closeGripper();
-//        if(gamepad2.y)
-//            robot.wobbleArm.openGripper();
     }
 
     private void drive(){
