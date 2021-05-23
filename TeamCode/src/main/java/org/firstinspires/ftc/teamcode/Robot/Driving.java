@@ -146,11 +146,11 @@ public class Driving extends RobotComponent {
 
         /* function config */
         //acceleration
-        double accelerationTime = 1;
+        double accelerationTime = 0.5;
         //deceleration
         double maxSpeedDecelerationDistance = 50;
         //min speed
-        double minSpeedY = 0.15;
+        double minSpeedY = 0.2;
         double minSpeedX = 0.3;
         //rotation
         double maxAngleCorrection = 0.5;

@@ -39,8 +39,8 @@ public class RingStackDetection extends RobotComponent {
     public int getStackSize(){
         int avgRedVal = camPipeline.getAvgRedVal();
 
-        int oneRingThreshhold = 125;
-        int fourRingThreshhold = 132;
+        int oneRingThreshhold = 123;
+        int fourRingThreshhold = 130;
 
         int stackSize = 0;
         if(avgRedVal > fourRingThreshhold)
@@ -55,7 +55,7 @@ public class RingStackDetection extends RobotComponent {
     }
 
     private static class RingStackDetermenationPipeline extends OpenCvPipeline{
-        static final Point REGION1_TOPLEFT = new Point(10,105);
+        static final Point REGION1_TOPLEFT = new Point(0,105);
         static final int REGION1_WIDTH = 45;
         static final int REGION1_HEIGHT = 33;
         static final Point region1Start = new Point(

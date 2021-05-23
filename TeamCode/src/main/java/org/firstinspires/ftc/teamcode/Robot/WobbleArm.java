@@ -4,14 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
-import java.util.HashMap;
-
 @Disabled
 public class WobbleArm extends RobotComponent {
-    private Servo arm1;
-    private Servo arm2;
+    public Servo arm;
     private Servo gripper;
 
     private Servo autonomousReleaser;
@@ -19,14 +14,11 @@ public class WobbleArm extends RobotComponent {
     public WobbleArm(HardwareMap hardwareMap, MainRobot inputRobot) {
         super(inputRobot);
 
-        arm1 = hardwareMap.get(Servo.class, "wobbleArm1");
-        arm2 = hardwareMap.get(Servo.class, "wobbleArm2");
-        arm1.scaleRange(0, 0.85);
-        arm2.scaleRange(0, 0.85);
-        arm2.setDirection(Servo.Direction.REVERSE);
+        arm = hardwareMap.get(Servo.class, "wobbleArm1");
+        arm.scaleRange(0, 0.85);
 
         gripper = hardwareMap.get(Servo.class, "wobbleGripper");
-        gripper.scaleRange(0.1, 0.6);//0,25, 0,6
+        gripper.scaleRange(0.1, 0.6);
         closeGripper();
 
         autonomousReleaser = hardwareMap.get(Servo.class, "wobbleAutonomousReleaser");
@@ -39,15 +31,13 @@ public class WobbleArm extends RobotComponent {
     }
 
     public void armUpAutonomous(int delay){
-        arm1.setPosition(0.4);
-        arm2.setPosition(0.4);
+        arm.setPosition(0.4);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
     }
     public void armDownAutonomous(int delay){
-        arm1.setPosition(0.9);
-        arm2.setPosition(0.9);
+        arm.setPosition(0.9);
         try{
             Thread.sleep(delay);
         } catch (InterruptedException ignored){}
@@ -65,16 +55,22 @@ public class WobbleArm extends RobotComponent {
         } catch (InterruptedException ignored){}
     }
 
-    public void armUp(){
-        double armPos = arm1.getPosition();
-        arm1.setPosition(armPos - 0.008);
-        arm2.setPosition(armPos - 0.008);
+    public void armToBottom(){
+        arm.setPosition(0);
     }
-    public void armDown(){
-        double armPos = arm1.getPosition();
-        arm1.setPosition(armPos + 0.008 );
-        arm2.setPosition(armPos + 0.008 );
+    public void armToPickup(){
+        arm.setPosition(0.08);
     }
+    public void armToHold(){
+        arm.setPosition(0.32);
+    }
+    public void armToDrop(){
+        arm.setPosition(0.67);
+    }
+    public void armToTop(){
+        arm.setPosition(1);
+    }
+
     public void closeGripper(){
         gripper.setPosition(0);
     }

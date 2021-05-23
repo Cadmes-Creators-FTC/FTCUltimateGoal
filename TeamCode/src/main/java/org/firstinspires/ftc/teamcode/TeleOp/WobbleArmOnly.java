@@ -34,10 +34,10 @@ public class WobbleArmOnly extends LinearOpMode {
     }
 
     private void wobbleArm(){
-        if (gamepad2.a)
-            robot.wobbleArm.armDown();
-        else if(gamepad2.b)
-            robot.wobbleArm.armUp();
+//        if (gamepad2.a)
+//            robot.wobbleArm.armDown();
+//        else if(gamepad2.b)
+//            robot.wobbleArm.armUp();
 
         if(gamepad2.x)
             robot.wobbleArm.closeGripper();

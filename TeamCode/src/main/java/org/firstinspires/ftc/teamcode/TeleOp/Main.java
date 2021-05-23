@@ -104,11 +104,16 @@ public class Main extends LinearOpMode {
     int i = 0;
     boolean prevWobbleArmGripperBtn = false;
     private void wobbleArm(){
-        if (gamepad2.right_trigger > 0){
-            robot.wobbleArm.armDown();
-        } else if (gamepad2.right_bumper){
-            robot.wobbleArm.armUp();
-        }
+        if(gamepad2.dpad_down)
+            robot.wobbleArm.armToBottom();
+        else if (gamepad2.dpad_left)
+            robot.wobbleArm.armToPickup();
+        else if (gamepad2.dpad_right)
+            robot.wobbleArm.armToHold();
+        else if (gamepad2.dpad_up)
+            robot.wobbleArm.armToDrop();
+        else if (gamepad2.x)
+            robot.wobbleArm.armToTop();
 
         boolean wobbleArmGripperBtn = gamepad2.y;
         if(wobbleArmGripperBtn && !prevWobbleArmGripperBtn){
