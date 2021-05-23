@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class RobotComponent {
-    public final MainRobot robot; //reference to robot
+    public final MainRobot robot;
 
     public RobotComponent(MainRobot inputRobot) {
         robot = inputRobot;
