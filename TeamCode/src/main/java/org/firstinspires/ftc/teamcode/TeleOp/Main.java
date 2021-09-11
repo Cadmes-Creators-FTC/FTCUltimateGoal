@@ -96,7 +96,7 @@ public class Main extends LinearOpMode {
             if(robot.shooter.isOn())
                 robot.shooter.turnOff();
             else
-                robot.shooter.turnOn(0.5);
+                robot.shooter.turnOn(0.4);
         }
         prevShooterBtn = shooterBtn;
     }

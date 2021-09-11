@@ -43,9 +43,9 @@ public class RemoteRed2 extends LinearOpMode {
         double numOfRings = robot.ringStackDetection.getStackSize();
         robot.logging.setLog("numOfRings", numOfRings);
         Vector2 wobbleDropPoint = new Vector2(180, 185);//200
-        Vector2 wobbleDropPointArm = new Vector2(160, 190);
+//        Vector2 wobbleDropPointArm = new Vector2(160, 190);
         double wobbleDropHoek = 135;
-        double wobbleDropHoekArm = 90;
+//        double wobbleDropHoekArm = 90;
 
         if(numOfRings == 1) {
             wobbleDropHoek = 145;
@@ -61,7 +61,7 @@ public class RemoteRed2 extends LinearOpMode {
             robot.driving.driveToPositionYOnly(new Vector2(210, 160), null, 0.6, null);
             robot.driving.driveToPositionYOnly(new Vector2(135, 165), 180.0, 0.6, null);
         }else{
-            robot.driving.driveToPositionYOnly(new Vector2(150, 160), 180.0, 1.0, null);
+            robot.driving.driveToPositionYOnly(new Vector2(135, 165), 180.0, 0.6, null);
         }
 
         robot.conveyor.turnOn(0.75);
@@ -71,29 +71,29 @@ public class RemoteRed2 extends LinearOpMode {
 
 
         //drop off first wobble goal
-        robot.driving.driveToPositionYOnly(wobbleDropPoint, wobbleDropHoek, 1.0, -1.0);
+        robot.driving.driveToPositionYOnly(wobbleDropPoint, wobbleDropHoek, 0.6, -1.0);
         robot.wobbleArm.releaseWobbleAutonomous();
         Thread.sleep(400);
 
-        if(numOfRings == 0){
-            robot.wobbleArm.armToPickup();
-            robot.wobbleArm.openGripper();
-            robot.driving.driveToPositionYOnly(new Vector2(115, 140), 180.0, 0.7, null);
-            robot.driving.driveToPositionYOnly(new Vector2(robot.driving.getCurrentPosition().x, 80), 180.0, 0.3, 1.0);
-            Thread.sleep(100);
-            robot.wobbleArm.closeGripper();
-            Thread.sleep(800);
-            robot.wobbleArm.armToHold();
+//        if(numOfRings == 0){
+//            robot.wobbleArm.armToPickup();
+//            robot.wobbleArm.openGripper();
+//            robot.driving.driveToPositionYOnly(new Vector2(115, 140), 180.0, 0.7, null);
+//            robot.driving.driveToPositionYOnly(new Vector2(robot.driving.getCurrentPosition().x, 80), 180.0, 0.3, 1.0);
+//            Thread.sleep(100);
+//            robot.wobbleArm.closeGripper();
+//            Thread.sleep(800);
+//            robot.wobbleArm.armToHold();
+//
+//            robot.driving.driveToPositionYOnly(wobbleDropPointArm, wobbleDropHoekArm, 1.0, null);
+//            robot.wobbleArm.armToBottom();
+//            Thread.sleep(500);
+//            robot.wobbleArm.openGripper();
+//            Thread.sleep(500);
+//            robot.wobbleArm.armToTop();
+//        }
 
-            robot.driving.driveToPositionYOnly(wobbleDropPointArm, wobbleDropHoekArm, 1.0, null);
-            robot.wobbleArm.armToBottom();
-            Thread.sleep(500);
-            robot.wobbleArm.openGripper();
-            Thread.sleep(500);
-            robot.wobbleArm.armToTop();
-        }
-
-        double toLineSpeed = numOfRings == 0 ? 1.0 : 0.6;
-        robot.driving.driveToPositionYOnly(new Vector2(100, 200), 180.0, toLineSpeed, null);
+//        double toLineSpeed = numOfRings == 0 ? 1.0 : 0.6;
+        robot.driving.driveToPositionYOnly(new Vector2(100, 200), 180.0, 0.6, null);
     }
 }
